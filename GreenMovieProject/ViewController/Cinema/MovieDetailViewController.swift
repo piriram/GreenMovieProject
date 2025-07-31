@@ -23,6 +23,7 @@ class MovieDetailViewController: BaseViewController {
     }
     var collectionView: UICollectionView!
     let metaHeaderView = MovieMetaView()
+    lazy var synopsisView = SynopsisView(text: movie.overview)
     init(movie: Trending) {
         self.movie = movie
         super.init(nibName: nil, bundle: nil)
@@ -48,10 +49,11 @@ class MovieDetailViewController: BaseViewController {
         
     }
     func configureUI(){
-     
+        
         collectionView = createCollectionView()
         view.addSubview(collectionView)
         view.addSubview(metaHeaderView)
+        view.addSubview(synopsisView)
         
         
     }
@@ -64,6 +66,11 @@ class MovieDetailViewController: BaseViewController {
             make.top.equalTo(collectionView.snp.bottom).offset(-8)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(20)
+        }
+        synopsisView.snp.makeConstraints { make in
+            make.top.equalTo(metaHeaderView.snp.bottom).offset(16)
+               make.left.right.equalTo(view.safeAreaLayoutGuide).inset(16)
+               make.height.greaterThanOrEqualTo(60)
         }
 
     }
