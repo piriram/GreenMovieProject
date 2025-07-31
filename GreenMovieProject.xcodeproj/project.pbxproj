@@ -22,7 +22,7 @@
 		4EC8365A2E3B413C004A10CC /* Exceptions for "GreenMovieProject" folder in "GreenMovieProject" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Resource/Info.plist,
+				Info.plist,
 			);
 			target = 4EC836442E3B413A004A10CC /* GreenMovieProject */;
 		};
