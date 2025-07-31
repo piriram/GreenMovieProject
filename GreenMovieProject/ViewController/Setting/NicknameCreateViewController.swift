@@ -14,14 +14,6 @@ class NicknameCreateViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .yellow
         navigationItem.title = "닉네임 설정"
-        NetworkManager.shared.fetchTrending{ result in
-            switch result{
-                case .success(let data):
-                dump(data)
-            case .failure(let error):
-                print(error)
-            }
-            
-        }
+        
     }
 }
