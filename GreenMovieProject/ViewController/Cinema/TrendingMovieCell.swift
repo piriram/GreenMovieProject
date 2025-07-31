@@ -45,7 +45,7 @@ class TrendingMovieCell: UICollectionViewCell {
         titleLabel.font = .systemFont(ofSize: 20, weight: .bold)
         
         overviewLabel.textColor = .name
-        overviewLabel.font = .systemFont(ofSize: 15)
+        overviewLabel.font = .systemFont(ofSize: 14)
         overviewLabel.numberOfLines = 3
         
         
@@ -55,14 +55,15 @@ class TrendingMovieCell: UICollectionViewCell {
         print(#function)
         posterImageView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
-            make.height.equalTo(300) //TODO: 세로길이에 맞춰서 늘어나기
+//            make.height.equalTo(300) //TODO: 세로길이에 맞춰서 늘어나기
+            make.height.equalTo(posterImageView.snp.width).multipliedBy(1.5)
         }
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(posterImageView.snp.bottom).offset(8)
+            make.top.equalTo(posterImageView.snp.bottom).offset(12)
             make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
         }
         overviewLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(2)
+            make.top.equalTo(titleLabel.snp.bottom).offset(8)
             make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
         }
         
@@ -72,6 +73,7 @@ class TrendingMovieCell: UICollectionViewCell {
         print(#function)
         
     }
+    
     func configureCell(_ movie: Trending){
         print(movie.title)
         print(#function)
@@ -88,3 +90,4 @@ class TrendingMovieCell: UICollectionViewCell {
         
     }
 }
+

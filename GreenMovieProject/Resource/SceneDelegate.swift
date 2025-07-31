@@ -18,13 +18,31 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
-        let rootVC = CinemaViewController()
-        let nav = UINavigationController(rootViewController: rootVC)
+        //MARK: 네비게이션 타이틀 배경을 검정색으로 바꾸고, 타이틀 색을 흰색으로 교체함
+        //TODO: 함수로 빼기?
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .black
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
+
+        UINavigationBar.appearance().tintColor = .white
+        UINavigationBar.appearance().prefersLargeTitles = false
+
+
+        
+        let rootVC = MainViewController()
+//        let nav = UINavigationController(rootViewController: rootVC)
         
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = nav
+        window?.rootViewController = rootVC
         window?.makeKeyAndVisible()
-
+        
+       
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
