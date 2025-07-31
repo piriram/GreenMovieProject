@@ -22,7 +22,7 @@ class MovieDetailViewController: BaseViewController {
         }
     }
     var collectionView: UICollectionView!
-    
+    let metaHeaderView = MovieMetaView()
     init(movie: Trending) {
         self.movie = movie
         super.init(nibName: nil, bundle: nil)
@@ -48,13 +48,22 @@ class MovieDetailViewController: BaseViewController {
         
     }
     func configureUI(){
+     
         collectionView = createCollectionView()
         view.addSubview(collectionView)
+        view.addSubview(metaHeaderView)
+        
+        
     }
     func configureLayout(){
         collectionView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(250)
+        }
+        metaHeaderView.snp.makeConstraints { make in
+            make.top.equalTo(collectionView.snp.bottom).offset(-8)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+            make.height.equalTo(20)
         }
 
     }
