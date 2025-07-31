@@ -6,6 +6,14 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4EC836B72E3B641B004A10CC /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 4EC836B62E3B641B004A10CC /* Alamofire */; };
+		4EC836BA2E3B6425004A10CC /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4EC836B92E3B6425004A10CC /* SnapKit */; };
+		4EC836BD2E3B642F004A10CC /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 4EC836BC2E3B642F004A10CC /* Kingfisher */; };
+		4EC836C02E3B6437004A10CC /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = 4EC836BF2E3B6437004A10CC /* Toast */; };
+		4EC836C32E3B644E004A10CC /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 4EC836C22E3B644E004A10CC /* IQKeyboardManagerSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		4EC836452E3B413A004A10CC /* GreenMovieProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GreenMovieProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -14,7 +22,7 @@
 		4EC8365A2E3B413C004A10CC /* Exceptions for "GreenMovieProject" folder in "GreenMovieProject" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				Resource/Info.plist,
 			);
 			target = 4EC836442E3B413A004A10CC /* GreenMovieProject */;
 		};
@@ -36,6 +44,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EC836C32E3B644E004A10CC /* IQKeyboardManagerSwift in Frameworks */,
+				4EC836C02E3B6437004A10CC /* Toast in Frameworks */,
+				4EC836BD2E3B642F004A10CC /* Kingfisher in Frameworks */,
+				4EC836B72E3B641B004A10CC /* Alamofire in Frameworks */,
+				4EC836BA2E3B6425004A10CC /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +91,11 @@
 			);
 			name = GreenMovieProject;
 			packageProductDependencies = (
+				4EC836B62E3B641B004A10CC /* Alamofire */,
+				4EC836B92E3B6425004A10CC /* SnapKit */,
+				4EC836BC2E3B642F004A10CC /* Kingfisher */,
+				4EC836BF2E3B6437004A10CC /* Toast */,
+				4EC836C22E3B644E004A10CC /* IQKeyboardManagerSwift */,
 			);
 			productName = GreenMovieProject;
 			productReference = 4EC836452E3B413A004A10CC /* GreenMovieProject.app */;
@@ -107,6 +125,13 @@
 			);
 			mainGroup = 4EC8363C2E3B413A004A10CC;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				4EC836B52E3B641B004A10CC /* XCRemoteSwiftPackageReference "Alamofire" */,
+				4EC836B82E3B6425004A10CC /* XCRemoteSwiftPackageReference "SnapKit" */,
+				4EC836BB2E3B642F004A10CC /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				4EC836BE2E3B6437004A10CC /* XCRemoteSwiftPackageReference "Toast-Swift" */,
+				4EC836C12E3B644E004A10CC /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4EC836462E3B413A004A10CC /* Products */;
 			projectDirPath = "";
@@ -333,6 +358,77 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		4EC836B52E3B641B004A10CC /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+		4EC836B82E3B6425004A10CC /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+		4EC836BB2E3B642F004A10CC /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.5.0;
+			};
+		};
+		4EC836BE2E3B6437004A10CC /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scalessec/Toast-Swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.1;
+			};
+		};
+		4EC836C12E3B644E004A10CC /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4EC836B62E3B641B004A10CC /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4EC836B52E3B641B004A10CC /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		4EC836B92E3B6425004A10CC /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4EC836B82E3B6425004A10CC /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		4EC836BC2E3B642F004A10CC /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4EC836BB2E3B642F004A10CC /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		4EC836BF2E3B6437004A10CC /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4EC836BE2E3B6437004A10CC /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
+		};
+		4EC836C22E3B644E004A10CC /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4EC836C12E3B644E004A10CC /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4EC8363D2E3B413A004A10CC /* Project object */;
 }
