@@ -16,7 +16,7 @@ class TrendingMovieCell: UICollectionViewCell {
     let overviewLabel = UILabel()
     
     override init(frame: CGRect) {
-        print(#function)
+        
         super.init(frame: frame)
         configureAll()
     }
@@ -26,13 +26,13 @@ class TrendingMovieCell: UICollectionViewCell {
     }
     
     func configureAll(){
-        print(#function)
+        
         configureUI()
         configureLayout()
         
     }
     func configureUI(){
-        print(#function)
+        
         contentView.addSubview(posterImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(overviewLabel)
@@ -52,10 +52,10 @@ class TrendingMovieCell: UICollectionViewCell {
         
     }
     func configureLayout(){
-        print(#function)
+        
         posterImageView.snp.makeConstraints { make in
             make.top.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
-//            make.height.equalTo(300) //TODO: 세로길이에 맞춰서 늘어나기
+            //            make.height.equalTo(300) //TODO: 세로길이에 맞춰서 늘어나기
             make.height.equalTo(posterImageView.snp.width).multipliedBy(1.5)
         }
         titleLabel.snp.makeConstraints { make in
@@ -70,24 +70,22 @@ class TrendingMovieCell: UICollectionViewCell {
     }
     
     func configureData(){
-        print(#function)
+        
         
     }
     
     func configureCell(_ movie: Trending){
-        print(movie.title)
-        print(#function)
-        let base = "https://image.tmdb.org/t/p/w500"
-        let path = movie.posterPath
-        if path != ""{
-            let url = URL(string: base + path)!
-            posterImageView.kf.setImage(with: url)
-        }else{
-            posterImageView.image = UIImage(systemName: "photo")
-        }
+        //        print(movie.title)
+        
+       
+        let urlString = NetworkManager.shared.composeURLPath(path: movie.posterPath)
+        let url = URL(string: urlString)!
+        posterImageView.kf.setImage(with: url)
+        
         titleLabel.text = movie.title
         overviewLabel.text = movie.overview
         
     }
+    
 }
 
