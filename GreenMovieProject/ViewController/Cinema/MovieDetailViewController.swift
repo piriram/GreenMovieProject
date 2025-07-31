@@ -24,6 +24,10 @@ class MovieDetailViewController: BaseViewController {
     var collectionView: UICollectionView!
     let metaHeaderView = MovieMetaView()
     lazy var synopsisView = SynopsisView(text: movie.overview)
+    
+    let scrollView = UIScrollView()
+    let contentView = UIView()
+    
     init(movie: Trending) {
         self.movie = movie
         super.init(nibName: nil, bundle: nil)
@@ -51,28 +55,44 @@ class MovieDetailViewController: BaseViewController {
     func configureUI(){
         
         collectionView = createCollectionView()
-        view.addSubview(collectionView)
-        view.addSubview(metaHeaderView)
-        view.addSubview(synopsisView)
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        
+        contentView.addSubview(collectionView)
+        contentView.addSubview(metaHeaderView)
+        contentView.addSubview(synopsisView)
         
         
     }
     func configureLayout(){
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        contentView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.width.equalToSuperview()
+        }
+        
         collectionView.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+            make.top.equalToSuperview().offset(0)
+            make.left.right.equalToSuperview()
             make.height.equalTo(250)
         }
+        
         metaHeaderView.snp.makeConstraints { make in
-            make.top.equalTo(collectionView.snp.bottom).offset(-8)
-            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
-            make.height.equalTo(20)
+            make.top.equalTo(collectionView.snp.bottom).offset(16)
+            make.left.right.equalToSuperview().inset(16)
+            make.height.equalTo(200)
         }
+        
         synopsisView.snp.makeConstraints { make in
             make.top.equalTo(metaHeaderView.snp.bottom).offset(16)
-               make.left.right.equalTo(view.safeAreaLayoutGuide).inset(16)
-               make.height.greaterThanOrEqualTo(60)
+            make.left.right.equalToSuperview().inset(16)
+            make.bottom.equalToSuperview().inset(20)
         }
-
+        
+        
     }
     
     func fetchData(){
@@ -129,7 +149,7 @@ extension MovieDetailViewController: UICollectionViewDataSource, UICollectionVie
         return cell
     }
     
-
+    
 }
 
 

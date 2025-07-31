@@ -8,7 +8,7 @@ import UIKit
 import SnapKit
 // MARK: @@애니메이션 넣어보기?
 final class SynopsisView: UIView {
-
+    
     private let titleLabel = UILabel()
     private let moreButton = UIButton(type: .system)
     private let bodyLabel = UILabel()

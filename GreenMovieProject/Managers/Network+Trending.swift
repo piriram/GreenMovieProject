@@ -16,7 +16,7 @@ extension NetworkManager {
             .validate(statusCode: 200..<300)
             .responseDecodable(of: TrendingResponse.self) { response in
                 switch response.result {
-                    case .success(let value):
+                case .success(let value):
                     completion(.success(value))
                 case .failure(let error):
                     print("네트워크 오류 : \(error.localizedDescription)")

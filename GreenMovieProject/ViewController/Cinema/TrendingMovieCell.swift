@@ -77,7 +77,7 @@ class TrendingMovieCell: UICollectionViewCell {
     func configureCell(_ movie: Trending){
         //        print(movie.title)
         
-       
+        
         let urlString = NetworkManager.shared.composeURLPath(path: movie.posterPath)
         let url = URL(string: urlString)!
         posterImageView.kf.setImage(with: url)
