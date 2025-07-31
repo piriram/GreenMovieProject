@@ -18,9 +18,9 @@ final class NetworkManager {
     let headers: HTTPHeaders = [
         "Authorization":"Bearer \(APIKey.APIKey)"
     ]
-    var parameters: Parameters = ["language":"ko-KR"]
+    var parameters: Parameters = ["language":"ko-KR"] //"include_image_language":null
     func fetchMovieImages(movieID:Int,completion:@escaping ([MediaImage])->Void){
-        
+        parameters["include_image_language"] = "null"
         let path = "/movie/\(movieID)/images"
         print(baseURL + path)
         AF.request(baseURL + path,parameters: parameters ,headers: headers)
@@ -64,6 +64,8 @@ final class NetworkManager {
                 
             }
     }
+    
+    //MARK: 무엇을 하는 함수인가요?
     func composeURLPath(path:String)->String{
         return "https://image.tmdb.org/t/p/w500" + path
     }
