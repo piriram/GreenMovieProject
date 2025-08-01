@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct ImageResponse: Decodable {
+struct MedioResponse: Decodable {
     let id: Int
-    let backdrops: [MediaImage]
-    let logos: [MediaImage]
-    let posters: [MediaImage]
+    let backdrops: [Medio]
+    let logos: [Medio]
+    let posters: [Medio]
 }
 
-struct MediaImage: Decodable {
+struct Medio: Decodable {
     let aspectRatio: Double
     let height: Int
     let filePath: String

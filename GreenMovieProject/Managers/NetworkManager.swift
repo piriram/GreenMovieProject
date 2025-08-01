@@ -6,30 +6,10 @@
 //
 //MARK: 나중에 TMDBManager로 이름바꿀 예정
 //TODO: 나중에 속성에 private 다 붙이기
-import UIKit
 import Alamofire
 
 final class NetworkManager {
     static let shared = NetworkManager()
-   
-    
-    func fetchGenres(completion: @escaping ([Int: String]) -> Void) {
-           let url = "\(baseURL)/genre/movie/list"
-           let parameters: Parameters = ["language": "ko-KR"]
-           
-           AF.request(url, parameters: parameters, headers: headers)
-               .validate()
-               .responseDecodable(of: GenreListResponse.self) { response in
-                   switch response.result {
-                   case .success(let result):
-                       let genreDict = Dictionary(uniqueKeysWithValues: result.genres.map { ($0.id, $0.name) })
-                       completion(genreDict)
-                   case .failure(let error):
-                       print("장르 로드 실패: \(error.localizedDescription)")
-                       completion([:]) 
-                   }
-               }
-       }
     private init() {}
     
     let baseURL = "https://api.themoviedb.org/3"
@@ -37,23 +17,30 @@ final class NetworkManager {
         "Authorization":"Bearer \(APIKey.APIKey)"
     ]
     var parameters: Parameters = ["language":"ko-KR"] //"include_image_language":null
-    func fetchSearchResults(query: String, page: Int = 1, completion: @escaping (Result<[Movie], Error>) -> Void) {
-        let url = "\(baseURL)/search/movie"
-        
-        parameters["query"] = query
-        parameters["page"] = page
-        print("parameters:\(parameters)")
-        print("search url:\(url)")
-        AF.request(url, method: .get, parameters: parameters, headers: headers)
-            .validate()
-            .responseDecodable(of: MovieListResponse.self) { response in
+    
+   
+   
+    func fetchMovieImages(movieID:Int,completion:@escaping ([Medio])->Void){
+        parameters["include_image_language"] = "null"
+        let path = "/movie/\(movieID)/images"
+        print(baseURL + path)
+        AF.request(baseURL + path,parameters: parameters ,headers: headers)
+            .validate(statusCode: 200..<300)
+            .responseDecodable(of: MedioResponse.self) { response in
+                
                 switch response.result {
-                case .success(let movieList):
-                    completion(.success(movieList.results))
+                case .success(let value):
+                    completion(value.backdrops)
                 case .failure(let error):
-                    completion(.failure(error))
+                    print("네트워크 오류 : \(error.localizedDescription)")
+                    if let afError = error.asAFError,
+                       case let .responseSerializationFailed(reason) = afError ,
+                       case let .decodingFailed(decodingError) = reason{
+                        print("디코딩 실패:\(decodingError)")
+                    }
+                    
                 }
+                
             }
     }
-    
 }

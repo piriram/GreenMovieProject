@@ -5,33 +5,10 @@
 //  Created by piri kim on 8/1/25.
 //
 
-import UIKit
 import Alamofire
 
 extension NetworkManager {
-    func fetchMovieImages(movieID:Int,completion:@escaping ([MediaImage])->Void){
-        parameters["include_image_language"] = "null"
-        let path = "/movie/\(movieID)/images"
-        print(baseURL + path)
-        AF.request(baseURL + path,parameters: parameters ,headers: headers)
-            .validate(statusCode: 200..<300)
-            .responseDecodable(of: ImageResponse.self) { response in
-                
-                switch response.result {
-                case .success(let value):
-                    completion(value.backdrops)
-                case .failure(let error):
-                    print("네트워크 오류 : \(error.localizedDescription)")
-                    if let afError = error.asAFError,
-                       case let .responseSerializationFailed(reason) = afError ,
-                       case let .decodingFailed(decodingError) = reason{
-                        print("디코딩 실패:\(decodingError)")
-                    }
-                    
-                }
-                
-            }
-    }
+  
     func fetchMovieDetail(movieID:Int,completion:@escaping ([Cast], [Crew])->Void){
         let path = "/movie/\(movieID)/credits"
         print(baseURL + path)

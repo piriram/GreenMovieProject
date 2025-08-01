@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct MovieListResponse: Decodable {
+struct MovieResponse: Decodable {
     let page: Int
     let results: [Movie]
     let totalPages: Int
     let totalResults: Int
-
+    
     enum CodingKeys: String, CodingKey {
         case page, results
         case totalPages = "total_pages"
@@ -28,7 +28,7 @@ struct Movie: Decodable {
     let voteAverage: Double
     let overview: String
     let genreIds: [Int]
-
+    
     enum CodingKeys: String, CodingKey {
         case id
         case title

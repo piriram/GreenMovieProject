@@ -14,7 +14,7 @@ class MovieDetailViewController: BaseViewController {
     let movie:Trending
     var cast: [Cast] = []
     var crew: [Crew] = []
-    var medios: [MediaImage] = []{
+    var medios: [Medio] = []{
         didSet{
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
