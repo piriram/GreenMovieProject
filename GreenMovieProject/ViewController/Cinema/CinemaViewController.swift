@@ -12,19 +12,25 @@ class CinemaViewController:BaseViewController {
     
     static let identifier = "CinemaViewController"
     var movies:[Trending] = []
-    
+    let width:Double = 140
+
     /// 트렌딩 관련 프로퍼티
-    lazy var collectionView:UICollectionView = createTrendingCollectionView()
+    let trendingLabel = UILabel()
+    lazy var trendingCV:UICollectionView = createTrendingCollectionView()
     
     override func viewDidLoad() {
         //        print(#function)
         super.viewDidLoad()
         navigationItem.title = "파이리피디아"
-        configureTrending()
+        configureAll()
+         
+            print("get keywords: \(RecentSearchManager.shared.getKeywords())")
+        
     }
     
-    func configureTrending() {
+    func configureAll() {
         configureTrendingLayout()
+        goSearchButton()
         fetchTrendingData()
     }
     func createTrendingCollectionView() -> UICollectionView {
@@ -35,7 +41,7 @@ class CinemaViewController:BaseViewController {
         layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
         layout.minimumLineSpacing = 16
         
-        layout.itemSize = CGSize(width: 180, height: 260 )
+        layout.itemSize = CGSize(width: width, height: width * 1.5 )
         
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .clear // 블랙?
@@ -48,12 +54,24 @@ class CinemaViewController:BaseViewController {
     }
     func configureTrendingLayout(){
         //        print(#function)
-        view.addSubview(collectionView)
-        collectionView.snp.makeConstraints { make in
+        view.addSubview(trendingLabel)
+        view.addSubview(trendingCV)
+        trendingLabel.snp.makeConstraints { make in
+            make.top.equalTo(view.layoutMarginsGuide).offset(300)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
-            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(20)
-            make.height.equalTo(500)
+            make.height.equalTo(17)
         }
+        trendingCV.snp.makeConstraints { make in
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.equalTo(view.safeAreaLayoutGuide)
+            make.top.equalTo(trendingLabel.snp.bottom)
+        }
+        
+        trendingLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        trendingLabel.textColor = .white
+        trendingLabel.textAlignment = .left
+        trendingLabel.text = "오늘의 영화"
+        print("트렌딩레이블")
     }
     func fetchTrendingData(){
         
@@ -63,7 +81,7 @@ class CinemaViewController:BaseViewController {
                 //                dump(data)
                 self.movies = data.results
                 DispatchQueue.main.async {
-                    self.collectionView.reloadData()
+                    self.trendingCV.reloadData()
                 }
                 
             case .failure(let error):
@@ -71,6 +89,21 @@ class CinemaViewController:BaseViewController {
             }
             
         }
+    }
+    func goSearchButton() {
+        let searchButton = UIBarButtonItem(
+            image: UIImage(systemName: "magnifyingglass"),
+            style: .plain,
+            target: self,
+            action: #selector(didTapSearchButton)
+        )
+        searchButton.tintColor = .primary
+        navigationItem.rightBarButtonItem = searchButton
+    }
+    
+    @objc func didTapSearchButton() {
+        let searchVC = SearchViewController()
+        navigationController?.pushViewController(searchVC, animated: true)
     }
     
     

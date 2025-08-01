@@ -43,7 +43,7 @@ final class SearchViewController: UIViewController {
             switch result {
             case .success(let movies):
                 self.movies = movies
-                
+                RecentSearchManager.shared.addKeyword(query)
             case .failure(let error):
                 print("검색 실패: \(error.localizedDescription)")
             }

@@ -42,10 +42,10 @@ class TrendingMovieCell: UICollectionViewCell {
         
         titleLabel.numberOfLines = 1
         titleLabel.textColor = .white
-        titleLabel.font = .systemFont(ofSize: 20, weight: .bold)
+        titleLabel.font = .systemFont(ofSize: 18, weight: .bold)
         
         overviewLabel.textColor = .name
-        overviewLabel.font = .systemFont(ofSize: 14)
+        overviewLabel.font = .systemFont(ofSize: 12)
         overviewLabel.numberOfLines = 3
         
         
@@ -59,11 +59,11 @@ class TrendingMovieCell: UICollectionViewCell {
             make.height.equalTo(posterImageView.snp.width).multipliedBy(1.5)
         }
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(posterImageView.snp.bottom).offset(12)
+            make.top.equalTo(posterImageView.snp.bottom).offset(4)
             make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
         }
         overviewLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(8)
+            make.top.equalTo(titleLabel.snp.bottom).offset(4)
             make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
         }
         
