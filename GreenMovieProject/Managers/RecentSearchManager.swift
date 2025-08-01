@@ -32,7 +32,7 @@ final class RecentSearchManager {
         UserDefaultsManager.shared.addStrings(filtered, forKey: key) // 배열을 제거해서 배열로 넣기
     }
     
-    func clearAll() {
+    func removeAllKeyword() {
         UserDefaultsManager.shared.removeKey(forKey: key)
     }
 }

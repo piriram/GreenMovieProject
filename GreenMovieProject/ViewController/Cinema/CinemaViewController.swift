@@ -13,7 +13,8 @@ class CinemaViewController:BaseViewController {
     static let identifier = "CinemaViewController"
     var movies:[Trending] = []
     let width:Double = 140
-
+    let recentSearchView = RecentSearchView()
+    
     /// 트렌딩 관련 프로퍼티
     let trendingLabel = UILabel()
     lazy var trendingCV:UICollectionView = createTrendingCollectionView()
@@ -23,8 +24,11 @@ class CinemaViewController:BaseViewController {
         super.viewDidLoad()
         navigationItem.title = "파이리피디아"
         configureAll()
-         
-            print("get keywords: \(RecentSearchManager.shared.getKeywords())")
+        
+        print("get keywords: \(RecentSearchManager.shared.getKeywords())")
+        let keywords: [String] = RecentSearchManager.shared.getKeywords()
+        
+        recentSearchView.updateKeywords(keywords)
         
     }
     
@@ -54,10 +58,17 @@ class CinemaViewController:BaseViewController {
     }
     func configureTrendingLayout(){
         //        print(#function)
+        view.addSubview(recentSearchView)
         view.addSubview(trendingLabel)
         view.addSubview(trendingCV)
+        
+        recentSearchView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(200)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+            make.height.equalTo(80)
+        }
         trendingLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.layoutMarginsGuide).offset(300)
+            make.top.equalTo(recentSearchView.snp.bottom).offset(4)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(17)
         }
@@ -104,6 +115,17 @@ class CinemaViewController:BaseViewController {
     @objc func didTapSearchButton() {
         let searchVC = SearchViewController()
         navigationController?.pushViewController(searchVC, animated: true)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        print(#function)
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        recentSearchView.reloadKeywords()
+        print(#function)
     }
     
     
