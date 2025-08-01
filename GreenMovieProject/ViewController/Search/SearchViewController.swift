@@ -6,109 +6,128 @@
 //
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class SearchViewController: UIViewController {
     var movies: [Movie] = []
-    let searchBar = UISearchBar()
-    let resultCountLabel = UILabel()
-    var collectionView: UICollectionView!
     var genreMap: [Int: String] = [:]
+    var initialQuery: String?
+    var currentPage = 1
+    var isLoading = false
+    var hasMoreData = true
+    
+    let searchBar = UISearchBar()
+    var collectionView: UICollectionView!
+    let emptyLabel = UILabel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "영화 검색"
-        configureAll()
+        configureUI()
+        configureLayout()
         
+        if let query = initialQuery {
+            searchBar.text = query
+            fetchData(query: query)
+        } else {
+            showEmptyUI()
+            searchBar.becomeFirstResponder()
+        }
     }
-    func fetchData(){
+    
+    func fetchData(query: String) {
+        isLoading = true
         let group = DispatchGroup()
+        
         group.enter()
-        NetworkManager.shared.fetchSearchResults(query: "어벤져스") { result in
+        NetworkManager.shared.fetchSearchResults(query: query, page: currentPage) { result in
             switch result {
             case .success(let movies):
                 self.movies = movies
-                print("검색 성공")
+                self.hasMoreData = movies.count == 20
             case .failure(let error):
                 print("검색 실패: \(error.localizedDescription)")
             }
             group.leave()
         }
+        
         group.enter()
         NetworkManager.shared.fetchGenres { genre in
             self.genreMap = genre
-            //            dump(genre)
-            print("fetch genre 종료")
             group.leave()
-            
         }
+        
         group.notify(queue: .main) {
-            self.resultCountLabel.text = "검색 결과 \(self.movies.count)개"
             self.collectionView.reloadData()
+            self.emptyLabel.isHidden = !self.movies.isEmpty
+            self.isLoading = false
         }
-        
-        
     }
+    
     func configureUI() {
-        configureSearchBar()
-        configureResultLabel()
-        configureCollectionView()
-    }
-    
-    func configureAll() {
-        fetchData()
-        configureUI()
-        configureLayout()
-    }
-    
-    func configureSearchBar() {
-        searchBar.searchBarStyle = .minimal
-        searchBar.searchTextField.textColor = .white
-        searchBar.searchTextField.leftView?.tintColor = .white
-        view.addSubview(searchBar)
-    }
-    
-    func configureResultLabel() {
-        resultCountLabel.text = "검색 결과 0개"
-        resultCountLabel.textColor = .white
-        resultCountLabel.font = .systemFont(ofSize: 14, weight: .medium)
-        view.addSubview(resultCountLabel)
-    }
-    
-    func configureCollectionView() {
-        collectionView = makeCollectionView()
-        collectionView.backgroundColor = .clear
-        collectionView.dataSource = self
-        view.addSubview(collectionView)
-        collectionView.register(MovieCell.self, forCellWithReuseIdentifier: MovieCell.identifier) // 위치?
+        view.backgroundColor = .black
         
-    }
-    
-    func makeCollectionView() -> UICollectionView {
+        searchBar.delegate = self
+        searchBar.searchBarStyle = .minimal
+        searchBar.tintColor = .white
+        searchBar.searchTextField.textColor = .white
+        view.addSubview(searchBar)
+        
+        
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: UIScreen.main.bounds.width , height: 140)
         layout.minimumLineSpacing = 10
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        return UICollectionView(frame: .zero, collectionViewLayout: layout)
+        
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.backgroundColor = .clear
+        collectionView.register(MovieCell.self, forCellWithReuseIdentifier: MovieCell.identifier)
+        view.addSubview(collectionView)
+        
+        emptyLabel.text = "원하는 검색결과를 찾지 못했습니다"
+        emptyLabel.font = .systemFont(ofSize: 14)
+        emptyLabel.textColor = .lightGray
+        emptyLabel.textAlignment = .center
+        emptyLabel.isHidden = true
+        view.addSubview(emptyLabel)
     }
     
     func configureLayout() {
         searchBar.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            $0.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(44)
         }
         
-        resultCountLabel.snp.makeConstraints {
-            $0.top.equalTo(searchBar.snp.bottom).offset(12)
-            $0.leading.equalToSuperview().inset(16)
+        collectionView.snp.makeConstraints {
+            $0.top.equalTo(searchBar.snp.bottom).offset(8)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
-        collectionView.snp.makeConstraints {
-            $0.top.equalTo(resultCountLabel.snp.bottom).offset(12)
-            $0.horizontalEdges.bottom.equalTo(view.safeAreaLayoutGuide)
+        emptyLabel.snp.makeConstraints {
+            $0.center.equalToSuperview()
         }
+    }
+    
+    func showEmptyUI() {
+        movies = []
+        collectionView.reloadData()
+        emptyLabel.isHidden = false
     }
 }
 
+
+extension SearchViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let query = searchBar.text?.trimmingCharacters(in: .whitespaces), !query.isEmpty else { return }
+        searchBar.resignFirstResponder()
+        currentPage = 1
+        fetchData(query: query)
+    }
+}
 
 extension SearchViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -116,12 +135,27 @@ extension SearchViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCell.identifier, for: indexPath) as! MovieCell
+        
+        
         let movie = movies[indexPath.item]
         cell.configureData(movie: movie, genreMap: genreMap)
         
+        let genreNames = movie.genreIds.compactMap { genreMap[$0] }
+        cell.configureGenres(genreNames)
         return cell
     }
-    
+}
+
+extension SearchViewController: UICollectionViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        
+        if offsetY > contentHeight - scrollView.frame.height - 100 {
+            guard !isLoading, hasMoreData, let query = searchBar.text else { return }
+            currentPage += 1
+            fetchData(query: query)
+        }
+    }
 }
