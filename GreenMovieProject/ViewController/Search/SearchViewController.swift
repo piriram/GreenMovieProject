@@ -13,12 +13,11 @@ final class SearchViewController: UIViewController {
     var genreMap: [Int: String] = [:]
     var initialQuery: String?
     var currentPage = 1
-    var isLoading = false
-    var hasMoreData = true
     
     let searchBar = UISearchBar()
     var collectionView: UICollectionView!
     let emptyLabel = UILabel()
+    var isSearch = false // 검색하는 경우면 테이블뷰 포커스를 상단으로 올림
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +35,7 @@ final class SearchViewController: UIViewController {
     }
     
     func fetchData(query: String) {
-        isLoading = true
+        
         let group = DispatchGroup()
         
         group.enter()
@@ -44,7 +43,7 @@ final class SearchViewController: UIViewController {
             switch result {
             case .success(let movies):
                 self.movies = movies
-                self.hasMoreData = movies.count == 20
+                
             case .failure(let error):
                 print("검색 실패: \(error.localizedDescription)")
             }
@@ -58,9 +57,13 @@ final class SearchViewController: UIViewController {
         }
         
         group.notify(queue: .main) {
+            if self.isSearch{
+                self.collectionView.setContentOffset(.zero, animated: false) //스크롤을 위로 올리기
+                self.isSearch = false
+            }
             self.collectionView.reloadData()
             self.emptyLabel.isHidden = !self.movies.isEmpty
-            self.isLoading = false
+            
         }
     }
     
@@ -69,6 +72,7 @@ final class SearchViewController: UIViewController {
         
         searchBar.delegate = self
         searchBar.searchBarStyle = .minimal
+        searchBar.placeholder = "영화를 검색해보세요."
         searchBar.tintColor = .white
         searchBar.searchTextField.textColor = .white
         view.addSubview(searchBar)
@@ -81,7 +85,7 @@ final class SearchViewController: UIViewController {
         
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.dataSource = self
-        collectionView.delegate = self
+        
         collectionView.backgroundColor = .clear
         collectionView.register(MovieCell.self, forCellWithReuseIdentifier: MovieCell.identifier)
         view.addSubview(collectionView)
@@ -125,6 +129,7 @@ extension SearchViewController: UISearchBarDelegate {
         guard let query = searchBar.text?.trimmingCharacters(in: .whitespaces), !query.isEmpty else { return }
         searchBar.resignFirstResponder()
         currentPage = 1
+        isSearch = true
         fetchData(query: query)
     }
 }
@@ -143,19 +148,13 @@ extension SearchViewController: UICollectionViewDataSource {
         
         let genreNames = movie.genreIds.compactMap { genreMap[$0] }
         cell.configureGenres(genreNames)
-        return cell
-    }
-}
-
-extension SearchViewController: UICollectionViewDelegate {
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let offsetY = scrollView.contentOffset.y
-        let contentHeight = scrollView.contentSize.height
         
-        if offsetY > contentHeight - scrollView.frame.height - 100 {
-            guard !isLoading, hasMoreData, let query = searchBar.text else { return }
-            currentPage += 1
-            fetchData(query: query)
+        if indexPath.item == movies.count - 10{
+            if let query = searchBar.text, !query.isEmpty {
+                currentPage += 1
+                fetchData(query: query)
+            }
         }
+        return cell
     }
 }
