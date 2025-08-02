@@ -28,7 +28,7 @@ final class SettingViewController: UIViewController {
         view.addSubview(profileCardView)
         
         profileCardView.configure(
-            nickname: NicknameManager.shared.readNickname() ?? "",
+            nickname: UserInfoManager.shared.readNickname() ?? "",
             joinDate: "25.06.24 가입",
             boxNum: 2
         )

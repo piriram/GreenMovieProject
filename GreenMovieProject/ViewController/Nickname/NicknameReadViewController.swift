@@ -111,7 +111,7 @@ final class NicknameReadViewController: UIViewController {
            nickname.count < 10,
            nickname.rangeOfCharacter(from: .decimalDigits) == nil,
            nickname.rangeOfCharacter(from: CharacterSet(charactersIn: "@#$%")) == nil {
-            NicknameManager.shared.createNickname(nickname)
+            UserInfoManager.shared.createNickname(nickname)
         }
         navigationController?.popViewController(animated: true)
     }

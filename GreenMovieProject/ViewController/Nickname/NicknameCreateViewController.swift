@@ -20,7 +20,7 @@ final class NicknameCreateViewController: UIViewController {
         
         configureUI()
         configureLayout()
-        nicknameTextField.text = NicknameManager.shared.readNickname() ?? ""
+        nicknameTextField.text = UserInfoManager.shared.readNickname() ?? ""
     }
     
     func configureUI() {

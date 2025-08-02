@@ -87,7 +87,7 @@ class CinemaViewController:BaseViewController {
             make.top.equalTo(trendingLabel.snp.bottom).offset(16)
         }
         profileCardView.configure(
-            nickname: NicknameManager.shared.readNickname() ?? "",
+            nickname: UserInfoManager.shared.readNickname() ?? "",
             joinDate: "25.06.24 가입",
             boxNum: 2
         )
