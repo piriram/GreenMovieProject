@@ -58,12 +58,12 @@ final class ProfileCardView: UIView {
             $0.leading.equalToSuperview().offset(16)
         }
         chevronImage.snp.makeConstraints {
-            $0.bottom.equalTo(nicknameLabel.snp.bottom)
+            $0.top.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().inset(16)
             $0.size.equalTo(16)
         }
         joinLabel.snp.makeConstraints {
-            $0.bottom.equalTo(nicknameLabel.snp.bottom)
+            $0.top.equalToSuperview().offset(16)
             $0.trailing.equalTo(chevronImage.snp.leading).offset(-8)
         }
         

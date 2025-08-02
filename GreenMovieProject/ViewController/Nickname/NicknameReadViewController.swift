@@ -10,7 +10,7 @@ import SnapKit
 
 final class NicknameReadViewController: UIViewController {
     
-    var initialNickname: String? // ← 이전 닉네임을 전달 받음
+    var initialNickname: String? = ""
     
     private let nicknameTextField = UITextField()
     private let statusLabel = UILabel()

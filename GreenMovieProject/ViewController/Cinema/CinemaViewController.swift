@@ -12,14 +12,14 @@ class CinemaViewController:BaseViewController {
     
     static let identifier = "CinemaViewController"
     var movies:[Trending] = []
-    let width:Double = 140
+    let width:Double = 250
     let profileCardView = ProfileCardView()
     let recentSearchView = RecentSearchView()
     
     
     /// 트렌딩 관련 프로퍼티
     let trendingLabel = UILabel()
-    lazy var trendingCV:UICollectionView = createTrendingCollectionView()
+    lazy var trendingCollectionView:UICollectionView = createTrendingCollectionView()
     
     override func viewDidLoad() {
         //        print(#function)
@@ -47,7 +47,7 @@ class CinemaViewController:BaseViewController {
         layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
         layout.minimumLineSpacing = 16
         
-        layout.itemSize = CGSize(width: width, height: width * 1.5 )
+        //        layout.itemSize = CGSize(width: width, height: width * 1.5 )
         
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .clear // 블랙?
@@ -63,13 +63,13 @@ class CinemaViewController:BaseViewController {
         view.addSubview(profileCardView)
         view.addSubview(recentSearchView)
         view.addSubview(trendingLabel)
-        view.addSubview(trendingCV)
+        view.addSubview(trendingCollectionView)
         
         profileCardView.snp.makeConstraints { make in
             
             make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
             make.horizontalEdges.equalToSuperview().inset(16)
-            make.height.equalTo(100)
+            make.height.equalTo(92)
         }
         recentSearchView.snp.makeConstraints { make in
             make.top.equalTo(profileCardView.snp.bottom).offset(16)
@@ -77,14 +77,14 @@ class CinemaViewController:BaseViewController {
             make.height.equalTo(80)
         }
         trendingLabel.snp.makeConstraints { make in
-            make.top.equalTo(recentSearchView.snp.bottom).offset(4)
+            make.top.equalTo(recentSearchView.snp.bottom).offset(16)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(17)
         }
-        trendingCV.snp.makeConstraints { make in
+        trendingCollectionView.snp.makeConstraints { make in
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
             make.bottom.equalTo(view.safeAreaLayoutGuide)
-            make.top.equalTo(trendingLabel.snp.bottom)
+            make.top.equalTo(trendingLabel.snp.bottom).offset(16)
         }
         profileCardView.configure(
             nickname: NicknameManager.shared.readNickname() ?? "",
@@ -107,7 +107,7 @@ class CinemaViewController:BaseViewController {
                 //                dump(data)
                 self.movies = data.results
                 DispatchQueue.main.async {
-                    self.trendingCV.reloadData()
+                    self.trendingCollectionView.reloadData()
                 }
                 
             case .failure(let error):
@@ -146,6 +146,11 @@ class CinemaViewController:BaseViewController {
         let nextViewController = ViewController()
         navigationController?.pushViewController(nextViewController, animated: true)
     }
+    //    override func viewDidLayoutSubviews() {
+    //        super.viewDidLayoutSubviews()
+    //        trendingCV.collectionViewLayout.invalidateLayout()
+    //    }
+    
     
     
 }
@@ -174,4 +179,24 @@ extension CinemaViewController: UICollectionViewDataSource {
     }
 }
 
+extension CinemaViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let width = self.width
+        
+        // 전체 높이에서 고정 컴포넌트 높이만큼 빼기
+        let topSafeArea = view.safeAreaInsets.top
+        let bottomSafeArea = view.safeAreaInsets.bottom
+        let totalHeight = view.bounds.height
+        
+//        let fixedHeights: CGFloat = topSafeArea + bottomSafeArea + 16 + 100 + 16 + 80 + 4 + 17
+//        print("fixedHeights: \(fixedHeights)")
+        let availableHeight = totalHeight - 450
+        
+        let height = availableHeight
+        
+        return CGSize(width: width, height: height)
+    }
+}
 

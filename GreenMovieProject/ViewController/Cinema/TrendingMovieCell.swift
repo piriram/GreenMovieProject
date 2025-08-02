@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Kingfisher
+
 class TrendingMovieCell: UICollectionViewCell {
     static let identifier = "TrendingMovieCell"
     
@@ -16,26 +17,20 @@ class TrendingMovieCell: UICollectionViewCell {
     let overviewLabel = UILabel()
     
     override init(frame: CGRect) {
-        
         super.init(frame: frame)
-        configureAll()
+        configureUI()
+        configureLayout()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configureAll(){
-        
-        configureUI()
-        configureLayout()
-        
-    }
-    func configureUI(){
-        
+    func configureUI() {
         contentView.addSubview(posterImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(overviewLabel)
+        
         posterImageView.contentMode = .scaleAspectFill
         posterImageView.clipsToBounds = true
         posterImageView.layer.cornerRadius = 20
@@ -47,45 +42,38 @@ class TrendingMovieCell: UICollectionViewCell {
         overviewLabel.textColor = .name
         overviewLabel.font = .systemFont(ofSize: 12)
         overviewLabel.numberOfLines = 3
-        
-        
-        
     }
-    func configureLayout(){
+    
+    func configureLayout() {
         
-        posterImageView.snp.makeConstraints { make in
-            make.top.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
-            //            make.height.equalTo(300) //TODO: 세로길이에 맞춰서 늘어나기
-            make.height.equalTo(posterImageView.snp.width).multipliedBy(1.5)
-        }
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(posterImageView.snp.bottom).offset(4)
-            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
+            make.height.equalTo(20)
+            make.horizontalEdges.equalToSuperview()
         }
+
+        
         overviewLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(4)
-            make.horizontalEdges.equalTo(contentView.safeAreaLayoutGuide)
+            make.horizontalEdges.equalToSuperview()
+            make.height.equalTo(48)
+            make.bottom.equalToSuperview().inset(4)
         }
-        
+
+        // Poster Image View: 남은 공간 모두 차지
+        posterImageView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(titleLabel.snp.top).offset(-8)
+        }
     }
+
     
-    func configureData(){
-        
-        
-    }
-    
-    func configureCell(_ movie: Trending){
-        //        print(movie.title)
-        
-        
+    func configureCell(_ movie: Trending) {
         let urlString = NetworkManager.shared.composeURLPath(path: movie.posterPath)
-        let url = URL(string: urlString)!
-        posterImageView.kf.setImage(with: url)
-        
+        if let url = URL(string: urlString) {
+            posterImageView.kf.setImage(with: url)
+        }
         titleLabel.text = movie.title
         overviewLabel.text = movie.overview
-        
     }
-    
 }
-
