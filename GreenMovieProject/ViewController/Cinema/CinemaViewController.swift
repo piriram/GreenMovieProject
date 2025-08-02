@@ -13,7 +13,9 @@ class CinemaViewController:BaseViewController {
     static let identifier = "CinemaViewController"
     var movies:[Trending] = []
     let width:Double = 140
+    let profileCardView = ProfileCardView()
     let recentSearchView = RecentSearchView()
+    
     
     /// 트렌딩 관련 프로퍼티
     let trendingLabel = UILabel()
@@ -58,12 +60,19 @@ class CinemaViewController:BaseViewController {
     }
     func configureTrendingLayout(){
         //        print(#function)
+        view.addSubview(profileCardView)
         view.addSubview(recentSearchView)
         view.addSubview(trendingLabel)
         view.addSubview(trendingCV)
         
+        profileCardView.snp.makeConstraints { make in
+            
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
+            make.horizontalEdges.equalToSuperview().inset(16)
+            make.height.equalTo(100)
+        }
         recentSearchView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(200)
+            make.top.equalTo(profileCardView.snp.bottom).offset(16)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(80)
         }
@@ -77,7 +86,13 @@ class CinemaViewController:BaseViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide)
             make.top.equalTo(trendingLabel.snp.bottom)
         }
-        
+        profileCardView.configure(
+            nickname: NicknameManager.shared.readNickname() ?? "",
+            joinDate: "25.06.24 가입",
+            boxNum: 2
+        )
+        let tap = UITapGestureRecognizer(target: self, action: #selector(profileCardTouched))
+        profileCardView.addGestureRecognizer(tap)
         trendingLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         trendingLabel.textColor = .white
         trendingLabel.textAlignment = .left
@@ -106,13 +121,13 @@ class CinemaViewController:BaseViewController {
             image: UIImage(systemName: "magnifyingglass"),
             style: .plain,
             target: self,
-            action: #selector(didTapSearchButton)
+            action: #selector(searchButtonTouched)
         )
         searchButton.tintColor = .primary
         navigationItem.rightBarButtonItem = searchButton
     }
     
-    @objc func didTapSearchButton() {
+    @objc func searchButtonTouched() {
         let searchVC = SearchViewController()
         navigationController?.pushViewController(searchVC, animated: true)
     }
@@ -126,6 +141,10 @@ class CinemaViewController:BaseViewController {
         super.viewDidAppear(animated)
         recentSearchView.reloadKeywords()
         print(#function)
+    }
+    @objc func profileCardTouched() {
+        let nextViewController = ViewController()
+        navigationController?.pushViewController(nextViewController, animated: true)
     }
     
     

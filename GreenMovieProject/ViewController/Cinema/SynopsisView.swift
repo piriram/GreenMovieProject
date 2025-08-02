@@ -31,7 +31,7 @@ final class SynopsisView: UIView {
         titleLabel.textColor = .white
         
         moreButton.setTitle("More", for: .normal)
-        moreButton.setTitleColor(.green, for: .normal)
+        moreButton.setTitleColor(.primary, for: .normal)
         moreButton.titleLabel?.font = .systemFont(ofSize: 14, weight: .medium)
         moreButton.addTarget(self, action: #selector(moreTapped), for: .touchUpInside)
         
