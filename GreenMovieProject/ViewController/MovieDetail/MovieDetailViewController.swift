@@ -94,7 +94,6 @@ class MovieDetailViewController: BaseViewController {
                     self.cast = cast
                     self.crew = crew
 
-                    // TODO: 흠 이게 최선일까
                     let castView = CastListView(cast: cast)
                     self.castView = castView
                     self.contentView.addSubview(castView)

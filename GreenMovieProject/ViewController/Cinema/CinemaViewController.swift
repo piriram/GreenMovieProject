@@ -141,6 +141,7 @@ class CinemaViewController:BaseViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         recentSearchView.reloadKeywords()
+        trendingCollectionView.reloadData()
         print(#function)
     }
     @objc func profileCardTouched() {
@@ -192,8 +193,8 @@ extension CinemaViewController: UICollectionViewDelegateFlowLayout {
         let bottomSafeArea = view.safeAreaInsets.bottom
         let totalHeight = view.bounds.height
         
-//        let fixedHeights: CGFloat = topSafeArea + bottomSafeArea + 16 + 100 + 16 + 80 + 4 + 17
-//        print("fixedHeights: \(fixedHeights)")
+        //        let fixedHeights: CGFloat = topSafeArea + bottomSafeArea + 16 + 100 + 16 + 80 + 4 + 17
+        //        print("fixedHeights: \(fixedHeights)")
         let availableHeight = totalHeight - 450
         
         let height = availableHeight
