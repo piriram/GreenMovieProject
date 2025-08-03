@@ -37,6 +37,7 @@ struct Trending: Decodable {
     let voteAverage:Double //vote_number 디폴트 0
     let voteCount:Int // vote_count 디폴트 0
     
+    
     enum CodingKeys: String, CodingKey {
         case adult
         case backdropPath = "backdrop_path"

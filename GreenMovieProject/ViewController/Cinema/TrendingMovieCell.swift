@@ -15,11 +15,14 @@ class TrendingMovieCell: UICollectionViewCell {
     let posterImageView = UIImageView()
     let titleLabel = UILabel()
     let overviewLabel = UILabel()
+    let heartButton = UIButton()
+    private var movieID: Int?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
         configureLayout()
+        heartButton.addTarget(self, action: #selector(didTapHeart), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -42,6 +45,11 @@ class TrendingMovieCell: UICollectionViewCell {
         overviewLabel.textColor = .name
         overviewLabel.font = .systemFont(ofSize: 12)
         overviewLabel.numberOfLines = 3
+        
+        heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
+        heartButton.tintColor = .primary
+        contentView.addSubview(heartButton)
+       
     }
     
     func configureLayout() {
@@ -50,7 +58,11 @@ class TrendingMovieCell: UICollectionViewCell {
             make.height.equalTo(20)
             make.horizontalEdges.equalToSuperview()
         }
-
+        heartButton.snp.makeConstraints {
+            $0.bottom.equalTo(titleLabel.snp.bottom)
+            $0.right.equalToSuperview().inset(8)
+            $0.size.equalTo(32)
+        }
         
         overviewLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(4)
@@ -58,7 +70,7 @@ class TrendingMovieCell: UICollectionViewCell {
             make.height.equalTo(48)
             make.bottom.equalToSuperview().inset(4)
         }
-
+        
         // Poster Image View: 남은 공간 모두 차지
         posterImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
@@ -66,7 +78,7 @@ class TrendingMovieCell: UICollectionViewCell {
             make.bottom.equalTo(titleLabel.snp.top).offset(-8)
         }
     }
-
+    
     
     func configureCell(_ movie: Trending) {
         let urlString = NetworkManager.shared.composeURLPath(path: movie.posterPath)
@@ -75,5 +87,21 @@ class TrendingMovieCell: UICollectionViewCell {
         }
         titleLabel.text = movie.title
         overviewLabel.text = movie.overview
+        movieID = movie.id 
+        let isHearted = FavoriteManager.shared.isHearted(id: movie.id)
+        heartButton.setImage(UIImage(systemName: isHearted ? "heart.fill" : "heart"), for: .normal)
+    }
+    @objc private func didTapHeart() {
+        print("heartbutton 탭")
+        guard let id = movieID else { return }
+        
+        if FavoriteManager.shared.isHearted(id: id) {
+            FavoriteManager.shared.removeHeartedMovie(id: id)
+            heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
+        } else {
+            FavoriteManager.shared.saveHeartedMovie(id: id)
+            heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+        }
+        
     }
 }

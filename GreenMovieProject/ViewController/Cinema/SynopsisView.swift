@@ -63,6 +63,6 @@ final class SynopsisView: UIView {
     @objc private func moreTapped() {
         isExpanded.toggle()
         bodyLabel.numberOfLines = isExpanded ? 0 : 3
-        moreButton.setTitle(isExpanded ? "Less" : "More", for: .normal)
+        moreButton.setTitle(isExpanded ? "Hide" : "More", for: .normal)
     }
 }

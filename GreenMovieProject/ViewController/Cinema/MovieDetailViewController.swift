@@ -27,6 +27,8 @@ class MovieDetailViewController: BaseViewController {
     
     let scrollView = UIScrollView()
     let contentView = UIView()
+    var castView: CastListView?
+    
     
     init(movie: Trending) {
         self.movie = movie
@@ -64,18 +66,18 @@ class MovieDetailViewController: BaseViewController {
         
         
     }
-    func configureLayout(){
+    func configureLayout() {
         scrollView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
         
         contentView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-            make.width.equalToSuperview()
+            make.width.equalToSuperview() // 수직 스크롤을 위한 고정 폭
         }
         
         collectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(0)
+            make.top.equalToSuperview()
             make.left.right.equalToSuperview()
             make.height.equalTo(250)
         }
@@ -83,26 +85,38 @@ class MovieDetailViewController: BaseViewController {
         metaHeaderView.snp.makeConstraints { make in
             make.top.equalTo(collectionView.snp.bottom).offset(16)
             make.left.right.equalToSuperview().inset(16)
-            make.height.equalTo(200)
+            make.height.equalTo(20)
         }
         
         synopsisView.snp.makeConstraints { make in
             make.top.equalTo(metaHeaderView.snp.bottom).offset(16)
             make.left.right.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview().inset(20)
+            // ✨ 여기서 bottom은 제거하고 castView 추가 이후에 처리
         }
-        
-        
     }
+    
     
     func fetchData(){
         DispatchQueue.global(qos: .background).async {
             
             
-            NetworkManager.shared.fetchMovieDetail(movieID: self.movie.id){ cast, crew in
-                self.cast = cast
-                self.crew = crew
+            NetworkManager.shared.fetchMovieDetail(movieID: self.movie.id) { cast, crew in
+                DispatchQueue.main.async {
+                    self.cast = cast
+                    self.crew = crew
+                    
+                    let castView = CastListView(cast: cast)
+                    self.castView = castView
+                    self.contentView.addSubview(castView)
+                    
+                    castView.snp.makeConstraints { make in
+                        make.top.equalTo(self.synopsisView.snp.bottom).offset(16)
+                        make.left.right.equalToSuperview().inset(16)
+                        make.bottom.equalToSuperview().inset(20)
+                    }
+                }
             }
+            
         }
         DispatchQueue.global(qos: .background).async {
             NetworkManager.shared.fetchMovieImages(movieID: self.movie.id) { medios in

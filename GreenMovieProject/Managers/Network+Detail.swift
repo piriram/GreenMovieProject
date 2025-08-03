@@ -12,6 +12,7 @@ extension NetworkManager {
     func fetchMovieDetail(movieID:Int,completion:@escaping ([Cast], [Crew])->Void){
         let path = "/movie/\(movieID)/credits"
         print(baseURL + path)
+//        let parameters: [String: Any] = ["language":"ko-KR"]
         AF.request(baseURL + path,parameters: parameters ,headers: headers)
             .validate(statusCode: 200..<300)
             .responseDecodable(of: CreditsResponse.self) { response in

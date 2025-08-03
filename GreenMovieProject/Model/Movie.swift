@@ -28,6 +28,7 @@ struct Movie: Decodable {
     let voteAverage: Double
     let overview: String
     let genreIds: [Int]
+    var isHearted: Bool = false
     
     enum CodingKeys: String, CodingKey {
         case id
