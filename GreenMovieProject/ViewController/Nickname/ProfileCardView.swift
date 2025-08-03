@@ -69,7 +69,7 @@ final class ProfileCardView: UIView {
         
         movieBoxButton.snp.makeConstraints {
             
-            $0.top.equalTo(nicknameLabel.snp.bottom).offset(12)
+            $0.bottom.equalToSuperview().offset(-12)
             $0.horizontalEdges.equalToSuperview().inset(16)
             $0.height.equalTo(36)
             

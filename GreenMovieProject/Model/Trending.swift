@@ -18,34 +18,15 @@ struct TrendingResponse: Decodable {
         case totalResults = "total_results"
     }
 }
-struct Movie: Decodable {
-    let id: Int
-    let title: String
-    let posterPath: String?
-    let releaseDate: String
-    let voteAverage: Double
-    let overview: String
-    let genreIds: [Int]
-    var isHearted: Bool = false
-    
-    enum CodingKeys: String, CodingKey {
-        case id
-        case title
-        case posterPath = "poster_path"
-        case releaseDate = "release_date"
-        case voteAverage = "vote_average"
-        case overview
-        case genreIds = "genre_ids"
-    }
-}
+
 
 struct Trending: Decodable {
-//    let backdropPath: String //backdrop_path
+    //    let backdropPath: String //backdrop_path
     
     let id: Int // 디폴트 0
     let title:String
-//    let originalLanguage: String //original_language
-//    let originalTitle: String // original)tutke
+    //    let originalLanguage: String //original_language
+    //    let originalTitle: String // original)tutke
     let overview: String
     
     let posterPath:String // poster_path

@@ -12,31 +12,30 @@ final class UserInfoManager {
     
     let nicknameKey = "nickname"
     let joinDateKey = "joinDate"
-    let userDefaults = UserDefaultsManager.shared
     
     private init() {}
     
     func createNickname(_ nickname: String) {
-        userDefaults.addStrings([nickname], forKey: nicknameKey)
+        UserDefaults.standard.set(nickname,forKey: nicknameKey)
     }
     
     func readNickname() -> String? {
-        return userDefaults.getStrings(forKey: nicknameKey).first
+        return UserDefaults.standard.string(forKey: nicknameKey)
     }
     
     func deleteNickname() {
-        userDefaults.removeKey(forKey: nicknameKey)
+        UserDefaults.standard.removeObject(forKey:nicknameKey)
     }
     
     func saveJoinDate(_ date: Date) {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         let dateString = formatter.string(from: date)
-        userDefaults.addStrings([dateString], forKey: joinDateKey)
+        UserDefaults.standard.set(dateString, forKey: joinDateKey)
     }
     
     func readJoinDate() -> String? {
-        return userDefaults.getStrings(forKey: joinDateKey).first
+        return UserDefaults.standard.string(forKey: joinDateKey)
     }
     func formattedJoinDate() -> String {
         guard let dateStr = readJoinDate() else { return "" }

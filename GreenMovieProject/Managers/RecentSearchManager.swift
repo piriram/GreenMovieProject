@@ -15,7 +15,7 @@ final class RecentSearchManager {
     init() {}
     
     func getKeywords() -> [String] {
-        return UserDefaultsManager.shared.getStrings(forKey: key)
+        return UserDefaults.standard.array(forKey: key) as? [String] ?? []
     }
     
     func addKeyword(_ keyword: String) {
@@ -24,16 +24,17 @@ final class RecentSearchManager {
         
        
         print("keywords: \(current)")
-        UserDefaultsManager.shared.addStrings(current, forKey: key)
+        UserDefaults.standard.set(current, forKey: key)
+        
     }
     
     func removeKeyword(_ keyword: String) {
         let filtered = getKeywords().filter { $0 != keyword }
-        UserDefaultsManager.shared.addStrings(filtered, forKey: key) // 배열을 제거해서 배열로 넣기
+        UserDefaults.standard.set(filtered, forKey: key)// 배열을 제거해서 배열로 넣음
     }
     
     func removeAllKeyword() {
-        UserDefaultsManager.shared.removeKey(forKey: key)
+        UserDefaults.standard.removeObject(forKey: key)
     }
 }
 
