@@ -65,6 +65,7 @@ class MovieDetailViewController: BaseViewController {
         
         contentView.addSubview(collectionView)
         contentView.addSubview(metaHeaderView)
+        metaHeaderView.configure(releaseDate: movie.releaseDate, rating: movie.voteAverage, genre: "액션,스릴러")
         contentView.addSubview(synopsisView)
         
         
