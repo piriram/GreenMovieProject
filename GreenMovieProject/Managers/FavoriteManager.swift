@@ -13,24 +13,25 @@ final class FavoriteManager {
 
     private init() {}
 
-    func saveHeartedMovie(id: Int) {
-        var ids = loadHeartedMovies()
-        guard !ids.contains(id) else { return }
-        ids.append(id)
-        UserDefaults.standard.set(ids, forKey: key)
+    func createHeart(id: Int) {
+        var ids = readHeartAll()
+        if !ids.contains(id){
+            ids.append(id)
+            UserDefaults.standard.set(ids, forKey: key)
+        }
     }
 
-    func removeHeartedMovie(id: Int) {
-        var ids = loadHeartedMovies()
+    func deleteHeart(id: Int) {
+        var ids = readHeartAll()
         ids.removeAll { $0 == id }
         UserDefaults.standard.set(ids, forKey: key)
     }
 
-    func loadHeartedMovies() -> [Int] {
+    func readHeartAll() -> [Int] {
         return UserDefaults.standard.array(forKey: key) as? [Int] ?? []
     }
 
     func isHearted(id: Int) -> Bool {
-        return loadHeartedMovies().contains(id)
+        return readHeartAll().contains(id)
     }
 }

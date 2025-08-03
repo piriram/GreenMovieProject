@@ -16,19 +16,23 @@ class TrendingMovieCell: UICollectionViewCell {
     let titleLabel = UILabel()
     let overviewLabel = UILabel()
     let heartButton = UIButton()
-    private var movieID: Int?
+    var movieID: Int?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
         configureLayout()
+        configureData()
+        
         heartButton.addTarget(self, action: #selector(didTapHeart), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+    func configureData(){
+        
+    }
     func configureUI() {
         contentView.addSubview(posterImageView)
         contentView.addSubview(titleLabel)
@@ -71,7 +75,6 @@ class TrendingMovieCell: UICollectionViewCell {
             make.bottom.equalToSuperview().inset(4)
         }
         
-        // Poster Image View: 남은 공간 모두 차지
         posterImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.trailing.equalToSuperview()
@@ -82,12 +85,15 @@ class TrendingMovieCell: UICollectionViewCell {
     
     func configureCell(_ movie: Trending) {
         let urlString = NetworkManager.shared.composeURLPath(path: movie.posterPath)
+        
         if let url = URL(string: urlString) {
             posterImageView.kf.setImage(with: url)
         }
+        
         titleLabel.text = movie.title
         overviewLabel.text = movie.overview
-        movieID = movie.id 
+        movieID = movie.id
+        
         let isHearted = FavoriteManager.shared.isHearted(id: movie.id)
         heartButton.setImage(UIImage(systemName: isHearted ? "heart.fill" : "heart"), for: .normal)
     }
@@ -96,10 +102,10 @@ class TrendingMovieCell: UICollectionViewCell {
         guard let id = movieID else { return }
         
         if FavoriteManager.shared.isHearted(id: id) {
-            FavoriteManager.shared.removeHeartedMovie(id: id)
+            FavoriteManager.shared.deleteHeart(id: id)
             heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
         } else {
-            FavoriteManager.shared.saveHeartedMovie(id: id)
+            FavoriteManager.shared.createHeart(id: id)
             heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
         }
         

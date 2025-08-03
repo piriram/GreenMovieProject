@@ -164,9 +164,9 @@ class MovieDetailViewController: BaseViewController {
     }
     @objc private func didTapHeartButton() {
         if FavoriteManager.shared.isHearted(id: movie.id) {
-            FavoriteManager.shared.removeHeartedMovie(id: movie.id)
+            FavoriteManager.shared.deleteHeart(id: movie.id)
         } else {
-            FavoriteManager.shared.saveHeartedMovie(id: movie.id)
+            FavoriteManager.shared.deleteHeart(id: movie.id)
         }
 
         // 버튼 상태 업데이트

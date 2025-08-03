@@ -8,10 +8,11 @@
 import UIKit
 import Alamofire
 import Kingfisher
+//TODO: - 하위 뷰 만들어서 관리하기
 class CinemaViewController:BaseViewController {
     
     static let identifier = "CinemaViewController"
-    var movies:[Trending] = []
+    var trendings:[Trending] = []
     let width:Double = 250
     let profileCardView = ProfileCardView()
     let recentSearchView = RecentSearchView()
@@ -105,7 +106,7 @@ class CinemaViewController:BaseViewController {
             switch result{
             case .success(let data):
                 //                dump(data)
-                self.movies = data.results
+                self.trendings = data.results
                 DispatchQueue.main.async {
                     self.trendingCollectionView.reloadData()
                 }
@@ -156,7 +157,7 @@ class CinemaViewController:BaseViewController {
 }
 extension CinemaViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let trending = movies[indexPath.item]
+        let trending = trendings[indexPath.item]
         let movie = Movie(id: trending.id, title: trending.title, posterPath: trending.posterPath, releaseDate: trending.releaseDate, voteAverage: trending.voteAverage, overview: trending.overview, genreIds: trending.genreIds)
         let vc = MovieDetailViewController(movie: movie)
         
@@ -168,13 +169,13 @@ extension CinemaViewController: UICollectionViewDelegate {
 extension CinemaViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        return movies.count
+        return trendings.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrendingMovieCell.identifier, for: indexPath) as! TrendingMovieCell
-        let movie = movies[indexPath.item]
+        let movie = trendings[indexPath.item]
         cell.configureCell(movie)
         return cell
     }

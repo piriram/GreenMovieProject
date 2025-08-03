@@ -145,10 +145,10 @@ final class MovieCell: UICollectionViewCell {
         guard let id = movieID else { return }
         
         if FavoriteManager.shared.isHearted(id: id) {
-            FavoriteManager.shared.removeHeartedMovie(id: id)
+            FavoriteManager.shared.deleteHeart(id: id)
             heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
         } else {
-            FavoriteManager.shared.saveHeartedMovie(id: id)
+            FavoriteManager.shared.createHeart(id: id)
             heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
         }
     }
