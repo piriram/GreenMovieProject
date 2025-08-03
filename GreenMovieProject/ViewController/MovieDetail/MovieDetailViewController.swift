@@ -4,193 +4,163 @@
 //
 //  Created by piri kim on 7/31/25.
 //
-
 import UIKit
 import Alamofire
 import Kingfisher
 
 class MovieDetailViewController: BaseViewController {
     
-    let movie:Movie
-    
-    var cast: [Cast] = []
-    var crew: [Crew] = []
-    var medios: [Medio] = []{
-        didSet{
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-        }
+     let movie: Movie
+     var cast: [Cast] = []
+     var crew: [Crew] = []
+     var medios: [Medio] = [] {
+        didSet { collectionView.reloadData() }
     }
-    var collectionView: UICollectionView!
-    let metaHeaderView = MovieMetaView()
-    lazy var synopsisView = SynopsisView(text: movie.overview)
-    
-    let scrollView = UIScrollView()
-    let contentView = UIView()
-    var castView: CastListView?
-    
-    
+
+     var collectionView: UICollectionView!
+     let metaHeaderView = MovieMetaView()
+     lazy var synopsisView = SynopsisView(text: movie.overview)
+     let scrollView = UIScrollView()
+     let contentView = UIView()
+     var castView: CastListView?
+
+
     init(movie: Movie) {
         self.movie = movie
-        
         super.init(nibName: nil, bundle: nil)
-        
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "\(movie.title)"
-        configureAll()
-        
-        
-        
-    }
-    func configureAll(){
-        fetchData()
+        navigationItem.title = movie.title
+        updateNavHeartButton()
         configureUI()
-        configureLayout()
-        configureRightHeartButton() 
-        
+        fetchCast()
+        fetchImages()
     }
-    func configureUI(){
-        
+
+     func configureUI() {
         collectionView = createCollectionView()
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        
-        contentView.addSubview(collectionView)
-        contentView.addSubview(metaHeaderView)
-        metaHeaderView.configure(releaseDate: movie.releaseDate, rating: movie.voteAverage, genre: "액션,스릴러")
-        contentView.addSubview(synopsisView)
-        
-        
+
+         contentView.addSubview(collectionView)
+         contentView.addSubview(metaHeaderView)
+         contentView.addSubview(synopsisView)
+       
+
+        metaHeaderView.configureData(releaseDate: movie.releaseDate,
+                                 rating: movie.voteAverage,
+                                 genre: "액션,스릴러")
+
+         configureLayout()
     }
-    func configureLayout() {
-        scrollView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
+
+     func configureLayout() {
+        scrollView.snp.makeConstraints {
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        
-        contentView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-            make.width.equalToSuperview() // 수직 스크롤을 위한 고정 폭
+
+        contentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
         }
-        
-        collectionView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.left.right.equalToSuperview()
-            make.height.equalTo(250)
+
+        collectionView.snp.makeConstraints {
+            $0.top.left.right.equalToSuperview()
+            $0.height.equalTo(250)
         }
-        
-        metaHeaderView.snp.makeConstraints { make in
-            make.top.equalTo(collectionView.snp.bottom).offset(16)
-            make.left.right.equalToSuperview().inset(16)
-            make.height.equalTo(20)
+
+        metaHeaderView.snp.makeConstraints {
+            $0.top.equalTo(collectionView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview().inset(16)
+            $0.height.equalTo(20)
         }
-        
-        synopsisView.snp.makeConstraints { make in
-            make.top.equalTo(metaHeaderView.snp.bottom).offset(16)
-            make.left.right.equalToSuperview().inset(16)
+
+        synopsisView.snp.makeConstraints {
+            $0.top.equalTo(metaHeaderView.snp.bottom).offset(16)
+            $0.left.right.equalToSuperview().inset(16)
         }
     }
-    
-    
-    func fetchData(){
+
+     func fetchCast() {
         DispatchQueue.global(qos: .background).async {
-            
-            
             NetworkManager.shared.fetchMovieDetail(movieID: self.movie.id) { cast, crew in
                 DispatchQueue.main.async {
                     self.cast = cast
                     self.crew = crew
-                    
+
+                    // TODO: 흠 이게 최선일까
                     let castView = CastListView(cast: cast)
                     self.castView = castView
                     self.contentView.addSubview(castView)
-                    
-                    castView.snp.makeConstraints { make in
-                        make.top.equalTo(self.synopsisView.snp.bottom).offset(16)
-                        make.left.right.equalToSuperview().inset(16)
-                        make.bottom.equalToSuperview().inset(20)
+
+                    castView.snp.makeConstraints {
+                        $0.top.equalTo(self.synopsisView.snp.bottom).offset(16)
+                        $0.left.right.equalToSuperview().inset(16)
+                        $0.bottom.equalToSuperview().inset(20)
                     }
                 }
             }
-            
         }
+    }
+
+     func fetchImages() {
         DispatchQueue.global(qos: .background).async {
             NetworkManager.shared.fetchMovieImages(movieID: self.movie.id) { medios in
-                self.medios = Array(medios.prefix(5)) //TODO: ??
-                print("medios Count: \(self.medios.count)")
+                self.medios = Array(medios.prefix(5))
             }
         }
-        
     }
-    
-    func createCollectionView() -> UICollectionView {
+
+     func createCollectionView() -> UICollectionView {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: UIScreen.main.bounds.width, height: 250)
         layout.minimumLineSpacing = 0
-        
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.isPagingEnabled = true
-        collectionView.showsHorizontalScrollIndicator = false
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.register(MediaImageCell.self, forCellWithReuseIdentifier: MediaImageCell.identifier)
-        return collectionView
+
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.isPagingEnabled = true
+        cv.showsHorizontalScrollIndicator = false
+        cv.dataSource = self
+        cv.delegate = self
+        cv.register(MediaImageCell.self, forCellWithReuseIdentifier: MediaImageCell.identifier)
+        return cv
     }
-    //TODO: 딥다이빙
-    func createPageControl() -> UIPageControl {
-        let pc = UIPageControl()
-        pc.currentPage = 0
-        pc.currentPageIndicatorTintColor = .white
-        pc.pageIndicatorTintColor = .gray
-        return pc
-    }
-    private func configureRightHeartButton() {
-        let heartImageName = FavoriteManager.shared.isHearted(id: movie.id) ? "heart.fill" : "heart"
+
+     func updateNavHeartButton() {
+        let heartImageName = HeartManager.shared.isHearted(id: movie.id) ? "heart.fill" : "heart"
         let heartImage = UIImage(systemName: heartImageName)
         let heartButton = UIBarButtonItem(image: heartImage,
                                           style: .plain,
                                           target: self,
-                                          action: #selector(didTapHeartButton))
-        heartButton.tintColor = .primary // 원하는 색상 지정
+                                          action: #selector(heartButtonClicked))
+        heartButton.tintColor = .primary
         navigationItem.rightBarButtonItem = heartButton
     }
-    @objc private func didTapHeartButton() {
-        if FavoriteManager.shared.isHearted(id: movie.id) {
-            FavoriteManager.shared.deleteHeart(id: movie.id)
+
+    @objc  func heartButtonClicked() {
+        if HeartManager.shared.isHearted(id: movie.id) {
+            HeartManager.shared.deleteHeart(id: movie.id)
         } else {
-            FavoriteManager.shared.deleteHeart(id: movie.id)
+            HeartManager.shared.createHeart(id: movie.id)
         }
-
-        // 버튼 상태 업데이트
-        configureRightHeartButton()
+        updateNavHeartButton()
     }
-
-
-    
-    
 }
+
 extension MovieDetailViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return min(5, medios.count)
+        return medios.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MediaImageCell.identifier, for: indexPath) as! MediaImageCell
         cell.configureCell(medios[indexPath.item].filePath)
         return cell
     }
-    
-    
-    
 }
-
-
-

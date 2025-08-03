@@ -7,8 +7,8 @@
 
 import Foundation
 
-final class FavoriteManager {
-    static let shared = FavoriteManager()
+final class HeartManager {
+    static let shared = HeartManager()
     private let key = "heart"
     
     private init() {}

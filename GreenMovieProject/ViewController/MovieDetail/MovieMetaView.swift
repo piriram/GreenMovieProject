@@ -79,7 +79,7 @@ final class MovieMetaView: UIView {
         return view
     }
     
-    func configure(releaseDate: String, rating: Double, genre: String) {
+    func configureData(releaseDate: String, rating: Double, genre: String) {
         releaseDateLabel.text = releaseDate
         ratingLabel.text = String(format: "%.1f", rating)
         genreLabel.text = genre

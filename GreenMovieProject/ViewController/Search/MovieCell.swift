@@ -112,7 +112,7 @@ final class MovieCell: UICollectionViewCell {
             genreMap[data]
         }
         configureGenres(genreNames)
-        let isHearted = FavoriteManager.shared.isHearted(id: movie.id)
+        let isHearted = HeartManager.shared.isHearted(id: movie.id)
         let heartImage = UIImage(systemName: isHearted ? "heart.fill" : "heart")
         heartButton.setImage(heartImage, for: .normal)
         
@@ -144,11 +144,11 @@ final class MovieCell: UICollectionViewCell {
     @objc private func didTapHeart() {
         guard let id = movieID else { return }
         
-        if FavoriteManager.shared.isHearted(id: id) {
-            FavoriteManager.shared.deleteHeart(id: id)
+        if HeartManager.shared.isHearted(id: id) {
+            HeartManager.shared.deleteHeart(id: id)
             heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
         } else {
-            FavoriteManager.shared.createHeart(id: id)
+            HeartManager.shared.createHeart(id: id)
             heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
         }
     }

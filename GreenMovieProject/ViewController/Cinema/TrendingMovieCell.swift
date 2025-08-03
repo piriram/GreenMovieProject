@@ -94,18 +94,18 @@ class TrendingMovieCell: UICollectionViewCell {
         overviewLabel.text = movie.overview
         movieID = movie.id
         
-        let isHearted = FavoriteManager.shared.isHearted(id: movie.id)
+        let isHearted = HeartManager.shared.isHearted(id: movie.id)
         heartButton.setImage(UIImage(systemName: isHearted ? "heart.fill" : "heart"), for: .normal)
     }
     @objc private func didTapHeart() {
         print("heartbutton 탭")
         guard let id = movieID else { return }
         
-        if FavoriteManager.shared.isHearted(id: id) {
-            FavoriteManager.shared.deleteHeart(id: id)
+        if HeartManager.shared.isHearted(id: id) {
+            HeartManager.shared.deleteHeart(id: id)
             heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
         } else {
-            FavoriteManager.shared.createHeart(id: id)
+            HeartManager.shared.createHeart(id: id)
             heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
         }
         
