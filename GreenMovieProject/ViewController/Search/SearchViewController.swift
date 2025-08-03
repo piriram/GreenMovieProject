@@ -71,6 +71,7 @@ final class SearchViewController: UIViewController {
         view.backgroundColor = .black
         
         searchBar.delegate = self
+        
         searchBar.searchBarStyle = .minimal
         searchBar.placeholder = "영화를 검색해보세요."
         searchBar.tintColor = .white
@@ -85,6 +86,7 @@ final class SearchViewController: UIViewController {
         
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.dataSource = self
+        collectionView.delegate = self
         
         collectionView.backgroundColor = .clear
         collectionView.register(MovieCell.self, forCellWithReuseIdentifier: MovieCell.identifier)
@@ -134,7 +136,7 @@ extension SearchViewController: UISearchBarDelegate {
     }
 }
 
-extension SearchViewController: UICollectionViewDataSource {
+extension SearchViewController: UICollectionViewDataSource,UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return movies.count
     }
@@ -157,4 +159,12 @@ extension SearchViewController: UICollectionViewDataSource {
         }
         return cell
     }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("did select item")
+        let selectedMovie = movies[indexPath.item]
+        let detailVC = MovieDetailViewController(movie: selectedMovie)
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+
+    
 }

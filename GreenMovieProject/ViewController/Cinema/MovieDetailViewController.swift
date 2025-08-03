@@ -11,7 +11,8 @@ import Kingfisher
 
 class MovieDetailViewController: BaseViewController {
     
-    let movie:Trending
+    let movie:Movie
+    
     var cast: [Cast] = []
     var crew: [Crew] = []
     var medios: [Medio] = []{
@@ -30,8 +31,9 @@ class MovieDetailViewController: BaseViewController {
     var castView: CastListView?
     
     
-    init(movie: Trending) {
+    init(movie: Movie) {
         self.movie = movie
+        
         super.init(nibName: nil, bundle: nil)
         
     }
@@ -52,6 +54,7 @@ class MovieDetailViewController: BaseViewController {
         fetchData()
         configureUI()
         configureLayout()
+        configureRightHeartButton() 
         
     }
     func configureUI(){
@@ -91,7 +94,6 @@ class MovieDetailViewController: BaseViewController {
         synopsisView.snp.makeConstraints { make in
             make.top.equalTo(metaHeaderView.snp.bottom).offset(16)
             make.left.right.equalToSuperview().inset(16)
-            // ✨ 여기서 bottom은 제거하고 castView 추가 이후에 처리
         }
     }
     
@@ -149,6 +151,28 @@ class MovieDetailViewController: BaseViewController {
         pc.pageIndicatorTintColor = .gray
         return pc
     }
+    private func configureRightHeartButton() {
+        let heartImageName = FavoriteManager.shared.isHearted(id: movie.id) ? "heart.fill" : "heart"
+        let heartImage = UIImage(systemName: heartImageName)
+        let heartButton = UIBarButtonItem(image: heartImage,
+                                          style: .plain,
+                                          target: self,
+                                          action: #selector(didTapHeartButton))
+        heartButton.tintColor = .primary // 원하는 색상 지정
+        navigationItem.rightBarButtonItem = heartButton
+    }
+    @objc private func didTapHeartButton() {
+        if FavoriteManager.shared.isHearted(id: movie.id) {
+            FavoriteManager.shared.removeHeartedMovie(id: movie.id)
+        } else {
+            FavoriteManager.shared.saveHeartedMovie(id: movie.id)
+        }
+
+        // 버튼 상태 업데이트
+        configureRightHeartButton()
+    }
+
+
     
     
 }
@@ -162,6 +186,7 @@ extension MovieDetailViewController: UICollectionViewDataSource, UICollectionVie
         cell.configureCell(medios[indexPath.item].filePath)
         return cell
     }
+    
     
     
 }

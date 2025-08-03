@@ -156,7 +156,8 @@ class CinemaViewController:BaseViewController {
 }
 extension CinemaViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let movie = movies[indexPath.item]
+        let trending = movies[indexPath.item]
+        let movie = Movie(id: trending.id, title: trending.title, posterPath: trending.posterPath, releaseDate: trending.releaseDate, voteAverage: trending.voteAverage, overview: trending.overview, genreIds: trending.genreIds)
         let vc = MovieDetailViewController(movie: movie)
         
         navigationController?.pushViewController(vc, animated: true)

@@ -16,10 +16,11 @@ final class MovieCell: UICollectionViewCell {
     let releaseDateLabel = UILabel()
     let genreStackView = UIStackView()
     let heartButton = UIButton()
+    private var movieID: Int?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-//        contentView.backgroundColor = .black
+        //        contentView.backgroundColor = .black
         contentView.layer.cornerRadius = 8
         contentView.clipsToBounds = true
         
@@ -57,6 +58,9 @@ final class MovieCell: UICollectionViewCell {
         heartButton.tintColor = .primary
         contentView.addSubview(heartButton)
         
+        heartButton.addTarget(self, action: #selector(didTapHeart), for: .touchUpInside)
+        
+        
     }
     
     func configureLayout() {
@@ -91,6 +95,7 @@ final class MovieCell: UICollectionViewCell {
     }
     
     func configureData(movie: Movie, genreMap: [Int: String]) {
+        movieID = movie.id
         titleLabel.text = movie.title
         
         let dateStr = movie.releaseDate
@@ -107,12 +112,15 @@ final class MovieCell: UICollectionViewCell {
             genreMap[data]
         }
         configureGenres(genreNames)
-    
+        let isHearted = FavoriteManager.shared.isHearted(id: movie.id)
+        let heartImage = UIImage(systemName: isHearted ? "heart.fill" : "heart")
+        heartButton.setImage(heartImage, for: .normal)
+        
     }
     
     func configureGenres(_ genres: [String]) {
         genreStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-
+        
         for genre in genres.prefix(3) {
             let label = PaddingLabel()
             label.text = genre
@@ -125,13 +133,25 @@ final class MovieCell: UICollectionViewCell {
             
             label.setContentHuggingPriority(.required, for: .horizontal)
             label.setContentCompressionResistancePriority(.required, for: .horizontal)
-
+            
             label.snp.makeConstraints {
                 $0.height.equalTo(20)
             }
-
+            
             genreStackView.addArrangedSubview(label)
         }
     }
-
+    @objc private func didTapHeart() {
+        guard let id = movieID else { return }
+        
+        if FavoriteManager.shared.isHearted(id: id) {
+            FavoriteManager.shared.removeHeartedMovie(id: id)
+            heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
+        } else {
+            FavoriteManager.shared.saveHeartedMovie(id: id)
+            heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+        }
+    }
+    
+    
 }
