@@ -26,6 +26,10 @@ final class UserInfoManager {
     func deleteNickname() {
         UserDefaults.standard.removeObject(forKey:nicknameKey)
     }
+    func deleteUserInfo() {
+        UserDefaults.standard.removeObject(forKey:nicknameKey)
+        UserDefaults.standard.removeObject(forKey: joinDateKey)
+    }
     
     func createJoinDate(_ date: Date) {
         let formatter = DateFormatter()

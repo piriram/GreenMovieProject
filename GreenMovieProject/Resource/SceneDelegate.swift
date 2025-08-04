@@ -34,8 +34,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         UINavigationBar.appearance().prefersLargeTitles = false
 
 
+        let rootVC : UIViewController
+        if UserInfoManager.shared.isUserInfo(){
+            rootVC = MainViewController()
+        }
+        else{
+            rootVC = OnboardingViewController()
+        }
         
-        let rootVC = MainViewController()
+        
 //        let nav = UINavigationController(rootViewController: rootVC)
         
         window = UIWindow(windowScene: windowScene)

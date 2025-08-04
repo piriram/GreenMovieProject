@@ -19,12 +19,12 @@ final class SettingViewController: UIViewController {
         view.backgroundColor = .black
         navigationItem.title = "설정"
         
-        setupNicknameCard()
-        setupTableView()
-        layout()
+        configureNicknameCard()
+        configureTableView()
+        configureLayout()
     }
     
-    func setupNicknameCard() {
+    func configureNicknameCard() {
         view.addSubview(profileCardView)
         
         profileCardView.configure(
@@ -37,7 +37,7 @@ final class SettingViewController: UIViewController {
         profileCardView.addGestureRecognizer(tap)
     }
     
-    func setupTableView() {
+    func configureTableView() {
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
@@ -47,7 +47,7 @@ final class SettingViewController: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
     
-    func layout() {
+    func configureLayout() {
         profileCardView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(16)
@@ -80,8 +80,16 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+  
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
+        let selectedItem = items[indexPath.row]
+        
+        if selectedItem == "탈퇴하기" {
+            print("탈퇴하기 누름")
+            UserInfoManager.shared.deleteUserInfo()
+        }
     }
+
 }
