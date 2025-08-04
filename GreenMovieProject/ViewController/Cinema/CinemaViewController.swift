@@ -95,7 +95,7 @@ class CinemaViewController:BaseViewController {
         profileCardView.configure(
             nickname: UserInfoManager.shared.readNickname() ?? "",
             joinDate: "\(UserInfoManager.shared.getFormattedJoinDate()) 가입",
-            boxNum: 2
+            boxNum: HeartManager.shared.heartCount()
         )
         let tap = UITapGestureRecognizer(target: self, action: #selector(profileCardTouched))
         profileCardView.addGestureRecognizer(tap)

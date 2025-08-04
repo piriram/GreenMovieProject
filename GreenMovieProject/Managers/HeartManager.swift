@@ -34,4 +34,7 @@ final class HeartManager {
     func isHearted(id: Int) -> Bool {
         return readHeartAll().contains(id)
     }
+    func heartCount() -> Int {
+        return readHeartAll().count
+    }
 }
