@@ -14,7 +14,7 @@ extension NetworkManager {
         parameters["page"] = page
         print("parameters:\(parameters)")
         print("search url:\(url)")
-        AF.request(url, method: .get, parameters: parameters, headers: headers)
+        AF.request(url, method: .get, parameters: self.parameters, headers: headers)
             .validate()
             .responseDecodable(of: MovieResponse.self) { response in
                 switch response.result {

@@ -12,7 +12,7 @@ extension NetworkManager {
         let url = "\(baseURL)/genre/movie/list"
         let parameters: Parameters = ["language": "ko-KR"]
         
-        AF.request(url, parameters: parameters, headers: headers)
+        AF.request(url, parameters: self.parameters, headers: headers)
             .validate()
             .responseDecodable(of: GenreListResponse.self) { response in
                 switch response.result {

@@ -24,7 +24,7 @@ final class NetworkManager {
         parameters["include_image_language"] = "null"
         let path = "/movie/\(movieID)/images"
         print(baseURL + path)
-        AF.request(baseURL + path,parameters: parameters ,headers: headers)
+        AF.request(baseURL + path,parameters: self.parameters ,headers: headers)
             .validate(statusCode: 200..<300)
             .responseDecodable(of: MedioResponse.self) { response in
                 

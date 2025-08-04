@@ -13,7 +13,8 @@ extension NetworkManager {
         let path = "/movie/\(movieID)/credits"
         print(baseURL + path)
 //        let parameters: [String: Any] = ["language":"ko-KR"]
-        AF.request(baseURL + path,parameters: parameters ,headers: headers)
+//        print("parameters : \(parameters)")
+        AF.request(baseURL + path,parameters: self.parameters ,headers: headers)
             .validate(statusCode: 200..<300)
             .responseDecodable(of: CreditsResponse.self) { response in
                 

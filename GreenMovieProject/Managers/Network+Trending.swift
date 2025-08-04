@@ -12,7 +12,7 @@ extension NetworkManager {
     func fetchTrending(completion:@escaping (Result<TrendingResponse, Error>) -> Void){
         let path = "/trending/movie/day"
         
-        AF.request(baseURL + path,parameters: parameters ,headers: headers)
+        AF.request(baseURL + path,parameters: self.parameters ,headers: headers)
             .validate(statusCode: 200..<300)
             .responseDecodable(of: TrendingResponse.self) { response in
                 switch response.result {
