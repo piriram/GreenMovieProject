@@ -61,8 +61,7 @@ final class SettingViewController: UIViewController {
     }
     
     @objc func profileCardTouched() {
-        let nextViewController = ViewController() // 임시
-        navigationController?.pushViewController(nextViewController, animated: true)
+        goProfileCard()
     }
 }
 
@@ -88,19 +87,30 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
         
         if selectedItem == "탈퇴하기" {
             print("탈퇴하기 누름")
-            HeartManager.shared.removeAllHeart()
-            UserInfoManager.shared.deleteUserInfo()
+            let alert = UIAlertController(
+                title: "정말 탈퇴하시겠어요?",
+                message: "탈퇴하면 모든 데이터가 삭제되며 복구할 수 없어요.",
+                preferredStyle: .alert
+            )
             
+            alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
             
-            let onboardingVC = OnboardingViewController()
-            let nav = UINavigationController(rootViewController: onboardingVC)
+            alert.addAction(UIAlertAction(title: "탈퇴하기", style: .destructive, handler: { _ in
+                
+                HeartManager.shared.removeAllHeart()
+                UserInfoManager.shared.deleteUserInfo()
+                
+                let onboardingVC = OnboardingViewController()
+                let nav = UINavigationController(rootViewController: onboardingVC)
+                
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                   let delegate = windowScene.delegate as? SceneDelegate {
+                    delegate.window?.rootViewController = nav
+                    delegate.window?.makeKeyAndVisible()
+                }
+            }))
             
-            
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let delegate = windowScene.delegate as? SceneDelegate {
-                delegate.window?.rootViewController = nav
-                delegate.window?.makeKeyAndVisible()
-            }
+            present(alert, animated: true)
             
         }
     }

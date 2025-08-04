@@ -114,6 +114,7 @@ final class NicknameDetailViewController: UIViewController {
             onNicknameClosure?(nickname)
         }
         navigationController?.popViewController(animated: true)
+       
     }
     
 }

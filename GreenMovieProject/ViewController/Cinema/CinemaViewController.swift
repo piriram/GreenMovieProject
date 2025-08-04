@@ -151,13 +151,9 @@ class CinemaViewController:BaseViewController {
         print(#function)
     }
     @objc func profileCardTouched() {
-        let nextViewController = ViewController()
-        navigationController?.pushViewController(nextViewController, animated: true)
+        goProfileCard()
     }
-    //    override func viewDidLayoutSubviews() {
-    //        super.viewDidLayoutSubviews()
-    //        trendingCV.collectionViewLayout.invalidateLayout()
-    //    }
+ 
     
     
     

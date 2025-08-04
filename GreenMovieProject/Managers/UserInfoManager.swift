@@ -38,10 +38,10 @@ final class UserInfoManager {
         UserDefaults.standard.set(dateString, forKey: joinDateKey)
         
     }
-   
+    
     func createUserInfo(_ nickname: String, _ date: Date) {
         createNickname(nickname)
-        createJoinDate(date)    
+        createJoinDate(date)
     }
     func readJoinDate() -> String? {
         return UserDefaults.standard.string(forKey: joinDateKey)
