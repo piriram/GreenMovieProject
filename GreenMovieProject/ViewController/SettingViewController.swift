@@ -80,7 +80,7 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-  
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -88,8 +88,21 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
         
         if selectedItem == "탈퇴하기" {
             print("탈퇴하기 누름")
+            HeartManager.shared.removeAllHeart()
             UserInfoManager.shared.deleteUserInfo()
+            
+            
+            let onboardingVC = OnboardingViewController()
+            let nav = UINavigationController(rootViewController: onboardingVC)
+            
+            
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let delegate = windowScene.delegate as? SceneDelegate {
+                delegate.window?.rootViewController = nav
+                delegate.window?.makeKeyAndVisible()
+            }
+            
         }
     }
-
+    
 }

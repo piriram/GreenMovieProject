@@ -37,4 +37,8 @@ final class HeartManager {
     func heartCount() -> Int {
         return readHeartAll().count
     }
+    
+    func removeAllHeart() {
+        UserDefaults.standard.removeObject(forKey: key)
+    }
 }

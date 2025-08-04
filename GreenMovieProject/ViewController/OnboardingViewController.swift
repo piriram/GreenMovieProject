@@ -47,6 +47,8 @@ final class OnboardingViewController: UIViewController {
         view.addSubview(titleLabel)
         view.addSubview(nameLabel)
         view.addSubview(startButton)
+        
+        startButton.addTarget(self, action: #selector(startButtonClicked), for: .touchUpInside)
     }
     
     func configureLayout() {
@@ -72,5 +74,10 @@ final class OnboardingViewController: UIViewController {
             make.height.equalTo(50)
         }
     }
+    @objc func startButtonClicked() { // clicked touched tapped 차이?
+        let vc = NicknameCreateViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
 }
 

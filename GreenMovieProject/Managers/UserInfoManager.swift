@@ -36,8 +36,13 @@ final class UserInfoManager {
         formatter.dateFormat = "yy.MM.dd"
         let dateString = formatter.string(from: date)
         UserDefaults.standard.set(dateString, forKey: joinDateKey)
+        
     }
-    
+   
+    func createUserInfo(_ nickname: String, _ date: Date) {
+        createNickname(nickname)
+        createJoinDate(date)    
+    }
     func readJoinDate() -> String? {
         return UserDefaults.standard.string(forKey: joinDateKey)
     }

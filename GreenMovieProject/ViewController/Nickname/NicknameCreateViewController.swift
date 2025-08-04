@@ -93,7 +93,21 @@ final class NicknameCreateViewController: UIViewController {
     
     
     @objc func completButtonClicked() {
-        UserInfoManager.shared.createJoinDate(Date())
-        navigationController?.popViewController(animated: true)
+        //        UserInfoManager.shared.createJoinDate(Date())
+        guard let nicknameTextFieldText = nicknameTextField.text else { return }
+        if nicknameTextFieldText.isEmpty {
+            return
+        }
+        UserInfoManager.shared.createUserInfo(nicknameTextFieldText, Date())
+        
+        let tabBarController = MainViewController()
+        
+        // 씬딜리게이트 윈도우에 메인뷰컨 연결
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let sceneDelegate = windowScene.delegate as? SceneDelegate {
+            sceneDelegate.window?.rootViewController = tabBarController
+            sceneDelegate.window?.makeKeyAndVisible()
+        }
+        //        navigationController?.popViewController(animated: true)
     }
 }

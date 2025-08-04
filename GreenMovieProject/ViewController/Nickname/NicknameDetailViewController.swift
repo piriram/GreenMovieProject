@@ -110,7 +110,7 @@ final class NicknameDetailViewController: UIViewController {
            nickname.rangeOfCharacter(from: .decimalDigits) == nil,
            nickname.rangeOfCharacter(from: CharacterSet(charactersIn: "@#$%")) == nil {
             
-            UserInfoManager.shared.createNickname(nickname)
+            
             onNicknameClosure?(nickname)
         }
         navigationController?.popViewController(animated: true)
