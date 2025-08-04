@@ -14,7 +14,7 @@ final class RecentSearchView: UIView {
     
     let titleLabel = UILabel()
     
-    
+    var onKeywordClosure: ((String) -> Void)?
     let scrollView = UIScrollView()
     let keywordStackView: UIStackView = {
         let stackView = UIStackView()
@@ -88,7 +88,7 @@ final class RecentSearchView: UIView {
             
             
         }
-        clearAllButton.addTarget(self, action: #selector(didTapClearAllButton), for: .touchUpInside)
+        clearAllButton.addTarget(self, action: #selector(clearAllButtonClicked), for: .touchUpInside)
         
         scrollView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(8)
@@ -117,7 +117,7 @@ final class RecentSearchView: UIView {
         let deleteButton = UIButton(type: .system)
         deleteButton.setImage(UIImage(systemName: "xmark"), for: .normal)
         deleteButton.tintColor = .black
-        deleteButton.addTarget(self, action: #selector(deleteKeywordTapped(_:)), for: .touchUpInside)
+        deleteButton.addTarget(self, action: #selector(deleteKeywordClicked(_:)), for: .touchUpInside)
         deleteButton.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         deleteButton.tag = keywords.firstIndex(of: keyword) ?? -1
         
@@ -143,16 +143,25 @@ final class RecentSearchView: UIView {
             $0.height.equalTo(32)
         }
         
+        let tap = UITapGestureRecognizer(target: self, action: #selector(chipTouched(_ :)))
+        container.addGestureRecognizer(tap)
+        container.tag = keywords.firstIndex(of: keyword) ?? -1
         return container
     }
+    @objc func chipTouched(_ sender: UITapGestureRecognizer) {
+        guard let view = sender.view else { return } // 딥다이빙
+        let index = view.tag
+       let keyword =  keywords[index]
+        onKeywordClosure?(keyword)
+    }
     
-    @objc func deleteKeywordTapped(_ sender: UIButton) {
+    @objc func deleteKeywordClicked(_ sender: UIButton) {
         let index = sender.tag
         let removed = keywords[index]
         RecentSearchManager.shared.removeKeyword(removed)
         reloadKeywords()
     }
-    @objc func didTapClearAllButton() {
+    @objc func clearAllButtonClicked() {
         RecentSearchManager.shared.removeAllKeyword()
         keywords = []
         reloadKeywords()

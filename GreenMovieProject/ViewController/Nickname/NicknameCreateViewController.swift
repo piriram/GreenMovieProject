@@ -83,7 +83,7 @@ final class NicknameCreateViewController: UIViewController {
     
     
     @objc func goEditClicked() {
-        let detailVC = NicknameReadViewController()
+        let detailVC = NicknameDetailViewController()
         detailVC.initialNickname = nicknameTextField.text
         detailVC.onNicknameClosure = { [weak self] updatedNickname in
             self?.nicknameTextField.text = updatedNickname

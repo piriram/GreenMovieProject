@@ -20,6 +20,7 @@ final class RecentSearchManager {
     
     func addKeyword(_ keyword: String) {
         var current = getKeywords()
+        current.removeAll { $0 == keyword }
         current.insert(keyword,at: 0)
         
        

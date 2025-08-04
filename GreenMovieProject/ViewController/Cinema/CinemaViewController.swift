@@ -32,6 +32,11 @@ class CinemaViewController:BaseViewController {
         let keywords: [String] = RecentSearchManager.shared.getKeywords()
         
         recentSearchView.updateKeywords(keywords)
+        recentSearchView.onKeywordClosure = { [weak self] keyword in
+            let vc = SearchViewController()
+            vc.initialQuery = keyword
+            self?.navigationController?.pushViewController(vc, animated: true)
+        }
         
     }
     
@@ -122,13 +127,13 @@ class CinemaViewController:BaseViewController {
             image: UIImage(systemName: "magnifyingglass"),
             style: .plain,
             target: self,
-            action: #selector(searchButtonTouched)
+            action: #selector(searchButtonClicked)
         )
         searchButton.tintColor = .primary
         navigationItem.rightBarButtonItem = searchButton
     }
     
-    @objc func searchButtonTouched() {
+    @objc func searchButtonClicked() {
         let searchVC = SearchViewController()
         navigationController?.pushViewController(searchVC, animated: true)
     }

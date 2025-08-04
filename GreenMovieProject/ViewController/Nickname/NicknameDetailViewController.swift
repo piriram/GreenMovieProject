@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class NicknameReadViewController: UIViewController {
+final class NicknameDetailViewController: UIViewController {
     
     var initialNickname: String? = ""
     
