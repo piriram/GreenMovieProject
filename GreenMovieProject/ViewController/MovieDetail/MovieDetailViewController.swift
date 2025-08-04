@@ -14,10 +14,10 @@ class MovieDetailViewController: BaseViewController {
     var cast: [Cast] = []
     var crew: [Crew] = []
     var medios: [Medio] = [] {
-        didSet { collectionView.reloadData() }
+        didSet { imageCollectionView.reloadData() }
     }
     
-    var collectionView: UICollectionView!
+    var imageCollectionView: UICollectionView!
     let metaHeaderView = MovieMetaView()
     lazy var synopsisView = SynopsisView(text: movie.overview)
     let scrollView = UIScrollView()
@@ -44,11 +44,11 @@ class MovieDetailViewController: BaseViewController {
     }
     
     func configureUI() {
-        collectionView = createCollectionView()
+        imageCollectionView = createCollectionView()
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        contentView.addSubview(collectionView)
+        contentView.addSubview(imageCollectionView)
         contentView.addSubview(metaHeaderView)
         contentView.addSubview(synopsisView)
         
@@ -61,7 +61,6 @@ class MovieDetailViewController: BaseViewController {
                 genre: genreNames.joined(separator: ", ")
             )
         }
-        
         
         configureLayout()
     }
@@ -76,14 +75,14 @@ class MovieDetailViewController: BaseViewController {
             $0.width.equalToSuperview()
         }
         
-        collectionView.snp.makeConstraints {
-            $0.top.left.right.equalToSuperview()
-            $0.height.equalTo(250)
+        imageCollectionView.snp.makeConstraints {
+            $0.top.horizontalEdges.equalToSuperview()
+            $0.height.equalTo(contentView.snp.width).multipliedBy(1350.0 / 2400.0) // contentView와 view의 차이?
         }
         
         metaHeaderView.snp.makeConstraints {
-            $0.top.equalTo(collectionView.snp.bottom).offset(16)
-            $0.left.right.equalToSuperview().inset(16)
+            $0.top.equalTo(imageCollectionView.snp.bottom)
+            $0.horizontalEdges.equalToSuperview()
             $0.height.equalTo(20)
         }
         
@@ -118,6 +117,9 @@ class MovieDetailViewController: BaseViewController {
         DispatchQueue.global(qos: .background).async {
             NetworkManager.shared.fetchMovieImages(movieID: self.movie.id) { medios in
                 self.medios = Array(medios.prefix(5))
+                for me in self.medios{
+                    print("image Size: \(me.width) * \(me.height)")
+                }
             }
         }
     }

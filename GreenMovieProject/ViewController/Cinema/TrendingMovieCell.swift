@@ -24,7 +24,7 @@ class TrendingMovieCell: UICollectionViewCell {
         configureLayout()
         configureData()
         
-        heartButton.addTarget(self, action: #selector(didTapHeart), for: .touchUpInside)
+        heartButton.addTarget(self, action: #selector(heartButtonTouched), for: .touchUpInside)
     }
     
     required init?(coder: NSCoder) {
@@ -97,7 +97,7 @@ class TrendingMovieCell: UICollectionViewCell {
         let isHearted = HeartManager.shared.isHearted(id: movie.id)
         heartButton.setImage(UIImage(systemName: isHearted ? "heart.fill" : "heart"), for: .normal)
     }
-    @objc private func didTapHeart() {
+    @objc private func heartButtonTouched() {
         print("heartbutton 탭")
         guard let id = movieID else { return }
         

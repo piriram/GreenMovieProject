@@ -29,8 +29,8 @@ final class SettingViewController: UIViewController {
         
         profileCardView.configure(
             nickname: UserInfoManager.shared.readNickname() ?? "",
-            joinDate: "25.06.24 가입",
-            boxNum: 2
+            joinDate: "\(UserInfoManager.shared.getFormattedJoinDate()) 가입",
+            boxNum: HeartManager.shared.heartCount()
         )
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(profileCardTouched))

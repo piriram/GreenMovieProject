@@ -26,7 +26,7 @@ final class MainViewController: UITabBarController {
         let profileVC = UINavigationController(rootViewController: SettingViewController())
         profileVC.tabBarItem = UITabBarItem(title: "PROFILE", image: UIImage(systemName: "person"), selectedImage: UIImage(systemName: "person.fill"))
         
-        viewControllers = [upcomingVC,cinemaVC,  profileVC]
+        viewControllers = [cinemaVC,upcomingVC,  profileVC]
         
         tabBar.barTintColor = .black
         tabBar.tintColor = .primary
