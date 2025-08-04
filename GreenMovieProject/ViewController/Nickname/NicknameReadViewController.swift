@@ -12,8 +12,9 @@ final class NicknameReadViewController: UIViewController {
     
     var initialNickname: String? = ""
     
-    private let nicknameTextField = UITextField()
-    private let statusLabel = UILabel()
+    let nicknameTextField = UITextField()
+    let statusLabel = UILabel()
+    var onNicknameClosure: ((String) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,11 +24,10 @@ final class NicknameReadViewController: UIViewController {
         configureLayout()
         nicknameTextField.text = initialNickname
         nicknameTextField.becomeFirstResponder()
-        validateNickname()
+        confirmValidateNickname()
     }
     
-    private func configureUI() {
-        // 텍스트 필드
+    func configureUI() {
         nicknameTextField.textColor = .white
         nicknameTextField.font = .systemFont(ofSize: 16)
         nicknameTextField.borderStyle = .none
@@ -41,7 +41,6 @@ final class NicknameReadViewController: UIViewController {
             $0.leading.trailing.bottom.equalToSuperview()
         }
         
-        // 상태 레이블
         statusLabel.font = .systemFont(ofSize: 13)
         statusLabel.textColor = .primary
         statusLabel.textAlignment = .left
@@ -50,16 +49,15 @@ final class NicknameReadViewController: UIViewController {
         view.addSubview(nicknameTextField)
         view.addSubview(statusLabel)
         
-        // 왼쪽 뒤로가기 설정
         let backButton = UIBarButtonItem(image: UIImage(systemName: "chevron.left"),
                                          style: .plain,
                                          target: self,
-                                         action: #selector(didTapBack))
+                                         action: #selector(navBackButtonClicked))
         backButton.tintColor = .primary
         navigationItem.leftBarButtonItem = backButton
     }
     
-    private func configureLayout() {
+    func configureLayout() {
         nicknameTextField.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(40)
             $0.leading.trailing.equalToSuperview().inset(20)
@@ -72,11 +70,11 @@ final class NicknameReadViewController: UIViewController {
         }
     }
     
-    @objc private func textFieldDidChange() {
-        validateNickname()
+    @objc func textFieldDidChange() {
+        confirmValidateNickname()
     }
     
-    private func validateNickname() {
+    func confirmValidateNickname() {
         guard let text = nicknameTextField.text else {
             statusLabel.text = ""
             return
@@ -105,14 +103,17 @@ final class NicknameReadViewController: UIViewController {
         statusLabel.text = "사용할 수 있는 닉네임이에요"
     }
     
-    @objc private func didTapBack() {
+    @objc private func navBackButtonClicked() {
         if let nickname = nicknameTextField.text,
            nickname.count >= 2,
            nickname.count < 10,
            nickname.rangeOfCharacter(from: .decimalDigits) == nil,
            nickname.rangeOfCharacter(from: CharacterSet(charactersIn: "@#$%")) == nil {
+            
             UserInfoManager.shared.createNickname(nickname)
+            onNicknameClosure?(nickname)
         }
         navigationController?.popViewController(animated: true)
     }
+    
 }

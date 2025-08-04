@@ -9,11 +9,11 @@ import SnapKit
 // MARK: @@애니메이션 넣어보기?
 final class SynopsisView: UIView {
     
-    private let titleLabel = UILabel()
-    private let moreButton = UIButton(type: .system)
-    private let bodyLabel = UILabel()
+    let titleLabel = UILabel()
+    let moreButton = UIButton(type: .system)
+    let bodyLabel = UILabel()
     
-    private var isExpanded = false
+    var isExpanded = false
     
     init(text: String) {
         super.init(frame: .zero)
@@ -25,7 +25,7 @@ final class SynopsisView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configureUI() {
+    func configureUI() {
         titleLabel.text = "Synopsis"
         titleLabel.font = .boldSystemFont(ofSize: 18)
         titleLabel.textColor = .white
@@ -60,7 +60,7 @@ final class SynopsisView: UIView {
         }
     }
     
-    @objc private func moreTapped() {
+    @objc func moreTapped() {
         isExpanded.toggle()
         bodyLabel.numberOfLines = isExpanded ? 0 : 3
         moreButton.setTitle(isExpanded ? "Hide" : "More", for: .normal)

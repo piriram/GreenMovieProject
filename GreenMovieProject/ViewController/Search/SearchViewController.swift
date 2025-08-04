@@ -51,11 +51,15 @@ final class SearchViewController: UIViewController {
         }
         
         group.enter()
-        NetworkManager.shared.fetchGenres { genre in
-            self.genreMap = genre
+        GenreManager.shared.loadGenresIfNeeded {
+            self.genreMap = GenreManager.shared.genreMap /// private로 바꾸고 함수로 가져오기
             group.leave()
         }
-        
+        //        NetworkManager.shared.fetchGenres { genre in
+        //            self.genreMap = genre
+        //            group.leave()
+        //        }
+        //        
         group.notify(queue: .main) {
             if self.isSearch{
                 self.collectionView.setContentOffset(.zero, animated: false) //스크롤을 위로 올리기
@@ -165,6 +169,6 @@ extension SearchViewController: UICollectionViewDataSource,UICollectionViewDeleg
         let detailVC = MovieDetailViewController(movie: selectedMovie)
         navigationController?.pushViewController(detailVC, animated: true)
     }
-
+    
     
 }

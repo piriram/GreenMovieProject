@@ -11,7 +11,7 @@ import Kingfisher
 final class MediaImageCell: UICollectionViewCell {
     static let identifier = "MediaImageCell"
     
-    private let posterImageView = UIImageView()
+    let posterImageView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

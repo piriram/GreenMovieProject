@@ -12,10 +12,11 @@ final class MainViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
-        setupTabBar()
+        configureTabBar()
     }
     
-    private func setupTabBar() {
+    func configureTabBar() {
+        
         let cinemaVC = UINavigationController(rootViewController: CinemaViewController())
         cinemaVC.tabBarItem = UITabBarItem(title: "CINEMA", image: UIImage(systemName: "popcorn"), selectedImage: UIImage(systemName: "popcorn.fill"))
         
@@ -25,7 +26,7 @@ final class MainViewController: UITabBarController {
         let profileVC = UINavigationController(rootViewController: SettingViewController())
         profileVC.tabBarItem = UITabBarItem(title: "PROFILE", image: UIImage(systemName: "person"), selectedImage: UIImage(systemName: "person.fill"))
         
-        viewControllers = [cinemaVC,upcomingVC,  profileVC]
+        viewControllers = [upcomingVC,cinemaVC,  profileVC]
         
         tabBar.barTintColor = .black
         tabBar.tintColor = .primary

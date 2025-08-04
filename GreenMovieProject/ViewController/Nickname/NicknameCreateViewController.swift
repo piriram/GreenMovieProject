@@ -24,11 +24,10 @@ final class NicknameCreateViewController: UIViewController {
     }
     
     func configureUI() {
-        // 텍스트 필드 (편집 불가)
         nicknameTextField.textColor = .white
         nicknameTextField.font = .systemFont(ofSize: 16)
         nicknameTextField.borderStyle = .none
-        nicknameTextField.isUserInteractionEnabled = false
+        nicknameTextField.isUserInteractionEnabled = false // 편집 불가
         
         let underline = UIView()
         underline.backgroundColor = .lightGray
@@ -38,23 +37,21 @@ final class NicknameCreateViewController: UIViewController {
             $0.leading.trailing.bottom.equalToSuperview()
         }
         
-        // 편집 버튼
         editButton.setTitle("편집", for: .normal)
         editButton.setTitleColor(.white, for: .normal)
         editButton.layer.borderColor = UIColor.white.cgColor
         editButton.layer.borderWidth = 1
         editButton.layer.cornerRadius = 15
         editButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .medium)
-        editButton.addTarget(self, action: #selector(didTapEdit), for: .touchUpInside)
+        editButton.addTarget(self, action: #selector(goEditClicked), for: .touchUpInside)
         
-        // 완료 버튼
         completeButton.setTitle("완료", for: .normal)
         completeButton.setTitleColor(.primary, for: .normal)
         completeButton.layer.borderColor = UIColor.primary.cgColor
         completeButton.layer.borderWidth = 1
         completeButton.layer.cornerRadius = 24
         completeButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
-        completeButton.addTarget(self, action: #selector(didTapComplete), for: .touchUpInside)
+        completeButton.addTarget(self, action: #selector(completButtonClicked), for: .touchUpInside)
         
         view.addSubview(nicknameTextField)
         view.addSubview(editButton)
@@ -83,15 +80,20 @@ final class NicknameCreateViewController: UIViewController {
         }
     }
     
-  
     
-    @objc func didTapEdit() {
+    
+    @objc func goEditClicked() {
         let detailVC = NicknameReadViewController()
         detailVC.initialNickname = nicknameTextField.text
+        detailVC.onNicknameClosure = { [weak self] updatedNickname in
+            self?.nicknameTextField.text = updatedNickname
+        }
         navigationController?.pushViewController(detailVC, animated: true)
     }
     
-    @objc func didTapComplete() {
+    
+    @objc func completButtonClicked() {
+        UserInfoManager.shared.createJoinDate(Date())
         navigationController?.popViewController(animated: true)
     }
 }

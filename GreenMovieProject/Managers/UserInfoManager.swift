@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+//TODO: 포메터 객체 만들어서 사용해보기
 final class UserInfoManager {
     static let shared = UserInfoManager()
     
@@ -27,9 +27,9 @@ final class UserInfoManager {
         UserDefaults.standard.removeObject(forKey:nicknameKey)
     }
     
-    func saveJoinDate(_ date: Date) {
+    func createJoinDate(_ date: Date) {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.dateFormat = "yy.MM.dd"
         let dateString = formatter.string(from: date)
         UserDefaults.standard.set(dateString, forKey: joinDateKey)
     }
@@ -37,14 +37,26 @@ final class UserInfoManager {
     func readJoinDate() -> String? {
         return UserDefaults.standard.string(forKey: joinDateKey)
     }
-    func formattedJoinDate() -> String {
+    func getFormattedJoinDate() -> String {
         guard let dateStr = readJoinDate() else { return "" }
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        if let date = formatter.date(from: dateStr) {
-            formatter.dateFormat = "yy.MM.dd"
-            return formatter.string(from: date) + " 가입"
-        }
-        return ""
+        formatter.dateFormat = "yy-MM-dd"
+        return dateStr
+    }
+    func deleteJoinDate() {
+        UserDefaults.standard.removeObject(forKey: joinDateKey)
+    }
+    func isJoinDate() -> Bool {
+        return UserDefaults.standard.string(forKey: joinDateKey) != nil
+    }
+    func isNickname() -> Bool {
+        return UserDefaults.standard.string(forKey: nicknameKey) != nil
+    }
+    
+    func isUserInfo() -> Bool {
+        let result = isJoinDate() && isNickname()
+        
+        print("UserInfor가있는지 : \(result)")
+        return result
     }
 }

@@ -10,16 +10,16 @@ import SnapKit
 
 final class MovieMetaView: UIView {
     
-    private let releaseDateIcon = UIImageView(image: UIImage(systemName: "calendar"))
-    private let releaseDateLabel = UILabel()
+    let releaseDateIcon = UIImageView(image: UIImage(systemName: "calendar"))
+    let releaseDateLabel = UILabel()
     
-    private let ratingIcon = UIImageView(image: UIImage(systemName: "star.fill"))
-    private let ratingLabel = UILabel()
+    let ratingIcon = UIImageView(image: UIImage(systemName: "star.fill"))
+    let ratingLabel = UILabel()
     
-    private let genreIcon = UIImageView(image: UIImage(systemName: "film"))
-    private let genreLabel = UILabel()
+    let genreIcon = UIImageView(image: UIImage(systemName: "film"))
+    let genreLabel = UILabel()
     
-    private lazy var stackView: UIStackView = {
+    lazy var stackView: UIStackView = {
         let sv = UIStackView(arrangedSubviews: [
             makeItemStack(icon: releaseDateIcon, label: releaseDateLabel),
             separatorView(),
@@ -43,7 +43,7 @@ final class MovieMetaView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configureUI() {
+    func configureUI() {
         [releaseDateLabel, ratingLabel, genreLabel].forEach {
             $0.font = .systemFont(ofSize: 13)
             $0.textColor = .lightGray
@@ -54,17 +54,17 @@ final class MovieMetaView: UIView {
             $0.contentMode = .scaleAspectFit
             $0.snp.makeConstraints { $0.size.equalTo(14) }
         }
-
+        
         addSubview(stackView)
     }
     
-    private func configureLayout() {
+    func configureLayout() {
         stackView.snp.makeConstraints {
             $0.center.equalToSuperview()
         }
     }
     
-    private func makeItemStack(icon: UIImageView, label: UILabel) -> UIStackView {
+    func makeItemStack(icon: UIImageView, label: UILabel) -> UIStackView {
         let stack = UIStackView(arrangedSubviews: [icon, label])
         stack.axis = .horizontal
         stack.spacing = 4
@@ -72,7 +72,7 @@ final class MovieMetaView: UIView {
         return stack
     }
     
-    private func separatorView() -> UIView {
+    func separatorView() -> UIView {
         let view = UIView()
         view.backgroundColor = .darkGray
         view.snp.makeConstraints { $0.width.equalTo(1); $0.height.equalTo(14) }
