@@ -14,7 +14,10 @@ class MovieDetailViewController: BaseViewController {
     var cast: [Cast] = []
     var crew: [Crew] = []
     var medios: [Medio] = [] {
-        didSet { imageCollectionView.reloadData() }
+        didSet {
+            imageCollectionView.reloadData()
+            pageControl.numberOfPages = medios.count
+        }
     }
     
     var imageCollectionView: UICollectionView!
@@ -23,7 +26,7 @@ class MovieDetailViewController: BaseViewController {
     let scrollView = UIScrollView()
     let contentView = UIView()
     var castView: CastListView?
-    
+    let pageControl = UIPageControl()
     
     init(movie: Movie) {
         self.movie = movie
@@ -46,9 +49,11 @@ class MovieDetailViewController: BaseViewController {
     func configureUI() {
         imageCollectionView = createCollectionView()
         view.addSubview(scrollView)
+        
         scrollView.addSubview(contentView)
         
         contentView.addSubview(imageCollectionView)
+        contentView.addSubview(pageControl)
         contentView.addSubview(metaHeaderView)
         contentView.addSubview(synopsisView)
         
@@ -66,30 +71,37 @@ class MovieDetailViewController: BaseViewController {
     }
     
     func configureLayout() {
-        scrollView.snp.makeConstraints {
-            $0.edges.equalTo(view.safeAreaLayoutGuide)
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+
+        contentView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.width.equalToSuperview()
+        }
+
+        imageCollectionView.snp.makeConstraints { make in
+            make.top.horizontalEdges.equalToSuperview()
+            make.height.equalTo(contentView.snp.width).multipliedBy(1350.0 / 2400.0)
+        }
+
+        pageControl.snp.makeConstraints { make in
+            make.centerX.equalTo(imageCollectionView)
+            make.bottom.equalTo(imageCollectionView).inset(8)
+            
         }
         
-        contentView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            $0.width.equalToSuperview()
+        metaHeaderView.snp.makeConstraints { make in
+            make.top.equalTo(imageCollectionView.snp.bottom)
+            make.horizontalEdges.equalToSuperview()
+            make.height.equalTo(20)
         }
-        
-        imageCollectionView.snp.makeConstraints {
-            $0.top.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(contentView.snp.width).multipliedBy(1350.0 / 2400.0) // contentView와 view의 차이?
+
+        synopsisView.snp.makeConstraints { make in
+            make.top.equalTo(metaHeaderView.snp.bottom).offset(16)
+            make.horizontalEdges.equalToSuperview().inset(16)
         }
-        
-        metaHeaderView.snp.makeConstraints {
-            $0.top.equalTo(imageCollectionView.snp.bottom)
-            $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(20)
-        }
-        
-        synopsisView.snp.makeConstraints {
-            $0.top.equalTo(metaHeaderView.snp.bottom).offset(16)
-            $0.left.right.equalToSuperview().inset(16)
-        }
+
     }
     
     func fetchCast() {
@@ -157,6 +169,11 @@ class MovieDetailViewController: BaseViewController {
             HeartManager.shared.createHeart(id: movie.id)
         }
         updateNavHeartButton()
+    }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        let pageIndex = Int((scrollView.contentOffset.x + scrollView.frame.width / 2) / scrollView.frame.width)
+        let pageIndex = Int(round(scrollView.contentOffset.x / scrollView.frame.width))
+        pageControl.currentPage = pageIndex
     }
 }
 
