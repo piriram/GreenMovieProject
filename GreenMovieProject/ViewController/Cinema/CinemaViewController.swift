@@ -50,7 +50,7 @@ class CinemaViewController:BaseViewController {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         
-        layout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 10)
+        layout.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
         layout.minimumLineSpacing = 16
         
         //        layout.itemSize = CGSize(width: width, height: width * 1.5 )
@@ -73,22 +73,22 @@ class CinemaViewController:BaseViewController {
         
         profileCardView.snp.makeConstraints { make in
             
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
-            make.horizontalEdges.equalToSuperview().inset(16)
-            make.height.equalTo(92)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(12)
+            make.horizontalEdges.equalToSuperview().inset(12)
+            make.height.equalTo(96)
         }
         recentSearchView.snp.makeConstraints { make in
-            make.top.equalTo(profileCardView.snp.bottom).offset(16)
-            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
-            make.height.equalTo(80)
+            make.top.equalTo(profileCardView.snp.bottom).offset(12)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(12)
+            make.height.equalTo(92)
         }
         trendingLabel.snp.makeConstraints { make in
             make.top.equalTo(recentSearchView.snp.bottom).offset(16)
-            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(12)
             make.height.equalTo(17)
         }
         trendingCollectionView.snp.makeConstraints { make in
-            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide)
+            make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(12)
             make.bottom.equalTo(view.safeAreaLayoutGuide)
             make.top.equalTo(trendingLabel.snp.bottom).offset(16)
         }
@@ -105,6 +105,7 @@ class CinemaViewController:BaseViewController {
         trendingLabel.text = "오늘의 영화"
         print("트렌딩레이블")
     }
+    
     func fetchTrendingData(){
         
         NetworkManager.shared.fetchTrending{ result in
@@ -112,10 +113,10 @@ class CinemaViewController:BaseViewController {
             case .success(let data):
                 //                dump(data)
                 self.trendings = data.results
+                
                 DispatchQueue.main.async {
                     self.trendingCollectionView.reloadData()
                 }
-                
             case .failure(let error):
                 print(error)
             }
@@ -191,20 +192,22 @@ extension CinemaViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let width = self.width
-        
-        // 전체 높이에서 고정 컴포넌트 높이만큼 빼기
         let topSafeArea = view.safeAreaInsets.top
+        print("topSafeArea: \(topSafeArea)")
         let bottomSafeArea = view.safeAreaInsets.bottom
-        let totalHeight = view.bounds.height
+        print("bottomSafeArea: \(bottomSafeArea)")
         
-        //        let fixedHeights: CGFloat = topSafeArea + bottomSafeArea + 16 + 100 + 16 + 80 + 4 + 17
-        //        print("fixedHeights: \(fixedHeights)")
-        let availableHeight = totalHeight - 450
+        let fixedComponentHeight: CGFloat = topSafeArea + bottomSafeArea + 261 + 60
+        let availableHeight = view.bounds.height - fixedComponentHeight
+        //UIScreen?
+
+        let fixedTextHeight: CGFloat = 84  // poster 아래 spacing 포함
+
+        let posterHeight = availableHeight - fixedTextHeight
         
-        let height = availableHeight
+        let posterWidth = posterHeight * (500 / 716)
         
-        return CGSize(width: width, height: height)
+        return CGSize(width: posterWidth, height: availableHeight)
     }
 }
 

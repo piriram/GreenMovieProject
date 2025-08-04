@@ -47,7 +47,7 @@ class TrendingMovieCell: UICollectionViewCell {
         titleLabel.font = .systemFont(ofSize: 18, weight: .bold)
         
         overviewLabel.textColor = .name
-        overviewLabel.font = .systemFont(ofSize: 12)
+        overviewLabel.font = .systemFont(ofSize: 14)
         overviewLabel.numberOfLines = 3
         
         heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
@@ -71,7 +71,7 @@ class TrendingMovieCell: UICollectionViewCell {
         overviewLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(4)
             make.horizontalEdges.equalToSuperview()
-            make.height.equalTo(48)
+            make.height.equalTo(60)
             make.bottom.equalToSuperview().inset(4)
         }
         
@@ -87,7 +87,16 @@ class TrendingMovieCell: UICollectionViewCell {
         let urlString = NetworkManager.shared.composeURLPath(path: movie.posterPath)
         
         if let url = URL(string: urlString) {
-            posterImageView.kf.setImage(with: url)
+//            posterImageView.kf.setImage(with: url)
+            posterImageView.kf.setImage(with: url, completionHandler: { result in
+                switch result {
+                case .success(let value):
+                    let imageSize = value.image.size
+                    print("이미지 사이즈: \(imageSize.width) x \(imageSize.height)")
+                case .failure(let error):
+                    print("이미지 로드 실패: \(error.localizedDescription)")
+                }
+            })
         }
         
         titleLabel.text = movie.title

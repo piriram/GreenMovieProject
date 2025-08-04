@@ -36,7 +36,7 @@ final class RecentSearchView: UIView {
     }
     func configureUI() {
         titleLabel.text = "최근 검색어"
-        titleLabel.font = .systemFont(ofSize: 16, weight: .bold)
+        titleLabel.font = .systemFont(ofSize: 20, weight: .bold)
         titleLabel.textColor = .white
         
         
@@ -47,7 +47,7 @@ final class RecentSearchView: UIView {
         button.setTitleColor(.primary, for: .normal)
         button.backgroundColor = .clear
         button.titleLabel?.textAlignment = .right
-        button.titleLabel?.font = .systemFont(ofSize: 14, weight: .bold)
+        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .bold)
         return button
     }
     
@@ -106,16 +106,17 @@ final class RecentSearchView: UIView {
     func createChip(for keyword: String) -> UIView {
         let container = UIView()
         container.backgroundColor = .white
-        container.layer.cornerRadius = 16
+        container.layer.cornerRadius = 20
         container.clipsToBounds = true
         
         let label = UILabel()
         label.text = keyword
         label.textColor = .black
-        label.font = .systemFont(ofSize: 14)
+        label.font = .boldSystemFont(ofSize: 16)
         
         let deleteButton = UIButton(type: .system)
-        deleteButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+        let config = UIImage.SymbolConfiguration(pointSize: 12, weight: .bold)
+        deleteButton.setImage(UIImage(systemName: "xmark",withConfiguration: config), for: .normal)
         deleteButton.tintColor = .black
         deleteButton.addTarget(self, action: #selector(deleteKeywordClicked(_:)), for: .touchUpInside)
         deleteButton.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
@@ -136,11 +137,11 @@ final class RecentSearchView: UIView {
             $0.leading.equalTo(label.snp.trailing).offset(4)
             //            $0.size.equalTo(12)
             $0.trailing.equalToSuperview().offset(-4)
-            //            $0.centerY.equalToSuperview()
+                        $0.centerY.equalToSuperview()
         }
         
         container.snp.makeConstraints {
-            $0.height.equalTo(32)
+            $0.height.equalTo(20)
         }
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(chipTouched(_ :)))
