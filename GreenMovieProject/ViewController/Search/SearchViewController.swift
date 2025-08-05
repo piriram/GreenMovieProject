@@ -19,7 +19,7 @@ final class SearchViewController: BaseViewController {
     // 뷰 컨트롤러 내부 함수를 쓰려면 지연 속성으로 지정해야함 왜냐면 인스턴스 메서드이기 떄문에 static 으로 선언하는 방법이 있음
     lazy var collectionView = self.createCollectionView()
     
-    let emptyLabel = UILabel()
+    lazy var emptyView = EmptyMessageView(message: "원하는 검색결과를 찾지 못했습니다.")
     var isSearch = false // 검색하는 경우면 테이블뷰 포커스를 상단으로 올림
     
     override func viewDidLoad() {
@@ -70,10 +70,10 @@ final class SearchViewController: BaseViewController {
             /// 또 검색하면 그때 true
             ///
             if self.movies.isEmpty {
-                self.emptyLabel.isHidden = false
+                self.emptyView.show()
             }
             else{
-                self.emptyLabel.isHidden = true
+                self.emptyView.hide()
             }
             self.collectionView.reloadData()
         }
@@ -82,7 +82,7 @@ final class SearchViewController: BaseViewController {
     func configureUI() {
         view.addSubview(searchBar)
         view.addSubview(collectionView)
-        view.addSubview(emptyLabel)
+        view.addSubview(emptyView)
         searchBar.delegate = self
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -105,13 +105,7 @@ final class SearchViewController: BaseViewController {
         //        
         //        collectionView.backgroundColor = .clear
         //        collectionView.register(SearchMovieListCell.self, forCellWithReuseIdentifier: SearchMovieListCell.identifier)
-        //        
         
-        emptyLabel.text = "원하는 검색결과를 찾지 못했습니다"
-        emptyLabel.font = .systemFont(ofSize: 14)
-        emptyLabel.textColor = .lightGray
-        emptyLabel.textAlignment = .center
-        emptyLabel.isHidden = true
         
     }
     func createCollectionView() -> UICollectionView {
@@ -138,15 +132,17 @@ final class SearchViewController: BaseViewController {
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
-        emptyLabel.snp.makeConstraints {
-            $0.center.equalToSuperview()
+        emptyView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            
         }
     }
     
     func showEmptyUI() {
         movies = []
+        emptyView.show()
         collectionView.reloadData()
-        emptyLabel.isHidden = false
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {

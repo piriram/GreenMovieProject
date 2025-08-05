@@ -22,7 +22,7 @@ final class NicknameUpdateViewController: BaseViewController {
         configureUI()
         configureLayout()
         configureAction()
-        
+        configureNavigationBar()
     }
     
     func configureUI() {
@@ -85,6 +85,16 @@ final class NicknameUpdateViewController: BaseViewController {
     func configureAction() {
         nicknameTextField.text = UserInfoManager.shared.readNickname() ?? ""
     }
+    func configureNavigationBar() {
+        let btn = UIBarButtonItem(
+            image: UIImage(systemName: "xmark"),
+            style: .plain,
+            target: self,
+            action: #selector(dismissClicked)
+        )
+        btn.tintColor = .primary
+        navigationItem.leftBarButtonItem = btn
+    }
     
     @objc func goEditClicked() {
         let detailVC = NicknameDetailViewController()
@@ -108,6 +118,9 @@ final class NicknameUpdateViewController: BaseViewController {
         NotificationHelper.post(NotificationHelper.updateNickname)
         dismiss(animated: true)
         
+    }
+    @objc func dismissClicked(){
+        dismiss(animated: true)
     }
     
 }

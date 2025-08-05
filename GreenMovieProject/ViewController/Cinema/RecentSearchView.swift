@@ -14,32 +14,43 @@ final class RecentSearchView: UIView {
     
     let titleLabel = UILabel()
     
-    var onKeywordClosure: ((String) -> Void)?
+    var keywordClosure: ((String) -> Void)?
     let scrollView = UIScrollView()
-    let keywordStackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = 8
-        stackView.alignment = .fill
-        stackView.distribution = .fill
-        //        stackView.lineBreakMode = .byTruncatingTail
-        stackView.clipsToBounds = true
-        return stackView
-    }()
+    lazy var keywordStackView = setupStackView()
+    lazy var deleteAllButton = createClearAllButton()
+    
+    lazy var emptyView = EmptyMessageView(message: "최근 검색어 내역이 없습니다.")
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
         configureUI()
         configureLayout()
-        reloadKeywords()
+        configureAction()
+        
+        
     }
     func configureUI() {
+        addSubview(titleLabel)
+        addSubview(scrollView)
+        addSubview(deleteAllButton)
+        addSubview(emptyView)
+        scrollView.addSubview(keywordStackView)
+        
         titleLabel.text = "최근 검색어"
         titleLabel.font = .systemFont(ofSize: 20, weight: .bold)
         titleLabel.textColor = .white
         
         
+    }
+    func setupStackView()-> UIStackView {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 8
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.clipsToBounds = true
+        return stackView
     }
     func createClearAllButton() -> UIButton {
         let button = UIButton(type: .system)
@@ -64,45 +75,64 @@ final class RecentSearchView: UIView {
             let chipView = createChip(for: keyword)
             keywordStackView.addArrangedSubview(chipView)
         }
+        showEmptyView()
     }
+    
+    func showEmptyView() {
+        if keywords.isEmpty {
+            emptyView.show()
+            deleteAllButton.isHidden = true
+        }
+        else{
+            emptyView.hide()
+            deleteAllButton.isHidden = false
+        }
+    }
+    
     /// 외부에서 호출하여 키워드를 새로 갱신하는 함수
     func updateKeywords(_ newKeywords: [String]) {
         self.keywords = newKeywords
         reloadKeywords()
+        showEmptyView()
     }
     
     func configureLayout() {
-        addSubview(titleLabel)
-        addSubview(scrollView)
-        let clearAllButton = createClearAllButton()
-        addSubview(clearAllButton)
-        scrollView.addSubview(keywordStackView)
-        
-        titleLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(12)
-            $0.leading.equalToSuperview()
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(12)
+            make.leading.equalToSuperview()
         }
-        clearAllButton.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.top)
-            $0.trailing.equalToSuperview().offset(-4)
+        
+        deleteAllButton.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.top)
+            make.trailing.equalToSuperview().offset(-4)
+        }
+        
+        scrollView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(8)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalTo(40)
+            make.bottom.equalToSuperview()
+        }
+        
+        keywordStackView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.height.equalToSuperview()
+        }
+        emptyView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
             
-            
-        }
-        clearAllButton.addTarget(self, action: #selector(clearAllButtonClicked), for: .touchUpInside)
-        
-        scrollView.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(8)
-            $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(40)
-            $0.bottom.equalToSuperview()
-        }
-        
-        keywordStackView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            $0.height.equalToSuperview()
         }
     }
     
+    
+    func configureAction(){
+        deleteAllButton.addTarget(self, action: #selector(clearAllButtonClicked), for: .touchUpInside)
+        reloadKeywords()
+    }
     func createChip(for keyword: String) -> UIView {
         let container = UIView()
         container.backgroundColor = .white
@@ -128,20 +158,19 @@ final class RecentSearchView: UIView {
         label.setContentHuggingPriority(.required, for: .horizontal)
         label.setContentCompressionResistancePriority(.required, for: .horizontal)
         
-        label.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(12)
-            $0.centerY.equalToSuperview()
+        label.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(12)
+            make.centerY.equalToSuperview()
         }
         
-        deleteButton.snp.makeConstraints {
-            $0.leading.equalTo(label.snp.trailing).offset(4)
-            //            $0.size.equalTo(12)
-            $0.trailing.equalToSuperview().offset(-4)
-                        $0.centerY.equalToSuperview()
+        deleteButton.snp.makeConstraints { make in
+            make.leading.equalTo(label.snp.trailing).offset(4)
+            make.trailing.equalToSuperview().offset(-4)
+            make.centerY.equalToSuperview()
         }
         
-        container.snp.makeConstraints {
-            $0.height.equalTo(20)
+        container.snp.makeConstraints { make in
+            make.height.equalTo(20)
         }
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(chipTouched(_ :)))
@@ -152,8 +181,8 @@ final class RecentSearchView: UIView {
     @objc func chipTouched(_ sender: UITapGestureRecognizer) {
         guard let view = sender.view else { return } // 딥다이빙
         let index = view.tag
-       let keyword =  keywords[index]
-        onKeywordClosure?(keyword)
+        let keyword =  keywords[index]
+        keywordClosure?(keyword)
     }
     
     @objc func deleteKeywordClicked(_ sender: UIButton) {
@@ -166,6 +195,8 @@ final class RecentSearchView: UIView {
         RecentSearchManager.shared.deleteAllKeyword()
         keywords = []
         reloadKeywords()
+        emptyView.show()
+        deleteAllButton.isHidden = true
     }
     
 }

@@ -42,7 +42,7 @@ class CinemaViewController:BaseViewController {
         print("get keywords: \(RecentSearchManager.shared.readKeywords())")
         let keywords: [String] = RecentSearchManager.shared.readKeywords()
         recentSearchView.updateKeywords(keywords)
-        recentSearchView.onKeywordClosure = { [weak self] keyword in
+        recentSearchView.keywordClosure = { [weak self] keyword in
             let vc = SearchViewController()
             vc.initialQuery = keyword
             self?.navigationController?.pushViewController(vc, animated: true)
