@@ -21,7 +21,7 @@ final class SearchViewController: BaseViewController {
     
     lazy var emptyView = EmptyMessageView(message: "원하는 검색결과를 찾지 못했습니다.")
     var isSearch = false // 검색하는 경우면 테이블뷰 포커스를 상단으로 올림
-    
+    var beforeKeyword = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "영화 검색"
@@ -30,6 +30,7 @@ final class SearchViewController: BaseViewController {
         
         if let query = initialQuery {
             searchBar.text = query
+            print("fetch data 실행 view did load")
             fetchData(query: query)
         } else {
             showEmptyUI()
@@ -37,7 +38,7 @@ final class SearchViewController: BaseViewController {
         }
     }
     
-    func fetchData(query: String) {
+    func fetchData(query: String,isAppend: Bool = false) {
         
         let group = DispatchGroup()
         
@@ -45,7 +46,11 @@ final class SearchViewController: BaseViewController {
         NetworkManager.shared.fetchSearchResults(query: query, page: currentPage) { result in
             switch result {
             case .success(let movies):
-                self.movies = movies
+                if isAppend{
+                    self.movies.append(contentsOf: movies)
+                }else{
+                    self.movies = movies
+                }
                 RecentSearchManager.shared.createKeyword(query)
                 NotificationHelper.post(NotificationHelper.updateRecentKeyword)
             case .failure(let error):
@@ -75,6 +80,7 @@ final class SearchViewController: BaseViewController {
             else{
                 self.emptyView.hide()
             }
+            print(#function)
             self.collectionView.reloadData()
         }
     }
@@ -141,6 +147,7 @@ final class SearchViewController: BaseViewController {
     func showEmptyUI() {
         movies = []
         emptyView.show()
+        print(#function)
         collectionView.reloadData()
         
     }
@@ -151,6 +158,7 @@ final class SearchViewController: BaseViewController {
     }
     //TODO: 해당셀만 업데이트 해보기
     @objc func updateHeart(){
+        print(#function)
         collectionView.reloadData()
     }
 }
@@ -162,6 +170,7 @@ extension SearchViewController: UISearchBarDelegate {
         searchBar.resignFirstResponder()
         currentPage = 1
         isSearch = true
+        print("fetch data 실행 : searchbar clicked")
         fetchData(query: query)
     }
 }
@@ -172,6 +181,11 @@ extension SearchViewController: UICollectionViewDataSource,UICollectionViewDeleg
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard indexPath.item < movies.count else {
+            print("인덱스 : \(indexPath.item), movies.count: \(movies.count)")
+            return UICollectionViewCell()
+        }
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchMovieListCell.identifier, for: indexPath) as! SearchMovieListCell
         
         
@@ -184,13 +198,13 @@ extension SearchViewController: UICollectionViewDataSource,UICollectionViewDeleg
         if indexPath.item == movies.count - 10{
             if let query = searchBar.text, !query.isEmpty {
                 currentPage += 1
-                fetchData(query: query)
+                print("fetch data 실행 - 페이지네이션")
+                fetchData(query: query,isAppend: true)
             }
         }
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("did select item")
         let selectedMovie = movies[indexPath.item]
         let detailVC = MovieDetailViewController(movie: selectedMovie)
         navigationController?.pushViewController(detailVC, animated: true)

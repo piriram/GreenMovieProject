@@ -15,7 +15,6 @@ enum NotificationHelper {
     ///알림 보내기
     static func post(_ name: Notification.Name) {
         NotificationCenter.default.post(name: name, object: nil)
-        print("post")
     }
     ///알림 받기
     static func addObserver(_ observer: Any,
@@ -23,17 +22,14 @@ enum NotificationHelper {
                             name: Notification.Name,
                             object: Any? = nil) {
         NotificationCenter.default.addObserver(observer, selector: selector, name: name, object: object)
-        print("addObserver")
     }
     
     ///옵저버 제거
     static func removeObserver(_ observer: Any, name: Notification.Name) {
         NotificationCenter.default.removeObserver(observer, name: name, object: nil)
-        print("removeObserver")
     }
     ///옴저버 모두 제거
     static func removeAllObservers(_ observer: Any) {
         NotificationCenter.default.removeObserver(observer)
-        print("removeAllObservers")
     }
 }
