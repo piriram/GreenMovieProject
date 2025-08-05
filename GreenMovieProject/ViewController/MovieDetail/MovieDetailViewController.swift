@@ -113,10 +113,10 @@ class MovieDetailViewController: BaseViewController {
                     self.castView = castView
                     self.contentView.addSubview(castView)
                     
-                    castView.snp.makeConstraints {
-                        $0.top.equalTo(self.synopsisView.snp.bottom).offset(16)
-                        $0.left.right.equalToSuperview().inset(16)
-                        $0.bottom.equalToSuperview().inset(20)
+                    castView.snp.makeConstraints { make in
+                        make.top.equalTo(self.synopsisView.snp.bottom).offset(16)
+                        make.left.right.equalToSuperview().inset(16)
+                        make.bottom.equalToSuperview().inset(20)
                     }
                 }
             }

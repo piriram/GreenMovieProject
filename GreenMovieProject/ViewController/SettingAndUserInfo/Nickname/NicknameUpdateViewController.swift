@@ -56,29 +56,29 @@ final class NicknameUpdateViewController: BaseViewController {
     }
     
     func configureLayout() {
-        nicknameTextField.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(40)
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalTo(editButton.snp.leading).offset(-8)
-            $0.height.equalTo(30)
+        nicknameTextField.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalTo(editButton.snp.leading).offset(-8)
+            make.height.equalTo(30)
         }
         
-        editButton.snp.makeConstraints {
-            $0.centerY.equalTo(nicknameTextField)
-            $0.trailing.equalToSuperview().offset(-20)
-            $0.width.equalTo(52)
-            $0.height.equalTo(30)
+        editButton.snp.makeConstraints { make in
+            make.centerY.equalTo(nicknameTextField)
+            make.trailing.equalToSuperview().offset(-20)
+            make.width.equalTo(52)
+            make.height.equalTo(30)
         }
         
-        completeButton.snp.makeConstraints {
-            $0.top.equalTo(nicknameTextField.snp.bottom).offset(40)
-            $0.leading.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo(48)
+        completeButton.snp.makeConstraints { make in
+            make.top.equalTo(nicknameTextField.snp.bottom).offset(40)
+            make.horizontalEdges.equalToSuperview().inset(20)
+            make.height.equalTo(48)
         }
         
-        underline.snp.makeConstraints {
-            $0.height.equalTo(1)
-            $0.leading.trailing.bottom.equalToSuperview()
+        underline.snp.makeConstraints { make in
+            make.height.equalTo(1)
+            make.horizontalEdges.bottom.equalToSuperview()
         }
     }
     

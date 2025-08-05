@@ -68,33 +68,33 @@ final class SearchMovieListCell: UICollectionViewCell {
     }
     
     func configureLayout() {
-        posterImageView.snp.makeConstraints {
-            $0.left.verticalEdges.equalToSuperview().inset(8)
-            $0.width.equalTo(posterImageView.snp.height).multipliedBy(0.7)
+        posterImageView.snp.makeConstraints { make in
+            make.left.verticalEdges.equalToSuperview().inset(8)
+            make.width.equalTo(posterImageView.snp.height).multipliedBy(0.7)
             
         }
         
-        titleLabel.snp.makeConstraints {
-            $0.top.equalTo(posterImageView.snp.top).offset(4)
-            $0.left.equalTo(posterImageView.snp.right).offset(12)
-            $0.right.equalTo(heartButton.snp.left).offset(-8)
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(posterImageView.snp.top).offset(4)
+            make.left.equalTo(posterImageView.snp.right).offset(12)
+            make.right.equalTo(heartButton.snp.left).offset(-8)
         }
         
-        releaseDateLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(4)
-            $0.left.equalTo(titleLabel.snp.left)
+        releaseDateLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(4)
+            make.left.equalTo(titleLabel.snp.left)
         }
         
-        genreStackView.snp.makeConstraints {
-            $0.bottom.equalTo(posterImageView.snp.bottom)
-            $0.left.equalTo(titleLabel.snp.left)
-            $0.right.lessThanOrEqualToSuperview().inset(40)
+        genreStackView.snp.makeConstraints { make in
+            make.bottom.equalTo(posterImageView.snp.bottom)
+            make.left.equalTo(titleLabel.snp.left)
+            make.right.lessThanOrEqualToSuperview().inset(40)
         }
         
-        heartButton.snp.makeConstraints {
-            $0.bottom.equalTo(posterImageView.snp.bottom)
-            $0.right.equalToSuperview().inset(8)
-            $0.size.equalTo(32)
+        heartButton.snp.makeConstraints { make in
+            make.bottom.equalTo(posterImageView.snp.bottom)
+            make.right.equalToSuperview().inset(8)
+            make.size.equalTo(32)
         }
     }
     
@@ -160,8 +160,8 @@ final class SearchMovieListCell: UICollectionViewCell {
         //        label.setContentHuggingPriority(.required, for: .horizontal) // 크기 우선순위(확장 저항?)
         //        label.setContentCompressionResistancePriority(.required, for: .horizontal) // required 압축 저항(줄어들지 않음)
         //
-        label.snp.makeConstraints {
-            $0.height.equalTo(20)
+        label.snp.makeConstraints { make in
+            make.height.equalTo(20)
         }
         return label
     }

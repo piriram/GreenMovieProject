@@ -57,20 +57,22 @@ final class NicknameDetailViewController: UIViewController {
     }
     
     func configureLayout() {
-        nicknameTextField.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(40)
-            $0.leading.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo(40)
+        nicknameTextField.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(40)
+            make.horizontalEdges.equalToSuperview().inset(20)
+            make.height.equalTo(40)
         }
-        
-        statusLabel.snp.makeConstraints {
-            $0.top.equalTo(nicknameTextField.snp.bottom).offset(12)
-            $0.leading.trailing.equalToSuperview().inset(20)
+
+        statusLabel.snp.makeConstraints { make in
+            make.top.equalTo(nicknameTextField.snp.bottom).offset(12)
+            make.horizontalEdges.equalToSuperview().inset(20)
         }
-        underline.snp.makeConstraints {
-            $0.height.equalTo(1)
-            $0.leading.trailing.bottom.equalToSuperview()
+
+        underline.snp.makeConstraints { make in
+            make.height.equalTo(1)
+            make.horizontalEdges.bottom.equalToSuperview()
         }
+
     }
     
     func configureStatusLabel() {

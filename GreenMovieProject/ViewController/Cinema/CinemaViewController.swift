@@ -95,12 +95,12 @@ class CinemaViewController:BaseViewController {
         trendingLabel.snp.makeConstraints { make in
             make.top.equalTo(recentSearchView.snp.bottom).offset(16)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(12)
-            make.height.equalTo(17)
+            make.height.equalTo(16)
         }
         trendingCollectionView.snp.makeConstraints { make in
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(12)
             make.bottom.equalTo(view.safeAreaLayoutGuide)
-            make.top.equalTo(trendingLabel.snp.bottom).offset(16)
+            make.top.equalTo(trendingLabel.snp.bottom).offset(4)
         }
         
     }

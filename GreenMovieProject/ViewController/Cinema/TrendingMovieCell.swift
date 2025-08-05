@@ -22,16 +22,15 @@ class TrendingMovieCell: UICollectionViewCell {
         super.init(frame: frame)
         configureUI()
         configureLayout()
-        configureData()
-        
-        heartButton.addTarget(self, action: #selector(heartButtonTouched), for: .touchUpInside)
+        configureAction()
+
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    func configureData(){
-        
+    func configureAction(){
+        heartButton.addTarget(self, action: #selector(heartButtonTouched), for: .touchUpInside)
     }
     func configureUI() {
         contentView.addSubview(posterImageView)
@@ -45,6 +44,7 @@ class TrendingMovieCell: UICollectionViewCell {
         titleLabel.numberOfLines = 1
         titleLabel.textColor = .white
         titleLabel.font = .systemFont(ofSize: 18, weight: .bold)
+        titleLabel.lineBreakMode = .byTruncatingTail
         
         overviewLabel.textColor = .name
         overviewLabel.font = .systemFont(ofSize: 14)
@@ -52,6 +52,11 @@ class TrendingMovieCell: UICollectionViewCell {
         
         heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
         heartButton.tintColor = .primary
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(systemName: "heart", withConfiguration: UIImage.SymbolConfiguration(pointSize: 12, weight: .bold))
+        config.baseForegroundColor = .primary
+        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        heartButton.configuration = config
         contentView.addSubview(heartButton)
         
     }
@@ -60,12 +65,13 @@ class TrendingMovieCell: UICollectionViewCell {
         
         titleLabel.snp.makeConstraints { make in
             make.height.equalTo(20)
-            make.horizontalEdges.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalTo(heartButton.snp.leading).offset(-4)
         }
-        heartButton.snp.makeConstraints {
-            $0.bottom.equalTo(titleLabel.snp.bottom)
-            $0.right.equalToSuperview().inset(8)
-            $0.size.equalTo(32)
+        heartButton.snp.makeConstraints { make in
+            make.bottom.equalTo(titleLabel.snp.bottom)
+            make.right.equalToSuperview().inset(8)
+            make.size.equalTo(32)
         }
         
         overviewLabel.snp.makeConstraints { make in
@@ -77,7 +83,7 @@ class TrendingMovieCell: UICollectionViewCell {
         
         posterImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
-            make.leading.trailing.equalToSuperview()
+            make.horizontalEdges.equalToSuperview()
             make.bottom.equalTo(titleLabel.snp.top).offset(-8)
         }
     }

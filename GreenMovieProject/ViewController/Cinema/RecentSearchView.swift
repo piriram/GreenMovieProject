@@ -98,20 +98,19 @@ final class RecentSearchView: UIView {
     
     func configureLayout() {
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(12)
+            make.top.equalToSuperview()
             make.leading.equalToSuperview()
         }
         
         deleteAllButton.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.top)
+            make.bottom.equalTo(titleLabel.snp.bottom)
             make.trailing.equalToSuperview().offset(-4)
         }
         
         scrollView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(8)
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.height.equalTo(40)
+            make.horizontalEdges.equalToSuperview()
+            make.height.equalTo(34)
             make.bottom.equalToSuperview()
         }
         
@@ -136,7 +135,7 @@ final class RecentSearchView: UIView {
     func createChip(for keyword: String) -> UIView {
         let container = UIView()
         container.backgroundColor = .white
-        container.layer.cornerRadius = 20
+        container.layer.cornerRadius = 16
         container.clipsToBounds = true
         
         let label = UILabel()
@@ -145,13 +144,15 @@ final class RecentSearchView: UIView {
         label.font = .boldSystemFont(ofSize: 16)
         
         let deleteButton = UIButton(type: .system)
-        let config = UIImage.SymbolConfiguration(pointSize: 12, weight: .bold)
-        deleteButton.setImage(UIImage(systemName: "xmark",withConfiguration: config), for: .normal)
-        deleteButton.tintColor = .black
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(systemName: "xmark", withConfiguration: UIImage.SymbolConfiguration(pointSize: 12, weight: .bold))
+        config.baseForegroundColor = .black
+        config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 8, bottom: 4, trailing: 8)
+
+        deleteButton.configuration = config
         deleteButton.addTarget(self, action: #selector(deleteKeywordClicked(_:)), for: .touchUpInside)
-        deleteButton.contentEdgeInsets = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         deleteButton.tag = keywords.firstIndex(of: keyword) ?? -1
-        
+
         container.addSubview(label)
         container.addSubview(deleteButton)
         

@@ -107,8 +107,8 @@ final class SearchViewController: BaseViewController {
         //        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         //        collectionView.frame = .zero
         //        collectionView.collectionViewLayout = layout
-        //        
-        //        
+        //
+        //
         //        collectionView.backgroundColor = .clear
         //        collectionView.register(SearchMovieListCell.self, forCellWithReuseIdentifier: SearchMovieListCell.identifier)
         
@@ -126,16 +126,16 @@ final class SearchViewController: BaseViewController {
         return cv
     }
     func configureLayout() {
-        searchBar.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(44)
+        searchBar.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide)
+            make.horizontalEdges.equalToSuperview()
+            make.height.equalTo(44)
         }
         
-        collectionView.snp.makeConstraints {
-            $0.top.equalTo(searchBar.snp.bottom).offset(8)
-            $0.horizontalEdges.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(searchBar.snp.bottom).offset(8)
+            make.horizontalEdges.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide)
         }
         
         emptyView.snp.makeConstraints { make in

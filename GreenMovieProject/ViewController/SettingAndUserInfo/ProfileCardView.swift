@@ -53,25 +53,25 @@ final class ProfileCardView: UIView {
     }
     
     private func configureLayout() {
-        nicknameLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(16)
-            $0.leading.equalToSuperview().offset(16)
+        nicknameLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(16)
+            make.leading.equalToSuperview().offset(16)
         }
-        chevronImage.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().inset(16)
-            $0.size.equalTo(16)
+        chevronImage.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().inset(16)
+            make.size.equalTo(16)
         }
-        joinLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(16)
-            $0.trailing.equalTo(chevronImage.snp.leading).offset(-8)
+        joinLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(16)
+            make.trailing.equalTo(chevronImage.snp.leading).offset(-8)
         }
         
-        movieBoxButton.snp.makeConstraints {
+        movieBoxButton.snp.makeConstraints { make in
             
-            $0.bottom.equalToSuperview().offset(-12)
-            $0.horizontalEdges.equalToSuperview().inset(16)
-            $0.height.equalTo(36)
+            make.bottom.equalToSuperview().offset(-12)
+            make.horizontalEdges.equalToSuperview().inset(16)
+            make.height.equalTo(36)
             
         }
         
