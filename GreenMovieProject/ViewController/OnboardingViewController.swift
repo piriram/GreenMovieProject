@@ -7,7 +7,7 @@
 
 import UIKit
 import SnapKit
-
+// 여기에는 Base뷰컨도 백그라운드 컬러 블랙도 없는데 왜 배경이 블랙으로 나오죠..?
 final class OnboardingViewController: UIViewController {
     
     let splashImageView = UIImageView()
@@ -75,6 +75,7 @@ final class OnboardingViewController: UIViewController {
             make.height.equalTo(50)
         }
     }
+    
     @objc func startButtonClicked() { // clicked touched tapped 차이?
         let vc = NicknameCreateViewController()
         navigationController?.pushViewController(vc, animated: true)

@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let barAppearance = configureBackButtonItemAppearance()
         configureNavigationBarAppearance(barAppearance: barAppearance)
         
-        
+        // 여기에도 BaseViewController로 해야하는거 아닐까
         let rootVC : UIViewController
         if UserInfoManager.shared.isUserInfo(){
             rootVC = MainViewController()

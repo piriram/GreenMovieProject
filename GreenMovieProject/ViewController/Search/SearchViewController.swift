@@ -8,14 +8,17 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-final class SearchViewController: UIViewController {
+final class SearchViewController: BaseViewController {
     var movies: [Movie] = []
     var genreMap: [Int: String] = [:]
     var initialQuery: String?
     var currentPage = 1
     
     let searchBar = UISearchBar()
-    var collectionView: UICollectionView!
+    
+    // 뷰 컨트롤러 내부 함수를 쓰려면 지연 속성으로 지정해야함 왜냐면 인스턴스 메서드이기 떄문에 static 으로 선언하는 방법이 있음
+    lazy var collectionView = self.createCollectionView()
+    
     let emptyLabel = UILabel()
     var isSearch = false // 검색하는 경우면 테이블뷰 포커스를 상단으로 올림
     
@@ -49,61 +52,78 @@ final class SearchViewController: UIViewController {
             }
             group.leave()
         }
-        
         group.enter()
         GenreManager.shared.loadGenresIfNeeded {
             self.genreMap = GenreManager.shared.genreMap /// private로 바꾸고 함수로 가져오기
             group.leave()
         }
-        //        NetworkManager.shared.fetchGenres { genre in
-        //            self.genreMap = genre
-        //            group.leave()
-        //        }
-        //        
+       
+        // 두개의 데이터를 모두 가져오면, 그때 뷰를 그린다.
         group.notify(queue: .main) {
-            if self.isSearch{
+            if self.isSearch{//검색내용이 있던 상황이면
                 self.collectionView.setContentOffset(.zero, animated: false) //스크롤을 위로 올리기
                 self.isSearch = false
             }
+            /// 비어있는 레이블 -> 처음에 is hidden == false
+            /// 검색되면 그때 true
+            /// 또 검색하면 그때 true
+            if self.movies.isEmpty {
+                self.emptyLabel.isHidden = false
+            }
+            else{
+                self.emptyLabel.isHidden = true
+            }
             self.collectionView.reloadData()
-            self.emptyLabel.isHidden = !self.movies.isEmpty
-            
+
         }
     }
     
     func configureUI() {
-        view.backgroundColor = .black
-        
+        view.addSubview(searchBar)
+        view.addSubview(collectionView)
+        view.addSubview(emptyLabel)
         searchBar.delegate = self
-        
-        searchBar.searchBarStyle = .minimal
+        collectionView.dataSource = self
+        collectionView.delegate = self
+     
+        searchBar.searchBarStyle = .prominent
+        // TODO: 플레이스 홀더 색을 더 밝게
         searchBar.placeholder = "영화를 검색해보세요."
         searchBar.tintColor = .white
         searchBar.searchTextField.textColor = .white
-        view.addSubview(searchBar)
         
         
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width , height: 140)
-        layout.minimumLineSpacing = 10
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        
-        collectionView.backgroundColor = .clear
-        collectionView.register(SearchMovieListCell.self, forCellWithReuseIdentifier: SearchMovieListCell.identifier)
-        view.addSubview(collectionView)
+//        let layout = UICollectionViewFlowLayout()
+//        layout.itemSize = CGSize(width: UIScreen.main.bounds.width , height: 140)
+//        layout.minimumLineSpacing = 10
+//        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+//        collectionView.frame = .zero
+//        collectionView.collectionViewLayout = layout
+//        
+//        
+//        collectionView.backgroundColor = .clear
+//        collectionView.register(SearchMovieListCell.self, forCellWithReuseIdentifier: SearchMovieListCell.identifier)
+//        
         
         emptyLabel.text = "원하는 검색결과를 찾지 못했습니다"
         emptyLabel.font = .systemFont(ofSize: 14)
         emptyLabel.textColor = .lightGray
         emptyLabel.textAlignment = .center
         emptyLabel.isHidden = true
-        view.addSubview(emptyLabel)
+        
     }
-    
+    func createCollectionView() -> UICollectionView {
+        let layout = UICollectionViewFlowLayout()
+         layout.itemSize = CGSize(width: UIScreen.main.bounds.width, height: 140)
+         layout.minimumLineSpacing = 10
+         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+         
+         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.backgroundColor = .clear
+         cv.register(SearchMovieListCell.self, forCellWithReuseIdentifier: SearchMovieListCell.identifier)
+         return cv
+    }
     func configureLayout() {
         searchBar.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)

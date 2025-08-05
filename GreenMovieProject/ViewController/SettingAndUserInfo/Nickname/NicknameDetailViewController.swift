@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Toast
 //TODO: 열거형으로 관리하기
 final class NicknameDetailViewController: UIViewController {
     
@@ -16,16 +17,24 @@ final class NicknameDetailViewController: UIViewController {
     let statusLabel = UILabel()
     var onNicknameClosure: ((String) -> Void)?
     let underline = UIView()
-    
+    var status:NicknameStatus = .shortOrLong
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
         navigationItem.title = "닉네임 설정"
         configureUI()
         configureLayout()
+        configureData()
+        configureAction()
+    }
+    func configureData(){
         nicknameTextField.text = initialNickname
+        configureStatusLabel() // 이작업은 NicknameUpdateViewController때문에 닉네임 텍스트필드가 초기화된다음 시행
+    }
+    func configureAction(){
+        navigationItem.leftBarButtonItem = .actionBackBarButton(target: self, action: #selector(navBackButtonClicked))
+        nicknameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         nicknameTextField.becomeFirstResponder()
-        confirmValidateNickname()
     }
     
     func configureUI() {
@@ -35,13 +44,9 @@ final class NicknameDetailViewController: UIViewController {
         nicknameTextField.textColor = .white
         nicknameTextField.font = .systemFont(ofSize: 16)
         nicknameTextField.borderStyle = .none
-        nicknameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         
-       
         underline.backgroundColor = .lightGray
-       
-       
-        
+
         statusLabel.font = .systemFont(ofSize: 13)
         statusLabel.textColor = .primary
         statusLabel.textAlignment = .left
@@ -49,12 +54,6 @@ final class NicknameDetailViewController: UIViewController {
         
         
         
-        let backButton = UIBarButtonItem(image: UIImage(systemName: "chevron.left"),
-                                         style: .plain,
-                                         target: self,
-                                         action: #selector(navBackButtonClicked))
-        backButton.tintColor = .primary
-        navigationItem.leftBarButtonItem = backButton
     }
     
     func configureLayout() {
@@ -74,51 +73,61 @@ final class NicknameDetailViewController: UIViewController {
         }
     }
     
-    @objc func textFieldDidChange() {
-        confirmValidateNickname()
+    func configureStatusLabel() {
+        status = confirmValidateNickname()
+        statusLabel.text = status.result.message
+        statusLabel.textColor = status.result.color
     }
     
-    func confirmValidateNickname() {
-        guard let text = nicknameTextField.text else {
-            statusLabel.text = ""
-            return
+   
+    
+    func confirmValidateNickname() -> NicknameStatus{
+        guard let text = nicknameTextField.text,!text.isEmpty else {
+            return .shortOrLong
         }
         
         if text.count < 2 || text.count >= 10 {
-            statusLabel.textColor = .systemRed
-            statusLabel.text = "2글자 이상 10글자 미만으로 설정해주세요"
-            return
+            return .shortOrLong
+        }
+        /// 숫자가 들어있는지 확인
+        let hasNumber = text.contains { char in
+            return char.isNumber
+        }
+        print("hasNumber:\(hasNumber)")
+        if hasNumber{
+            return .containsNumber
         }
         
-        if text.rangeOfCharacter(from: CharacterSet.decimalDigits) != nil {
-            statusLabel.textColor = .systemRed
-            statusLabel.text = "닉네임에 숫자는 포함할 수 없어요"
-            return
+        /// 이상한 문자가 있는지 확인
+        let unvalidChars:Set<Character> = ["@","#","$","%"]
+        let hasUnvalidChar = text.contains { char in
+            return unvalidChars.contains(char)
+            
         }
         
-        let disallowedSet = CharacterSet(charactersIn: "@#$%")
-        if text.rangeOfCharacter(from: disallowedSet) != nil {
-            statusLabel.textColor = .systemRed
-            statusLabel.text = "닉네임에 @, #, $, % 는 포함할 수 없어요"
-            return
+        print("hasUnvalidChar:\(hasUnvalidChar)")
+        if hasUnvalidChar{
+            return .containsSymbol
         }
-        
-        statusLabel.textColor = .primary
-        statusLabel.text = "사용할 수 있는 닉네임이에요"
+        return .valid
     }
     
     @objc private func navBackButtonClicked() {
-        if let nickname = nicknameTextField.text,
-           nickname.count >= 2,
-           nickname.count < 10,
-           nickname.rangeOfCharacter(from: .decimalDigits) == nil,
-           nickname.rangeOfCharacter(from: CharacterSet(charactersIn: "@#$%")) == nil {
-            
-            
-            onNicknameClosure?(nickname)
+        if status == .valid {
+            onNicknameClosure?(nicknameTextField.text!)
+            navigationController?.popViewController(animated: true)
         }
-        navigationController?.popViewController(animated: true)
-       
+        else{
+            print("status가 유효하지않음")
+            ToastHelper.centerToast(view: self.view, message: status.result.message)
+        }
+        
+    
+    
     }
     
+    @objc func textFieldDidChange() {
+        configureStatusLabel()
+    }
 }
+

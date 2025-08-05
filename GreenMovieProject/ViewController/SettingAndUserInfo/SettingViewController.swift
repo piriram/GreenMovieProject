@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class SettingViewController: UIViewController {
+final class SettingViewController: BaseViewController {
     
     let profileCardView = ProfileCardView()
     let tableView = UITableView(frame: .zero, style: .plain)
@@ -16,7 +16,7 @@ final class SettingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
+
         navigationItem.title = "설정"
         
         configureNicknameCard()

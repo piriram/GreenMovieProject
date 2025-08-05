@@ -7,7 +7,7 @@
 import UIKit
 import SnapKit
 
-final class NicknameUpdateViewController: UIViewController {
+final class NicknameUpdateViewController: BaseViewController {
     
     let nicknameTextField = UITextField()
     let editButton = UIButton(type: .system)
@@ -16,7 +16,6 @@ final class NicknameUpdateViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
         navigationItem.title = "닉네임 수정"
         
         configureUI()
@@ -88,7 +87,9 @@ final class NicknameUpdateViewController: UIViewController {
         detailVC.initialNickname = nicknameTextField.text
         detailVC.onNicknameClosure = { [weak self] updatedNickname in
             self?.nicknameTextField.text = updatedNickname
+            
         }
+//        detailVC.configureStatusLabel()// 이떄 하면 텍스트가 빈값이라 원하는 작동이 안나옴
         navigationController?.pushViewController(detailVC, animated: true)
     }
     

@@ -7,7 +7,7 @@
 import UIKit
 import SnapKit
 
-final class NicknameCreateViewController: UIViewController {
+final class NicknameCreateViewController: BaseViewController {
     
     let nicknameTextField = UITextField()
     let editButton = UIButton(type: .system)
@@ -15,7 +15,6 @@ final class NicknameCreateViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
         navigationItem.title = "닉네임 설정"
         
         configureUI()
