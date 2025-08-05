@@ -17,7 +17,7 @@ class TrendingMovieCell: UICollectionViewCell {
     let overviewLabel = UILabel()
     let heartButton = UIButton()
     var movieID: Int?
-    
+    var heartClosure: (() -> Void)?
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
@@ -53,7 +53,7 @@ class TrendingMovieCell: UICollectionViewCell {
         heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
         heartButton.tintColor = .primary
         contentView.addSubview(heartButton)
-       
+        
     }
     
     func configureLayout() {
@@ -87,7 +87,7 @@ class TrendingMovieCell: UICollectionViewCell {
         let urlString = NetworkManager.shared.composeURLPath(path: movie.posterPath)
         
         if let url = URL(string: urlString) {
-//            posterImageView.kf.setImage(with: url)
+            //            posterImageView.kf.setImage(with: url)
             posterImageView.kf.setImage(with: url, completionHandler: { result in
                 switch result {
                 case .success(let value):
@@ -117,6 +117,7 @@ class TrendingMovieCell: UICollectionViewCell {
             HeartManager.shared.createHeart(id: id)
             heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
         }
+        heartClosure?() //nil이 아님 실행
         
     }
 }

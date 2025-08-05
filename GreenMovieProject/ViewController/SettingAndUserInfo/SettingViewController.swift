@@ -16,14 +16,17 @@ final class SettingViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         navigationItem.title = "설정"
         
-        configureNicknameCard()
-        configureTableView()
+        configureUI()
+        
         configureLayout()
     }
-    
+    func configureUI(){
+        configureNicknameCard()
+        configureTableView()
+    }
     func configureNicknameCard() {
         view.addSubview(profileCardView)
         
@@ -60,8 +63,18 @@ final class SettingViewController: BaseViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) { // 뷰가 화면에 나타나기 진전마다 호출
+        super.viewWillAppear(animated)
+        NotificationHelper.addObserver(self,
+                                       selector: #selector(didUpdateNickname),
+                                       name: NotificationHelper.updateNickname)
+    }
+    
     @objc func profileCardTouched() {
         goProfileCard()
+    }
+    @objc func didUpdateNickname(){
+        configureNicknameCard()
     }
 }
 

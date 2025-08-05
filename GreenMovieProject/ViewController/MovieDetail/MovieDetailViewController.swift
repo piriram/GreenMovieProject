@@ -49,9 +49,7 @@ class MovieDetailViewController: BaseViewController {
     func configureUI() {
         imageCollectionView = createCollectionView()
         view.addSubview(scrollView)
-        
         scrollView.addSubview(contentView)
-        
         contentView.addSubview(imageCollectionView)
         contentView.addSubview(pageControl)
         contentView.addSubview(metaHeaderView)
@@ -169,10 +167,11 @@ class MovieDetailViewController: BaseViewController {
             HeartManager.shared.createHeart(id: movie.id)
         }
         updateNavHeartButton()
+        NotificationHelper.post(NotificationHelper.updateHeart)
     }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        let pageIndex = Int((scrollView.contentOffset.x + scrollView.frame.width / 2) / scrollView.frame.width)
-        let pageIndex = Int(round(scrollView.contentOffset.x / scrollView.frame.width))
+        let pageIndex = Int((scrollView.contentOffset.x + scrollView.frame.width / 2) / scrollView.frame.width) // 반이상 넘겼을 때 페이지를 반영
+        
         pageControl.currentPage = pageIndex
     }
 }

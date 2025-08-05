@@ -6,13 +6,14 @@
 //
 import UIKit
 import SnapKit
-
+//TODO: NicknameCreateViewController와 NicknameUpdateViewController를 호환가능한 하나의 뷰로 만들 수 있을까? 그게 좋을까?
 final class NicknameUpdateViewController: BaseViewController {
     
     let nicknameTextField = UITextField()
     let editButton = UIButton(type: .system)
     let completeButton = UIButton(type: .system)
     var nickname: String?
+    let underline = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,22 +21,20 @@ final class NicknameUpdateViewController: BaseViewController {
         
         configureUI()
         configureLayout()
-        nicknameTextField.text = UserInfoManager.shared.readNickname() ?? ""
+        configureAction()
+        
     }
     
     func configureUI() {
+        view.addSubview(nicknameTextField)
+        view.addSubview(editButton)
+        view.addSubview(completeButton)
+        nicknameTextField.addSubview(underline)
+        
         nicknameTextField.textColor = .white
         nicknameTextField.font = .systemFont(ofSize: 16)
         nicknameTextField.borderStyle = .none
         nicknameTextField.isUserInteractionEnabled = false
-        
-        let underline = UIView()
-        underline.backgroundColor = .lightGray
-        nicknameTextField.addSubview(underline)
-        underline.snp.makeConstraints {
-            $0.height.equalTo(1)
-            $0.leading.trailing.bottom.equalToSuperview()
-        }
         
         editButton.setTitle("편집", for: .normal)
         editButton.setTitleColor(.white, for: .normal)
@@ -53,9 +52,7 @@ final class NicknameUpdateViewController: BaseViewController {
         completeButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
         completeButton.addTarget(self, action: #selector(completButtonClicked), for: .touchUpInside)
         
-        view.addSubview(nicknameTextField)
-        view.addSubview(editButton)
-        view.addSubview(completeButton)
+        underline.backgroundColor = .lightGray
     }
     
     func configureLayout() {
@@ -78,9 +75,16 @@ final class NicknameUpdateViewController: BaseViewController {
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.height.equalTo(48)
         }
+        
+        underline.snp.makeConstraints {
+            $0.height.equalTo(1)
+            $0.leading.trailing.bottom.equalToSuperview()
+        }
     }
     
-    
+    func configureAction() {
+        nicknameTextField.text = UserInfoManager.shared.readNickname() ?? ""
+    }
     
     @objc func goEditClicked() {
         let detailVC = NicknameDetailViewController()
@@ -89,10 +93,9 @@ final class NicknameUpdateViewController: BaseViewController {
             self?.nicknameTextField.text = updatedNickname
             
         }
-//        detailVC.configureStatusLabel()// 이떄 하면 텍스트가 빈값이라 원하는 작동이 안나옴
+        //        detailVC.configureStatusLabel()// 이떄 하면 텍스트가 빈값이라 원하는 작동이 안나옴
         navigationController?.pushViewController(detailVC, animated: true)
     }
-    
     
     @objc func completButtonClicked() {
         
@@ -100,9 +103,11 @@ final class NicknameUpdateViewController: BaseViewController {
         if nicknameTextFieldText.isEmpty {
             return
         }
-        UserInfoManager.shared.createNickname(nicknameTextFieldText)
         
+        UserInfoManager.shared.createNickname(nicknameTextFieldText) // 가입일자는 건들이지않음
+        NotificationHelper.post(NotificationHelper.updateNickname)
         dismiss(animated: true)
-       
+        
     }
+    
 }

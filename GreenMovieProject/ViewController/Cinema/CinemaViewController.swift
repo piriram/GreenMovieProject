@@ -23,14 +23,24 @@ class CinemaViewController:BaseViewController {
     lazy var trendingCollectionView:UICollectionView = createTrendingCollectionView()
     
     override func viewDidLoad() {
-        //        print(#function)
         super.viewDidLoad()
         navigationItem.title = "파이리피디아"
-        configureAll()
+        configureUI()
+        configureTrendingLayout()
+        configureAction()
         
+        
+        
+    }
+    
+    func configureAction() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(profileCardTouched))
+        profileCardView.addGestureRecognizer(tap)
+        
+        goSearchButton()
+        fetchTrendingData()
         print("get keywords: \(RecentSearchManager.shared.readKeywords())")
         let keywords: [String] = RecentSearchManager.shared.readKeywords()
-        
         recentSearchView.updateKeywords(keywords)
         recentSearchView.onKeywordClosure = { [weak self] keyword in
             let vc = SearchViewController()
@@ -38,12 +48,6 @@ class CinemaViewController:BaseViewController {
             self?.navigationController?.pushViewController(vc, animated: true)
         }
         
-    }
-    
-    func configureAll() {
-        configureTrendingLayout()
-        goSearchButton()
-        fetchTrendingData()
     }
     func createTrendingCollectionView() -> UICollectionView {
         //        print(#function)
@@ -61,10 +65,11 @@ class CinemaViewController:BaseViewController {
         cv.dataSource = self
         cv.delegate = self
         cv.register(TrendingMovieCell.self, forCellWithReuseIdentifier: TrendingMovieCell.identifier)
+        
         return cv
         
     }
-    func configureProfileCardData() {
+    func configureProfileCard() {
         profileCardView.configure(
             nickname: UserInfoManager.shared.readNickname() ?? "",
             joinDate: "\(UserInfoManager.shared.readFormattedJoinDate()) 가입",
@@ -74,10 +79,6 @@ class CinemaViewController:BaseViewController {
     
     func configureTrendingLayout(){
         //        print(#function)
-        view.addSubview(profileCardView)
-        view.addSubview(recentSearchView)
-        view.addSubview(trendingLabel)
-        view.addSubview(trendingCollectionView)
         
         profileCardView.snp.makeConstraints { make in
             
@@ -100,14 +101,20 @@ class CinemaViewController:BaseViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide)
             make.top.equalTo(trendingLabel.snp.bottom).offset(16)
         }
-        configureProfileCardData()
-        let tap = UITapGestureRecognizer(target: self, action: #selector(profileCardTouched))
-        profileCardView.addGestureRecognizer(tap)
+        
+    }
+    func configureUI(){
+        view.addSubview(profileCardView)
+        view.addSubview(recentSearchView)
+        view.addSubview(trendingLabel)
+        view.addSubview(trendingCollectionView)
+        configureProfileCard()
+        
         trendingLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         trendingLabel.textColor = .white
         trendingLabel.textAlignment = .left
         trendingLabel.text = "오늘의 영화"
-        print("트렌딩레이블")
+        
     }
     
     func fetchTrendingData(){
@@ -145,65 +152,24 @@ class CinemaViewController:BaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        NotificationHelper.addObserver(self, selector: #selector(didUpdateNickname), name: NotificationHelper.updateNickname)
+        NotificationHelper.addObserver(self, selector: #selector(didUpdateRecentKeyword), name: NotificationHelper.updateRecentKeyword)
         print(#function)
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        recentSearchView.reloadKeywords()
+        
         trendingCollectionView.reloadData()
         print(#function)
     }
     @objc func profileCardTouched() {
         goProfileCard()
     }
-}
-extension CinemaViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let trending = trendings[indexPath.item]
-        let movie = Movie(id: trending.id, title: trending.title, posterPath: trending.posterPath, releaseDate: trending.releaseDate, voteAverage: trending.voteAverage, overview: trending.overview, genreIds: trending.genreIds)
-        let vc = MovieDetailViewController(movie: movie)
-        
-        navigationController?.pushViewController(vc, animated: true)
+    @objc func didUpdateNickname(){
+        configureProfileCard()
+    }
+    @objc func didUpdateRecentKeyword(){
+        recentSearchView.reloadKeywords()
     }
 }
-
-
-extension CinemaViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
-        return trendings.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrendingMovieCell.identifier, for: indexPath) as! TrendingMovieCell
-        let movie = trendings[indexPath.item]
-        cell.configureCell(movie)
-        return cell
-    }
-}
-
-extension CinemaViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let topSafeArea = view.safeAreaInsets.top
-        print("topSafeArea: \(topSafeArea)")
-        let bottomSafeArea = view.safeAreaInsets.bottom
-        print("bottomSafeArea: \(bottomSafeArea)")
-        
-        let fixedComponentHeight: CGFloat = topSafeArea + bottomSafeArea + 261 + 60
-        let availableHeight = view.bounds.height - fixedComponentHeight
-        //UIScreen?
-
-        let fixedTextHeight: CGFloat = 84  // poster 아래 spacing 포함
-
-        let posterHeight = availableHeight - fixedTextHeight
-        
-        let posterWidth = posterHeight * (500 / 716)
-        
-        return CGSize(width: posterWidth, height: availableHeight)
-    }
-}
-

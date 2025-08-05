@@ -47,6 +47,7 @@ final class SearchViewController: BaseViewController {
             case .success(let movies):
                 self.movies = movies
                 RecentSearchManager.shared.createKeyword(query)
+                NotificationHelper.post(NotificationHelper.updateRecentKeyword)
             case .failure(let error):
                 print("검색 실패: \(error.localizedDescription)")
             }
@@ -57,7 +58,7 @@ final class SearchViewController: BaseViewController {
             self.genreMap = GenreManager.shared.genreMap /// private로 바꾸고 함수로 가져오기
             group.leave()
         }
-       
+        
         // 두개의 데이터를 모두 가져오면, 그때 뷰를 그린다.
         group.notify(queue: .main) {
             if self.isSearch{//검색내용이 있던 상황이면
@@ -67,6 +68,7 @@ final class SearchViewController: BaseViewController {
             /// 비어있는 레이블 -> 처음에 is hidden == false
             /// 검색되면 그때 true
             /// 또 검색하면 그때 true
+            ///
             if self.movies.isEmpty {
                 self.emptyLabel.isHidden = false
             }
@@ -74,7 +76,6 @@ final class SearchViewController: BaseViewController {
                 self.emptyLabel.isHidden = true
             }
             self.collectionView.reloadData()
-
         }
     }
     
@@ -85,8 +86,8 @@ final class SearchViewController: BaseViewController {
         searchBar.delegate = self
         collectionView.dataSource = self
         collectionView.delegate = self
-     
-        searchBar.searchBarStyle = .prominent
+        
+        searchBar.searchBarStyle = .minimal
         // TODO: 플레이스 홀더 색을 더 밝게
         searchBar.placeholder = "영화를 검색해보세요."
         searchBar.tintColor = .white
@@ -94,17 +95,17 @@ final class SearchViewController: BaseViewController {
         
         
         
-//        let layout = UICollectionViewFlowLayout()
-//        layout.itemSize = CGSize(width: UIScreen.main.bounds.width , height: 140)
-//        layout.minimumLineSpacing = 10
-//        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-//        collectionView.frame = .zero
-//        collectionView.collectionViewLayout = layout
-//        
-//        
-//        collectionView.backgroundColor = .clear
-//        collectionView.register(SearchMovieListCell.self, forCellWithReuseIdentifier: SearchMovieListCell.identifier)
-//        
+        //        let layout = UICollectionViewFlowLayout()
+        //        layout.itemSize = CGSize(width: UIScreen.main.bounds.width , height: 140)
+        //        layout.minimumLineSpacing = 10
+        //        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        //        collectionView.frame = .zero
+        //        collectionView.collectionViewLayout = layout
+        //        
+        //        
+        //        collectionView.backgroundColor = .clear
+        //        collectionView.register(SearchMovieListCell.self, forCellWithReuseIdentifier: SearchMovieListCell.identifier)
+        //        
         
         emptyLabel.text = "원하는 검색결과를 찾지 못했습니다"
         emptyLabel.font = .systemFont(ofSize: 14)
@@ -115,14 +116,14 @@ final class SearchViewController: BaseViewController {
     }
     func createCollectionView() -> UICollectionView {
         let layout = UICollectionViewFlowLayout()
-         layout.itemSize = CGSize(width: UIScreen.main.bounds.width, height: 140)
-         layout.minimumLineSpacing = 10
-         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-         
-         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width, height: 140)
+        layout.minimumLineSpacing = 10
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.backgroundColor = .clear
-         cv.register(SearchMovieListCell.self, forCellWithReuseIdentifier: SearchMovieListCell.identifier)
-         return cv
+        cv.register(SearchMovieListCell.self, forCellWithReuseIdentifier: SearchMovieListCell.identifier)
+        return cv
     }
     func configureLayout() {
         searchBar.snp.makeConstraints {
@@ -146,6 +147,15 @@ final class SearchViewController: BaseViewController {
         movies = []
         collectionView.reloadData()
         emptyLabel.isHidden = false
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationHelper.addObserver(self, selector: #selector(updateHeart), name: NotificationHelper.updateHeart)
+    }
+    //TODO: 해당셀만 업데이트 해보기
+    @objc func updateHeart(){
+        collectionView.reloadData()
     }
 }
 
