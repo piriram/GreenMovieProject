@@ -127,7 +127,7 @@ class MovieDetailViewController: BaseViewController {
     
     func fetchImages() {
         DispatchQueue.global(qos: .background).async {
-            NetworkManager.shared.fetchMovieImages(movieID: self.movie.id) { medios in
+            NetworkManager.shared.fetchBackdropImages(movieID: self.movie.id) { medios in
                 self.medios = Array(medios.prefix(5))
                 for me in self.medios{
                     print("image Size: \(me.width) * \(me.height)")
@@ -147,12 +147,12 @@ class MovieDetailViewController: BaseViewController {
         cv.showsHorizontalScrollIndicator = false
         cv.dataSource = self
         cv.delegate = self
-        cv.register(MediaImageCell.self, forCellWithReuseIdentifier: MediaImageCell.identifier)
+        cv.register(BackdropImageCell.self, forCellWithReuseIdentifier: BackdropImageCell.identifier)
         return cv
     }
     
     func updateNavHeartButton() {
-        let heartImageName = HeartManager.shared.isHearted(id: movie.id) ? "heart.fill" : "heart"
+        let heartImageName = HeartManager.shared.hasHearted(id: movie.id) ? "heart.fill" : "heart"
         let heartImage = UIImage(systemName: heartImageName)
         let heartButton = UIBarButtonItem(image: heartImage,
                                           style: .plain,
@@ -163,7 +163,7 @@ class MovieDetailViewController: BaseViewController {
     }
     
     @objc  func heartButtonClicked() {
-        if HeartManager.shared.isHearted(id: movie.id) {
+        if HeartManager.shared.hasHearted(id: movie.id) {
             HeartManager.shared.deleteHeart(id: movie.id)
         } else {
             HeartManager.shared.createHeart(id: movie.id)
@@ -183,7 +183,7 @@ extension MovieDetailViewController: UICollectionViewDataSource, UICollectionVie
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MediaImageCell.identifier, for: indexPath) as! MediaImageCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BackdropImageCell.identifier, for: indexPath) as! BackdropImageCell
         cell.configureCell(medios[indexPath.item].filePath)
         return cell
     }

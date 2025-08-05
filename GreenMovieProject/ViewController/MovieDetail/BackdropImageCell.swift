@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 //TODO: 높이 맞추기 (비율로)
-final class MediaImageCell: UICollectionViewCell {
+final class BackdropImageCell: UICollectionViewCell {
     static let identifier = "MediaImageCell"
     
     let posterImageView = UIImageView()

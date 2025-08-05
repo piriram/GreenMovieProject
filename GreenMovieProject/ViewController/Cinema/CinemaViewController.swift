@@ -28,8 +28,8 @@ class CinemaViewController:BaseViewController {
         navigationItem.title = "파이리피디아"
         configureAll()
         
-        print("get keywords: \(RecentSearchManager.shared.getKeywords())")
-        let keywords: [String] = RecentSearchManager.shared.getKeywords()
+        print("get keywords: \(RecentSearchManager.shared.readKeywords())")
+        let keywords: [String] = RecentSearchManager.shared.readKeywords()
         
         recentSearchView.updateKeywords(keywords)
         recentSearchView.onKeywordClosure = { [weak self] keyword in
@@ -67,8 +67,8 @@ class CinemaViewController:BaseViewController {
     func configureProfileCardData() {
         profileCardView.configure(
             nickname: UserInfoManager.shared.readNickname() ?? "",
-            joinDate: "\(UserInfoManager.shared.getFormattedJoinDate()) 가입",
-            boxNum: HeartManager.shared.heartCount()
+            joinDate: "\(UserInfoManager.shared.readFormattedJoinDate()) 가입",
+            boxNum: HeartManager.shared.readHeartCount()
         )
     }
     

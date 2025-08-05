@@ -6,7 +6,10 @@
 //
 
 import Foundation
-//TODO: 포메터 객체 만들어서 사용해보기
+/// 사용자 정보를 관리하는 매니저입니다.
+/// 현재는 닉네임과 가입일자만 사용하고 있습니다.
+///
+//TODO: 포메터 객체 만들어서 사용해보기 -> 한번만 사용하므로 다음번에,,,
 final class UserInfoManager {
     static let shared = UserInfoManager()
     
@@ -14,7 +17,7 @@ final class UserInfoManager {
     let joinDateKey = "joinDate"
     
     private init() {}
-    
+    /// 유저디폴트에선 create와 update가 동일하게 작동함
     func createNickname(_ nickname: String) {
         UserDefaults.standard.set(nickname,forKey: nicknameKey)
     }
@@ -25,10 +28,6 @@ final class UserInfoManager {
     
     func deleteNickname() {
         UserDefaults.standard.removeObject(forKey:nicknameKey)
-    }
-    func deleteUserInfo() {
-        UserDefaults.standard.removeObject(forKey:nicknameKey)
-        UserDefaults.standard.removeObject(forKey: joinDateKey)
     }
     
     func createJoinDate(_ date: Date) {
@@ -43,29 +42,38 @@ final class UserInfoManager {
         createNickname(nickname)
         createJoinDate(date)
     }
+    
     func readJoinDate() -> String? {
         return UserDefaults.standard.string(forKey: joinDateKey)
     }
-    func getFormattedJoinDate() -> String {
+    
+    func readFormattedJoinDate() -> String {
         guard let dateStr = readJoinDate() else { return "" }
         let formatter = DateFormatter()
         formatter.dateFormat = "yy-MM-dd"
         return dateStr
     }
+    
     func deleteJoinDate() {
         UserDefaults.standard.removeObject(forKey: joinDateKey)
     }
-    func isJoinDate() -> Bool {
+    
+    func hasJoinDate() -> Bool {
         return UserDefaults.standard.string(forKey: joinDateKey) != nil
     }
-    func isNickname() -> Bool {
+    
+    func hasNickname() -> Bool {
         return UserDefaults.standard.string(forKey: nicknameKey) != nil
     }
     
     func isUserInfo() -> Bool {
-        let result = isJoinDate() && isNickname()
-        
+        let result = hasJoinDate() && hasNickname()
         print("UserInfor가있는지 : \(result)")
         return result
+    }
+    
+    func deleteUserInfo() {
+        UserDefaults.standard.removeObject(forKey:nicknameKey)
+        UserDefaults.standard.removeObject(forKey: joinDateKey)
     }
 }

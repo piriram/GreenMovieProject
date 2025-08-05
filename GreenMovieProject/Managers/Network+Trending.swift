@@ -8,7 +8,7 @@
 import UIKit
 import Alamofire
 extension NetworkManager {
-    //TODO: AFError가 무엇인지
+    //AFError는 알로마파이어의 에러코드를 enum으로 관리하는 것
     func fetchTrending(completion:@escaping (Result<TrendingResponse, Error>) -> Void){
         let path = "/trending/movie/day"
         
@@ -19,12 +19,7 @@ extension NetworkManager {
                 case .success(let value):
                     completion(.success(value))
                 case .failure(let error):
-                    print("네트워크 오류 : \(error.localizedDescription)")
-                    if let afError = error.asAFError,
-                       case let .responseSerializationFailed(reason) = afError ,
-                       case let .decodingFailed(decodingError) = reason{
-                        print("디코딩 실패:\(decodingError)")
-                    }
+                    print("트렌딩 네트워크 실패")
                     completion(.failure(error))
                 }
                 

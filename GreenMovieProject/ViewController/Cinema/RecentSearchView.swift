@@ -57,7 +57,7 @@ final class RecentSearchView: UIView {
     
     
     func reloadKeywords() {
-        keywords = RecentSearchManager.shared.getKeywords()
+        keywords = RecentSearchManager.shared.readKeywords()
         keywordStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
         for keyword in keywords {
@@ -159,11 +159,11 @@ final class RecentSearchView: UIView {
     @objc func deleteKeywordClicked(_ sender: UIButton) {
         let index = sender.tag
         let removed = keywords[index]
-        RecentSearchManager.shared.removeKeyword(removed)
+        RecentSearchManager.shared.deleteOneKeyword(removed)
         reloadKeywords()
     }
     @objc func clearAllButtonClicked() {
-        RecentSearchManager.shared.removeAllKeyword()
+        RecentSearchManager.shared.deleteAllKeyword()
         keywords = []
         reloadKeywords()
     }

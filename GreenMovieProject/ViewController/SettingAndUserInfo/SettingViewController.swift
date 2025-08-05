@@ -29,8 +29,8 @@ final class SettingViewController: UIViewController {
         
         profileCardView.configure(
             nickname: UserInfoManager.shared.readNickname() ?? "",
-            joinDate: "\(UserInfoManager.shared.getFormattedJoinDate()) 가입",
-            boxNum: HeartManager.shared.heartCount()
+            joinDate: "\(UserInfoManager.shared.readFormattedJoinDate()) 가입",
+            boxNum: HeartManager.shared.readHeartCount()
         )
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(profileCardTouched))
@@ -97,9 +97,9 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
             
             alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { _ in
                 
-                HeartManager.shared.removeAllHeart()
+                HeartManager.shared.deleteAllHeart()
                 UserInfoManager.shared.deleteUserInfo()
-                RecentSearchManager.shared.removeAllKeyword()
+                RecentSearchManager.shared.deleteAllKeyword()
                 
                 let onboardingVC = OnboardingViewController()
                 let nav = UINavigationController(rootViewController: onboardingVC)

@@ -18,10 +18,10 @@ final class NetworkManager {
     ]
     var parameters: Parameters = ["language":"ko-KR"] //"include_image_language":null
     
-   
+    
     //MARK: 무엇을 하는 함수인가요?
     func composeURLPath(path:String)->String{
         return "https://image.tmdb.org/t/p/w500" + path
     }
-   
+    
 }

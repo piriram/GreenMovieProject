@@ -8,7 +8,7 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-final class MovieCell: UICollectionViewCell {
+final class SearchMovieListCell: UICollectionViewCell {
     static let identifier = "MovieCell"
     
     let posterImageView = UIImageView()
@@ -112,7 +112,7 @@ final class MovieCell: UICollectionViewCell {
             genreMap[data]
         }
         configureGenres(genreNames)
-        let isHearted = HeartManager.shared.isHearted(id: movie.id)
+        let isHearted = HeartManager.shared.hasHearted(id: movie.id)
         let heartImage = UIImage(systemName: isHearted ? "heart.fill" : "heart")
         heartButton.setImage(heartImage, for: .normal)
         
@@ -144,7 +144,7 @@ final class MovieCell: UICollectionViewCell {
     @objc private func didTapHeart() {
         guard let id = movieID else { return }
         
-        if HeartManager.shared.isHearted(id: id) {
+        if HeartManager.shared.hasHearted(id: id) {
             HeartManager.shared.deleteHeart(id: id)
             heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
         } else {

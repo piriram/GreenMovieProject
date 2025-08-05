@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+/// 사용자의 좋아요 배열을 관리하는 매니저
 final class HeartManager {
     static let shared = HeartManager()
     private let key = "heart"
@@ -20,6 +20,13 @@ final class HeartManager {
             UserDefaults.standard.set(ids, forKey: key)
         }
     }
+    func readHeartCount() -> Int {
+        return readHeartAll().count
+    }
+    
+    func readHeartAll() -> [Int] {
+        return UserDefaults.standard.array(forKey: key) as? [Int] ?? []
+    }
     
     func deleteHeart(id: Int) {
         var ids = readHeartAll()
@@ -27,18 +34,11 @@ final class HeartManager {
         UserDefaults.standard.set(ids, forKey: key)
     }
     
-    func readHeartAll() -> [Int] {
-        return UserDefaults.standard.array(forKey: key) as? [Int] ?? []
-    }
-    
-    func isHearted(id: Int) -> Bool {
-        return readHeartAll().contains(id)
-    }
-    func heartCount() -> Int {
-        return readHeartAll().count
-    }
-    
-    func removeAllHeart() {
+    func deleteAllHeart() {
         UserDefaults.standard.removeObject(forKey: key)
+    }
+    
+    func hasHearted(id: Int) -> Bool {
+        return readHeartAll().contains(id)
     }
 }

@@ -43,7 +43,7 @@ final class SearchViewController: UIViewController {
             switch result {
             case .success(let movies):
                 self.movies = movies
-                RecentSearchManager.shared.addKeyword(query)
+                RecentSearchManager.shared.createKeyword(query)
             case .failure(let error):
                 print("검색 실패: \(error.localizedDescription)")
             }
@@ -93,7 +93,7 @@ final class SearchViewController: UIViewController {
         collectionView.delegate = self
         
         collectionView.backgroundColor = .clear
-        collectionView.register(MovieCell.self, forCellWithReuseIdentifier: MovieCell.identifier)
+        collectionView.register(SearchMovieListCell.self, forCellWithReuseIdentifier: SearchMovieListCell.identifier)
         view.addSubview(collectionView)
         
         emptyLabel.text = "원하는 검색결과를 찾지 못했습니다"
@@ -146,7 +146,7 @@ extension SearchViewController: UICollectionViewDataSource,UICollectionViewDeleg
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCell.identifier, for: indexPath) as! MovieCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SearchMovieListCell.identifier, for: indexPath) as! SearchMovieListCell
         
         
         let movie = movies[indexPath.item]
