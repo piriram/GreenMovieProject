@@ -45,6 +45,7 @@ final class CastCell: UIView {
             profileImageView.kf.setImage(with: url)
         } else {
             profileImageView.image = UIImage(systemName: "person.circle")
+            profileImageView.tintColor = .darkGray
         }
         
         nameLabel.text = cast.name

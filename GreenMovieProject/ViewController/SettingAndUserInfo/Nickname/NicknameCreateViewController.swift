@@ -12,7 +12,7 @@ final class NicknameCreateViewController: BaseViewController {
     let nicknameTextField = UITextField()
     let editButton = UIButton(type: .system)
     let completeButton = UIButton(type: .system)
-    
+    var underline = UIView()
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "닉네임 설정"
@@ -23,18 +23,20 @@ final class NicknameCreateViewController: BaseViewController {
     }
     
     func configureUI() {
+        view.addSubview(nicknameTextField)
+        view.addSubview(editButton)
+        view.addSubview(completeButton)
+        
+        nicknameTextField.addSubview(underline)
         nicknameTextField.textColor = .white
         nicknameTextField.font = .systemFont(ofSize: 16)
         nicknameTextField.borderStyle = .none
         nicknameTextField.isUserInteractionEnabled = false // 편집 불가
         
-        let underline = UIView()
+        
         underline.backgroundColor = .lightGray
-        nicknameTextField.addSubview(underline)
-        underline.snp.makeConstraints {
-            $0.height.equalTo(1)
-            $0.leading.trailing.bottom.equalToSuperview()
-        }
+        
+       
         
         editButton.setTitle("편집", for: .normal)
         editButton.setTitleColor(.white, for: .normal)
@@ -52,9 +54,6 @@ final class NicknameCreateViewController: BaseViewController {
         completeButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
         completeButton.addTarget(self, action: #selector(completButtonClicked), for: .touchUpInside)
         
-        view.addSubview(nicknameTextField)
-        view.addSubview(editButton)
-        view.addSubview(completeButton)
     }
     
     func configureLayout() {
@@ -76,6 +75,10 @@ final class NicknameCreateViewController: BaseViewController {
             $0.top.equalTo(nicknameTextField.snp.bottom).offset(40)
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.height.equalTo(48)
+        }
+        underline.snp.makeConstraints {
+            $0.height.equalTo(1)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
     }
     

@@ -64,5 +64,6 @@ final class SynopsisView: UIView {
         isExpanded.toggle()
         bodyLabel.numberOfLines = isExpanded ? 0 : 3
         moreButton.setTitle(isExpanded ? "Hide" : "More", for: .normal)
+        
     }
 }

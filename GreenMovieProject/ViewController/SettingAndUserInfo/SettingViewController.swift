@@ -51,9 +51,10 @@ final class SettingViewController: BaseViewController {
     }
     
     func configureLayout() {
+       
         profileCardView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(16)
-            $0.horizontalEdges.equalToSuperview().inset(16)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(12)
+            $0.horizontalEdges.equalToSuperview().inset(12)
             $0.height.equalTo(100)
         }
         

@@ -14,7 +14,7 @@ final class CastListView: UIView {
     let titleLabel = UILabel()
     init(cast: [Cast]) {
         super.init(frame: .zero)
-        self.cast = Array(cast.prefix(5)) // 5명까지만 보여줌
+        self.cast = cast
         configureUI()
         configureLayout()
     }

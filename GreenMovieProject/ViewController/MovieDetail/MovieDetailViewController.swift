@@ -57,7 +57,7 @@ class MovieDetailViewController: BaseViewController {
         
         
         GenreManager.shared.loadGenresIfNeeded {
-            let genreNames = GenreManager.shared.top3GenreNames(from: self.movie.genreIds)
+            let genreNames = GenreManager.shared.top2GenreNames(from: self.movie.genreIds)
             self.metaHeaderView.configureData(
                 releaseDate: self.movie.releaseDate,
                 rating: self.movie.voteAverage,
@@ -90,7 +90,7 @@ class MovieDetailViewController: BaseViewController {
         }
         
         metaHeaderView.snp.makeConstraints { make in
-            make.top.equalTo(imageCollectionView.snp.bottom)
+            make.top.equalTo(imageCollectionView.snp.bottom).offset(12)
             make.horizontalEdges.equalToSuperview()
             make.height.equalTo(20)
         }

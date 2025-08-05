@@ -84,8 +84,9 @@ class CinemaViewController:BaseViewController {
             
             make.top.equalTo(view.safeAreaLayoutGuide).offset(12)
             make.horizontalEdges.equalToSuperview().inset(12)
-            make.height.equalTo(96)
+            make.height.equalTo(100)
         }
+       
         recentSearchView.snp.makeConstraints { make in
             make.top.equalTo(profileCardView.snp.bottom).offset(12)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(12)
@@ -124,7 +125,7 @@ class CinemaViewController:BaseViewController {
             case .success(let data):
                 //                dump(data)
                 self.trendings = data.results
-                
+
                 DispatchQueue.main.async {
                     self.trendingCollectionView.reloadData()
                 }

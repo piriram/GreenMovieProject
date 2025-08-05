@@ -35,4 +35,11 @@ final class GenreManager {
             .prefix(3)
             .map { $0 }
     }
+    /// 주어진 genreIDs에서 매칭된 이름 최대 2개 반환
+    func top2GenreNames(from genreIDs: [Int]) -> [String] {
+        return genreIDs
+            .compactMap { genreMap[$0] }
+            .prefix(3)
+            .map { $0 }
+    }
 }
