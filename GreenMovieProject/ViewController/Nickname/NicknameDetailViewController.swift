@@ -7,7 +7,7 @@
 
 import UIKit
 import SnapKit
-
+//TODO: 열거형으로 관리하기
 final class NicknameDetailViewController: UIViewController {
     
     var initialNickname: String? = ""
@@ -15,6 +15,7 @@ final class NicknameDetailViewController: UIViewController {
     let nicknameTextField = UITextField()
     let statusLabel = UILabel()
     var onNicknameClosure: ((String) -> Void)?
+    let underline = UIView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,26 +29,25 @@ final class NicknameDetailViewController: UIViewController {
     }
     
     func configureUI() {
+        view.addSubview(nicknameTextField)
+        view.addSubview(statusLabel)
+        nicknameTextField.addSubview(underline)
         nicknameTextField.textColor = .white
         nicknameTextField.font = .systemFont(ofSize: 16)
         nicknameTextField.borderStyle = .none
         nicknameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         
-        let underline = UIView()
+       
         underline.backgroundColor = .lightGray
-        nicknameTextField.addSubview(underline)
-        underline.snp.makeConstraints {
-            $0.height.equalTo(1)
-            $0.leading.trailing.bottom.equalToSuperview()
-        }
+       
+       
         
         statusLabel.font = .systemFont(ofSize: 13)
         statusLabel.textColor = .primary
         statusLabel.textAlignment = .left
         statusLabel.numberOfLines = 1
         
-        view.addSubview(nicknameTextField)
-        view.addSubview(statusLabel)
+        
         
         let backButton = UIBarButtonItem(image: UIImage(systemName: "chevron.left"),
                                          style: .plain,
@@ -67,6 +67,10 @@ final class NicknameDetailViewController: UIViewController {
         statusLabel.snp.makeConstraints {
             $0.top.equalTo(nicknameTextField.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview().inset(20)
+        }
+        underline.snp.makeConstraints {
+            $0.height.equalTo(1)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
     }
     

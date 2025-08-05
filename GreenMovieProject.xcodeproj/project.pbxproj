@@ -173,6 +173,7 @@
 				DEVELOPMENT_TEAM = F5WP2FDW4U;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GreenMovieProject/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "김소람";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -200,6 +201,7 @@
 				DEVELOPMENT_TEAM = F5WP2FDW4U;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = GreenMovieProject/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "김소람";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;

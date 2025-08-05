@@ -19,19 +19,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         //MARK: 네비게이션 타이틀 배경을 검정색으로 바꾸고, 타이틀 색을 흰색으로 교체함
-        //TODO: 함수로 빼기?
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .black
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        UINavigationBar.appearance().compactAppearance = appearance
-        
-        UINavigationBar.appearance().tintColor = .white
-        UINavigationBar.appearance().prefersLargeTitles = false
+        let barAppearance = configureBackButtonItemAppearance()
+        configureNavigationBarAppearance(barAppearance: barAppearance)
         
         
         let rootVC : UIViewController
@@ -44,14 +33,35 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
         }
         
-        
-        //        let nav = UINavigationController(rootViewController: rootVC)
-        
         window = UIWindow(windowScene: windowScene)
         window?.rootViewController = rootVC
-        window?.makeKeyAndVisible()
+        window?.makeKeyAndVisible()//메인창을 표시하고, 입력을 받는 활성 상태로 만든다. 없으면 검정색으로 나옴
         
         
+    }
+    // TODO:UIBarButtonItemAppearance,UINavigationBarAppearance, 등등 머가먼지 종류가 많아서 헷갈린다냥
+    func configureNavigationBarAppearance(barAppearance: UIBarButtonItemAppearance) {
+        let appearance = UINavigationBarAppearance()
+        
+        appearance.backgroundColor = .black
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+//        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.buttonAppearance = barAppearance
+        appearance.backButtonAppearance = barAppearance
+//        appearance.doneButtonAppearance = barButtonItemAppearance
+        
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+//        UINavigationBar.appearance().compactAppearance = appearance
+        UIBarButtonItem.appearance().tintColor = .primary
+    }
+    func configureBackButtonItemAppearance() -> UIBarButtonItemAppearance{
+        let barButtonItemAppearance = UIBarButtonItemAppearance()
+     
+        barButtonItemAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.clear,.font:UIFont.systemFont(ofSize: 0.0, weight: .medium)]
+        
+//        UIBarButtonItem.appearance().setBackButtonTitlePositionAdjustment(UIOffset(horizontal: -1000, vertical: 0), for: .default)
+        return barButtonItemAppearance
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {

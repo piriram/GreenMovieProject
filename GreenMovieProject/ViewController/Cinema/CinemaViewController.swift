@@ -13,7 +13,7 @@ class CinemaViewController:BaseViewController {
     
     static let identifier = "CinemaViewController"
     var trendings:[Trending] = []
-    let width:Double = 250
+    
     let profileCardView = ProfileCardView()
     let recentSearchView = RecentSearchView()
     
@@ -64,6 +64,14 @@ class CinemaViewController:BaseViewController {
         return cv
         
     }
+    func configureProfileCardData() {
+        profileCardView.configure(
+            nickname: UserInfoManager.shared.readNickname() ?? "",
+            joinDate: "\(UserInfoManager.shared.getFormattedJoinDate()) 가입",
+            boxNum: HeartManager.shared.heartCount()
+        )
+    }
+    
     func configureTrendingLayout(){
         //        print(#function)
         view.addSubview(profileCardView)
@@ -92,11 +100,7 @@ class CinemaViewController:BaseViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide)
             make.top.equalTo(trendingLabel.snp.bottom).offset(16)
         }
-        profileCardView.configure(
-            nickname: UserInfoManager.shared.readNickname() ?? "",
-            joinDate: "\(UserInfoManager.shared.getFormattedJoinDate()) 가입",
-            boxNum: HeartManager.shared.heartCount()
-        )
+        configureProfileCardData()
         let tap = UITapGestureRecognizer(target: self, action: #selector(profileCardTouched))
         profileCardView.addGestureRecognizer(tap)
         trendingLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
@@ -153,10 +157,6 @@ class CinemaViewController:BaseViewController {
     @objc func profileCardTouched() {
         goProfileCard()
     }
- 
-    
-    
-    
 }
 extension CinemaViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

@@ -100,6 +100,7 @@ final class NicknameUpdateViewController: UIViewController {
             return
         }
         UserInfoManager.shared.createNickname(nicknameTextFieldText)
+        
         dismiss(animated: true)
        
     }

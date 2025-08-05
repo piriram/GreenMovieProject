@@ -88,17 +88,18 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
         if selectedItem == "탈퇴하기" {
             print("탈퇴하기 누름")
             let alert = UIAlertController(
-                title: "정말 탈퇴하시겠어요?",
-                message: "탈퇴하면 모든 데이터가 삭제되며 복구할 수 없어요.",
+                title: "탈퇴하기",
+                message: "탈퇴를 하면 데이터가 모두 초기화됩니다. 탈퇴 하시겠습니까?",
                 preferredStyle: .alert
             )
             
             alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
             
-            alert.addAction(UIAlertAction(title: "탈퇴하기", style: .destructive, handler: { _ in
+            alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { _ in
                 
                 HeartManager.shared.removeAllHeart()
                 UserInfoManager.shared.deleteUserInfo()
+                RecentSearchManager.shared.removeAllKeyword()
                 
                 let onboardingVC = OnboardingViewController()
                 let nav = UINavigationController(rootViewController: onboardingVC)

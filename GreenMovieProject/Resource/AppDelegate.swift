@@ -61,8 +61,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return container
     }()
 
-    // MARK: - Core Data Saving support
-
     func saveContext () {
         let context = persistentContainer.viewContext
         if context.hasChanges {
@@ -76,6 +74,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    func applicationDidFinishLaunching(_ application: UIApplication) {
+//        setBackButtonColor()
+    }
 
 }
-
+//// MARK: - 백버튼 관련 통합 세팅
+//extension AppDelegate {
+//
+//    /// 백버튼의 타이틀을 clear 색상으로 바꾸고, tintColor를 mainTextColor로 바꾼다.
+//    private func setBackButtonColor() {
+//        let backButtonAppearance = UIBarButtonItemAppearance()
+//        let appearance = UINavigationBarAppearance()
+//
+//        backButtonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.red]
+//        appearance.configureWithOpaqueBackground()
+//        appearance.backButtonAppearance = backButtonAppearance
+//        appearance.backgroundColor = UIColor.clear
+//
+//        UINavigationBar.appearance().standardAppearance = appearance
+//        UINavigationBar.appearance().compactAppearance = appearance
+//        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+//        UIBarButtonItem.appearance().tintColor = .red
+//    }
+//}
