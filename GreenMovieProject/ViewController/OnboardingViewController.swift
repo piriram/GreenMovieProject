@@ -17,12 +17,17 @@ final class OnboardingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
+        
         configureUI()
         configureLayout()
     }
     
     func configureUI() {
+        view.addSubview(splashImageView)
+        view.addSubview(titleLabel)
+        view.addSubview(nameLabel)
+        view.addSubview(startButton)
+        
         splashImageView.image = UIImage(named: "splash")
         splashImageView.contentMode = .scaleAspectFit
         
@@ -43,12 +48,8 @@ final class OnboardingViewController: UIViewController {
         startButton.layer.borderWidth = 1
         startButton.layer.masksToBounds = true
         
-        view.addSubview(splashImageView)
-        view.addSubview(titleLabel)
-        view.addSubview(nameLabel)
-        view.addSubview(startButton)
-        
         startButton.addTarget(self, action: #selector(startButtonClicked), for: .touchUpInside)
+        
     }
     
     func configureLayout() {

@@ -16,11 +16,10 @@ final class SearchMovieListCell: UICollectionViewCell {
     let releaseDateLabel = UILabel()
     let genreStackView = UIStackView()
     let heartButton = UIButton()
-    private var movieID: Int?
-    
+    var movieID: Int?
+    var isHearted = false
     override init(frame: CGRect) {
         super.init(frame: frame)
-        //        contentView.backgroundColor = .black
         contentView.layer.cornerRadius = 8
         contentView.clipsToBounds = true
         
@@ -34,31 +33,36 @@ final class SearchMovieListCell: UICollectionViewCell {
     }
     
     func configureUI() {
+        contentView.addSubview(posterImageView)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(releaseDateLabel)
+        contentView.addSubview(genreStackView)
+        
         posterImageView.contentMode = .scaleAspectFit
         posterImageView.clipsToBounds = true
         posterImageView.layer.cornerRadius = 12
-        contentView.addSubview(posterImageView)
+        
         
         titleLabel.font = .systemFont(ofSize: 18, weight: .semibold)
         titleLabel.textColor = .white
         titleLabel.numberOfLines = 2
-        contentView.addSubview(titleLabel)
+        
         
         releaseDateLabel.font = .systemFont(ofSize: 13)
         releaseDateLabel.textColor = .gray
-        contentView.addSubview(releaseDateLabel)
+        
         
         genreStackView.axis = .horizontal
         genreStackView.spacing = 4
         genreStackView.alignment = .leading
-        contentView.addSubview(genreStackView)
+        
         
         //TODO: - 크기 변경
         heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
         heartButton.tintColor = .primary
         contentView.addSubview(heartButton)
         
-        heartButton.addTarget(self, action: #selector(didTapHeart), for: .touchUpInside)
+        heartButton.addTarget(self, action: #selector(heartButtonClicked), for: .touchUpInside)
         
         
     }
@@ -108,40 +112,61 @@ final class SearchMovieListCell: UICollectionViewCell {
             posterImageView.image = UIImage(systemName: "film")
         }
         
-        let genreNames = movie.genreIds.compactMap { data in
-            genreMap[data]
+        var genreNames:[String] = []
+        for id in movie.genreIds {
+            if genreMap.keys.contains(id) {
+                genreNames.append(genreMap[id]!)
+            }
         }
+        
         configureGenres(genreNames)
-        let isHearted = HeartManager.shared.hasHearted(id: movie.id)
-        let heartImage = UIImage(systemName: isHearted ? "heart.fill" : "heart")
-        heartButton.setImage(heartImage, for: .normal)
+        
+        updateHeartButton(movie)
         
     }
+    func updateHeartButton(_ movie:Movie){
+        self.isHearted = HeartManager.shared.hasHearted(id: movie.id)
+        let heartImage = UIImage(systemName: self.isHearted ? "heart.fill" : "heart")
+        heartButton.setImage(heartImage, for: .normal)
+    }
     
+    /// 셀 아래에 장르 태그 3개를 나열하는 설정
     func configureGenres(_ genres: [String]) {
-        genreStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        
+        /// 리유저블 셀에서 기존 장르태그들을 뷰에서 지운다음에
+        for genreView in genreStackView.arrangedSubviews{
+            genreStackView.removeArrangedSubview(genreView) // input view를 스택뷰의 서브뷰 배열에서 제거
+            genreView.removeFromSuperview() // 뷰계층에서 제거하지 않으면 뷰상에 남아서 메모리가 누수될 수 있음
+        }
+        /// 새로운 태그들을 설정해준다.
         for genre in genres.prefix(3) {
-            let label = PaddingLabel()
-            label.text = genre
-            label.font = .systemFont(ofSize: 11, weight: .medium)
-            label.textColor = .white
-            label.textAlignment = .center
-            label.backgroundColor = .darkGray
-            label.layer.cornerRadius = 4
-            label.clipsToBounds = true
-            
-            label.setContentHuggingPriority(.required, for: .horizontal)
-            label.setContentCompressionResistancePriority(.required, for: .horizontal)
-            
-            label.snp.makeConstraints {
-                $0.height.equalTo(20)
-            }
-            
+            let label = configureGenreLabel(genre)
             genreStackView.addArrangedSubview(label)
         }
     }
-    @objc private func didTapHeart() {
+    
+    func configureGenreLabel(_ genreTitle:String) -> UILabel{
+        let label = PaddingLabel()
+        
+        label.text = genreTitle
+        label.font = .systemFont(ofSize: 11, weight: .medium)
+        label.textColor = .white
+        label.textAlignment = .center
+        label.backgroundColor = .darkGray
+        label.layer.cornerRadius = 4
+        label.clipsToBounds = true
+        
+        /// 텍스트 길이에 따라서 늘어남
+        /// required > defaultHigh > defaultLow > fittingSizeLevel
+        //        label.setContentHuggingPriority(.required, for: .horizontal) // 크기 우선순위(확장 저항?)
+        //        label.setContentCompressionResistancePriority(.required, for: .horizontal) // required 압축 저항(줄어들지 않음)
+        //
+        label.snp.makeConstraints {
+            $0.height.equalTo(20)
+        }
+        return label
+    }
+    
+    @objc private func heartButtonClicked() {
         guard let id = movieID else { return }
         
         if HeartManager.shared.hasHearted(id: id) {
