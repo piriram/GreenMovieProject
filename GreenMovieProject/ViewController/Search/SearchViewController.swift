@@ -19,7 +19,7 @@ final class SearchViewController: BaseViewController {
     // 뷰 컨트롤러 내부 함수를 쓰려면 지연 속성으로 지정해야함 왜냐면 인스턴스 메서드이기 떄문에 static 으로 선언하는 방법이 있음
     lazy var collectionView = self.createCollectionView()
     
-    lazy var emptyView = EmptyMessageView(message: "원하는 검색결과를 찾지 못했습니다.")
+    lazy var emptyView = EmptyMessageView(message: "원하는 검색 결과를 찾지 못했습니다.")
     var isSearch = false // 검색하는 경우면 테이블뷰 포커스를 상단으로 올림
     var beforeKeyword = ""
     override func viewDidLoad() {
@@ -33,9 +33,10 @@ final class SearchViewController: BaseViewController {
             print("fetch data 실행 view did load")
             fetchData(query: query)
         } else {
-            showEmptyUI()
+            
             searchBar.becomeFirstResponder()
         }
+        emptyView.hide()
     }
     
     func fetchData(query: String,isAppend: Bool = false) {
@@ -143,14 +144,14 @@ final class SearchViewController: BaseViewController {
             
         }
     }
-    
-    func showEmptyUI() {
-        movies = []
-        emptyView.show()
-        print(#function)
-        collectionView.reloadData()
-        
-    }
+//    
+//    func showEmptyUI() {
+//        movies = []
+//        emptyView.show()
+//        print(#function)
+//        collectionView.reloadData()
+//        
+//    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

@@ -54,7 +54,7 @@ class CinemaViewController:BaseViewController {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         
-        layout.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 20, right: 0)
+        layout.sectionInset = .zero
         layout.minimumLineSpacing = 16
         
         //        layout.itemSize = CGSize(width: width, height: width * 1.5 )
@@ -70,7 +70,7 @@ class CinemaViewController:BaseViewController {
         
     }
     func configureProfileCard() {
-        profileCardView.configure(
+        profileCardView.configureData(
             nickname: UserInfoManager.shared.readNickname() ?? "",
             joinDate: "\(UserInfoManager.shared.readFormattedJoinDate()) 가입",
             boxNum: HeartManager.shared.readHeartCount()
@@ -81,7 +81,6 @@ class CinemaViewController:BaseViewController {
         //        print(#function)
         
         profileCardView.snp.makeConstraints { make in
-            
             make.top.equalTo(view.safeAreaLayoutGuide).offset(12)
             make.horizontalEdges.equalToSuperview().inset(12)
             make.height.equalTo(100)
@@ -95,12 +94,12 @@ class CinemaViewController:BaseViewController {
         trendingLabel.snp.makeConstraints { make in
             make.top.equalTo(recentSearchView.snp.bottom).offset(16)
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(12)
-            make.height.equalTo(16)
+            make.height.equalTo(20)
         }
         trendingCollectionView.snp.makeConstraints { make in
             make.horizontalEdges.equalTo(view.safeAreaLayoutGuide).inset(12)
             make.bottom.equalTo(view.safeAreaLayoutGuide)
-            make.top.equalTo(trendingLabel.snp.bottom).offset(4)
+            make.top.equalTo(trendingLabel.snp.bottom).offset(16)
         }
         
     }
@@ -155,6 +154,7 @@ class CinemaViewController:BaseViewController {
         super.viewWillAppear(animated)
         NotificationHelper.addObserver(self, selector: #selector(didUpdateNickname), name: NotificationHelper.updateNickname)
         NotificationHelper.addObserver(self, selector: #selector(didUpdateRecentKeyword), name: NotificationHelper.updateRecentKeyword)
+        NotificationHelper.addObserver(self, selector: #selector(didUpdateHeart), name: NotificationHelper.updateHeart)
         print(#function)
     }
     
@@ -172,5 +172,8 @@ class CinemaViewController:BaseViewController {
     }
     @objc func didUpdateRecentKeyword(){
         recentSearchView.reloadKeywords()
+    }
+    @objc func didUpdateHeart(){
+        configureProfileCard()
     }
 }

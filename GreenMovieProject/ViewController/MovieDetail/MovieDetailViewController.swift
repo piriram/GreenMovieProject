@@ -115,7 +115,7 @@ class MovieDetailViewController: BaseViewController {
                     
                     castView.snp.makeConstraints { make in
                         make.top.equalTo(self.synopsisView.snp.bottom).offset(16)
-                        make.left.right.equalToSuperview().inset(16)
+                        make.horizontalEdges.equalToSuperview().inset(16)
                         make.bottom.equalToSuperview().inset(20)
                     }
                 }

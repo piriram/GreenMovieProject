@@ -24,13 +24,13 @@ final class SettingViewController: BaseViewController {
         configureLayout()
     }
     func configureUI(){
-        configureNicknameCard()
+        configureProfileCard()
         configureTableView()
     }
-    func configureNicknameCard() {
+    func configureProfileCard() {
         view.addSubview(profileCardView)
         
-        profileCardView.configure(
+        profileCardView.configureData(
             nickname: UserInfoManager.shared.readNickname() ?? "",
             joinDate: "\(UserInfoManager.shared.readFormattedJoinDate()) 가입",
             boxNum: HeartManager.shared.readHeartCount()
@@ -51,7 +51,7 @@ final class SettingViewController: BaseViewController {
     }
     
     func configureLayout() {
-       
+        
         profileCardView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(12)
             make.horizontalEdges.equalToSuperview().inset(12)
@@ -67,16 +67,20 @@ final class SettingViewController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) { // 뷰가 화면에 나타나기 진전마다 호출
         super.viewWillAppear(animated)
         NotificationHelper.addObserver(self,
-                                       selector: #selector(didUpdateNickname),
+                                       selector: #selector(didUpdateProfileCard),
                                        name: NotificationHelper.updateNickname)
+        NotificationHelper.addObserver(self,
+                                       selector: #selector(didUpdateProfileCard),
+                                       name: NotificationHelper.updateHeart)
     }
     
     @objc func profileCardTouched() {
         goProfileCard()
     }
-    @objc func didUpdateNickname(){
-        configureNicknameCard()
+    @objc func didUpdateProfileCard(){
+        configureProfileCard()
     }
+    
 }
 
 extension SettingViewController: UITableViewDelegate, UITableViewDataSource {

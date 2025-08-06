@@ -32,12 +32,14 @@ final class OnboardingViewController: UIViewController {
         splashImageView.contentMode = .scaleAspectFit
         
         titleLabel.text = "GreenPedia"
-        titleLabel.font = .systemFont(ofSize: 22)
+        titleLabel.font = .boldSystemFont(ofSize: 28)
         titleLabel.textColor = .white
         
-        nameLabel.text = "김소람"
-        nameLabel.font = .systemFont(ofSize: 14)
-        nameLabel.textColor = .white
+        nameLabel.text = "당신만의 영화 세상\nGreenPedia를 시작해보세요."
+        nameLabel.font = .systemFont(ofSize: 17)
+        nameLabel.textColor = .lightGray
+        nameLabel.numberOfLines = 2
+        nameLabel.textAlignment = .center
         
         startButton.setTitle("시작하기", for: .normal)
         startButton.backgroundColor = .clear
@@ -56,21 +58,21 @@ final class OnboardingViewController: UIViewController {
         splashImageView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.centerY.equalToSuperview().offset(-80)
-            make.width.height.equalTo(150)
+            make.width.height.equalTo(200)
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(splashImageView.snp.bottom).offset(20)
+            make.top.equalTo(splashImageView.snp.bottom).offset(40)
             make.centerX.equalToSuperview()
         }
         
         nameLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(8)
+            make.top.equalTo(titleLabel.snp.bottom).offset(40)
             make.centerX.equalToSuperview()
         }
         
         startButton.snp.makeConstraints { make in
-            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(40)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).inset(60)
             make.horizontalEdges.equalToSuperview().inset(40)
             make.height.equalTo(50)
         }

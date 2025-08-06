@@ -27,7 +27,12 @@ final class ProfileCardView: UIView {
         configureLayout()
     }
     
-    private func configureUI() {
+    func configureUI() {
+        addSubview(nicknameLabel)
+        addSubview(joinLabel)
+        addSubview(movieBoxButton)
+        addSubview(chevronImage)
+        
         backgroundColor = .darkGray
         layer.cornerRadius = 12
         
@@ -44,41 +49,33 @@ final class ProfileCardView: UIView {
         movieBoxButton.titleLabel?.textAlignment = .center
         movieBoxButton.layer.cornerRadius = 8
         
-       
-        
-        addSubview(nicknameLabel)
-        addSubview(joinLabel)
-        addSubview(movieBoxButton)
-        addSubview(chevronImage)
     }
     
-    private func configureLayout() {
+    func configureLayout() {
         nicknameLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(16)
             make.leading.equalToSuperview().offset(16)
         }
+        
         chevronImage.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().inset(16)
             make.size.equalTo(16)
         }
+        
         joinLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(16)
             make.trailing.equalTo(chevronImage.snp.leading).offset(-8)
         }
         
         movieBoxButton.snp.makeConstraints { make in
-            
             make.bottom.equalToSuperview().offset(-12)
             make.horizontalEdges.equalToSuperview().inset(16)
             make.height.equalTo(36)
-            
         }
-        
-       
     }
     
-    func configure(nickname: String, joinDate: String, boxNum:Int) {
+    func configureData(nickname: String, joinDate: String, boxNum:Int) {
         nicknameLabel.text = nickname
         joinLabel.text = joinDate
         movieBoxButton.setTitle("\(boxNum)개의 무비박스 보관중", for: .normal)

@@ -110,6 +110,7 @@ final class SearchMovieListCell: UICollectionViewCell {
             posterImageView.kf.setImage(with: url)
         } else {
             posterImageView.image = UIImage(systemName: "film")
+            posterImageView.tintColor = .darkGray
         }
         
         var genreNames:[String] = []
@@ -176,6 +177,7 @@ final class SearchMovieListCell: UICollectionViewCell {
             HeartManager.shared.createHeart(id: id)
             heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
         }
+        NotificationHelper.post(NotificationHelper.updateHeart)
     }
     
     

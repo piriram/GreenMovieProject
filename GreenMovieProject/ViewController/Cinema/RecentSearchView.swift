@@ -41,7 +41,7 @@ final class RecentSearchView: UIView {
         titleLabel.font = .systemFont(ofSize: 20, weight: .bold)
         titleLabel.textColor = .white
         
-        
+        scrollView.showsHorizontalScrollIndicator = false
     }
     func setupStackView()-> UIStackView {
         let stackView = UIStackView()
@@ -103,7 +103,7 @@ final class RecentSearchView: UIView {
         }
         
         deleteAllButton.snp.makeConstraints { make in
-            make.bottom.equalTo(titleLabel.snp.bottom)
+            make.centerY.equalTo(titleLabel.snp.centerY)
             make.trailing.equalToSuperview().offset(-4)
         }
         
@@ -121,10 +121,19 @@ final class RecentSearchView: UIView {
             make.trailing.equalToSuperview()
             make.height.equalToSuperview()
         }
-        emptyView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            
+        let spacerView = UIView()
+        addSubview(spacerView)
+
+        spacerView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom)
+            make.bottom.equalToSuperview()
         }
+
+        emptyView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.centerY.equalTo(spacerView.snp.centerY)
+        }
+
     }
     
     

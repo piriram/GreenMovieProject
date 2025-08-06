@@ -39,7 +39,7 @@ class TrendingMovieCell: UICollectionViewCell {
         
         posterImageView.contentMode = .scaleAspectFill
         posterImageView.clipsToBounds = true
-        posterImageView.layer.cornerRadius = 20
+        posterImageView.layer.cornerRadius = 6
         
         titleLabel.numberOfLines = 1
         titleLabel.textColor = .white
@@ -55,7 +55,7 @@ class TrendingMovieCell: UICollectionViewCell {
         var config = UIButton.Configuration.plain()
         config.image = UIImage(systemName: "heart", withConfiguration: UIImage.SymbolConfiguration(pointSize: 12, weight: .bold))
         config.baseForegroundColor = .primary
-        config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+        config.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 0, bottom: 0, trailing: 0)
         heartButton.configuration = config
         contentView.addSubview(heartButton)
         
@@ -64,7 +64,7 @@ class TrendingMovieCell: UICollectionViewCell {
     func configureLayout() {
         
         titleLabel.snp.makeConstraints { make in
-            make.height.equalTo(20)
+            make.height.equalTo(16)
             make.leading.equalToSuperview()
             make.trailing.equalTo(heartButton.snp.leading).offset(-4)
         }
@@ -84,7 +84,7 @@ class TrendingMovieCell: UICollectionViewCell {
         posterImageView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.horizontalEdges.equalToSuperview()
-            make.bottom.equalTo(titleLabel.snp.top).offset(-8)
+            make.bottom.equalTo(titleLabel.snp.top).offset(-12)
         }
     }
     
