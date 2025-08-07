@@ -12,26 +12,26 @@ import Kingfisher
 class TrendingMovieCell: UICollectionViewCell {
     static let identifier = "TrendingMovieCell"
     
+    // MARK: - 컴포넌트
     let posterImageView = UIImageView()
     let titleLabel = UILabel()
     let overviewLabel = UILabel()
     let heartButton = UIButton()
+    
     var movieID: Int?
     var heartClosure: (() -> Void)?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureUI()
         configureLayout()
         configureAction()
-
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    func configureAction(){
-        heartButton.addTarget(self, action: #selector(heartButtonTouched), for: .touchUpInside)
-    }
+    
     func configureUI() {
         contentView.addSubview(posterImageView)
         contentView.addSubview(titleLabel)
@@ -52,10 +52,12 @@ class TrendingMovieCell: UICollectionViewCell {
         
         heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
         heartButton.tintColor = .primary
+        
         var config = UIButton.Configuration.plain()
         config.image = UIImage(systemName: "heart", withConfiguration: UIImage.SymbolConfiguration(pointSize: 12, weight: .bold))
         config.baseForegroundColor = .primary
         config.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 0, bottom: 0, trailing: 0)
+        
         heartButton.configuration = config
         contentView.addSubview(heartButton)
         
@@ -68,6 +70,7 @@ class TrendingMovieCell: UICollectionViewCell {
             make.leading.equalToSuperview()
             make.trailing.equalTo(heartButton.snp.leading).offset(-4)
         }
+        
         heartButton.snp.makeConstraints { make in
             make.bottom.equalTo(titleLabel.snp.bottom)
             make.right.equalToSuperview().inset(8)
@@ -88,12 +91,14 @@ class TrendingMovieCell: UICollectionViewCell {
         }
     }
     
+    func configureAction(){
+        heartButton.addTarget(self, action: #selector(heartButtonTouched), for: .touchUpInside)
+    }
     
     func configureCell(_ movie: Trending) {
         let urlString = NetworkManager.shared.composeURLPath(path: movie.posterPath)
         
         if let url = URL(string: urlString) {
-            //            posterImageView.kf.setImage(with: url)
             posterImageView.kf.setImage(with: url, completionHandler: { result in
                 switch result {
                 case .success(let value):
@@ -113,7 +118,6 @@ class TrendingMovieCell: UICollectionViewCell {
         heartButton.setImage(UIImage(systemName: isHearted ? "heart.fill" : "heart"), for: .normal)
     }
     @objc private func heartButtonTouched() {
-        print("heartbutton 탭")
         guard let id = movieID else { return }
         
         if HeartManager.shared.hasHearted(id: id) {

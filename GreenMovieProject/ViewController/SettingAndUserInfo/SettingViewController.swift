@@ -104,7 +104,6 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
         let selectedItem = items[indexPath.row]
         
         if selectedItem == "탈퇴하기" {
-            print("탈퇴하기 누름")
             let alert = UIAlertController(
                 title: "탈퇴하기",
                 message: "탈퇴를 하면 데이터가 모두 초기화됩니다. 탈퇴 하시겠습니까?",

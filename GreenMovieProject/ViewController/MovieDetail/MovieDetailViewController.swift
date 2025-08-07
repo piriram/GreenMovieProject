@@ -127,9 +127,6 @@ class MovieDetailViewController: BaseViewController {
         DispatchQueue.global(qos: .background).async {
             NetworkManager.shared.fetchBackdropImages(movieID: self.movie.id) { medios in
                 self.medios = Array(medios.prefix(5))
-                for me in self.medios{
-                    print("image Size: \(me.width) * \(me.height)")
-                }
             }
         }
     }
@@ -171,7 +168,6 @@ class MovieDetailViewController: BaseViewController {
     }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let pageIndex = Int((scrollView.contentOffset.x + scrollView.frame.width / 2) / scrollView.frame.width) // 반이상 넘겼을 때 페이지를 반영
-        
         pageControl.currentPage = pageIndex
     }
 }

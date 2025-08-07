@@ -68,7 +68,6 @@ final class UserInfoManager {
     
     func isUserInfo() -> Bool {
         let result = hasJoinDate() && hasNickname()
-        print("UserInfor가있는지 : \(result)")
         return result
     }
     
