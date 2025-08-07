@@ -12,6 +12,7 @@ extension NetworkManager {
         let url = "\(baseURL)/search/movie"
         parameters["query"] = query
         parameters["page"] = page
+        
         AF.request(url, method: .get, parameters: self.parameters, headers: headers)
             .validate()
             .responseDecodable(of: MovieResponse.self) { response in

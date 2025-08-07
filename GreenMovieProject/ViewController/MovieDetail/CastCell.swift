@@ -74,8 +74,6 @@ final class CastCell: UIView {
             make.trailing.equalToSuperview().offset(-4)
             make.centerY.equalToSuperview()
         }
-        
-       
     }
     
 }

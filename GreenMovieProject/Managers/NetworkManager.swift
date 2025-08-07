@@ -13,13 +13,11 @@ final class NetworkManager {
     private init() {}
     
     let baseURL = "https://api.themoviedb.org/3"
-    let headers: HTTPHeaders = [
-        "Authorization":"Bearer \(APIKey.APIKey)"
-    ]
+    let headers: HTTPHeaders = [ "Authorization":"Bearer \(APIKey.APIKey)" ]
     var parameters: Parameters = ["language":"ko-KR"] //"include_image_language":null
     
-    
-    //MARK: 무엇을 하는 함수인가요?
+    // MARK: - path와 결합해서 전체 URL 을 반환함
+    // TODO: enum과 합쳐서 해상도 정하기
     func composeURLPath(path:String)->String{
         return "https://image.tmdb.org/t/p/w500" + path
     }

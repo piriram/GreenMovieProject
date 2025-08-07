@@ -22,7 +22,6 @@ extension NetworkManager {
                     print("트렌딩 네트워크 실패")
                     completion(.failure(error))
                 }
-                
             }
     }
 }

@@ -26,7 +26,6 @@ final class BackdropImageCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     func configureCell(_ path: String) {
         contentView.backgroundColor = .black
         let baseURL = NetworkManager.shared.composeURLPath(path: path)

@@ -26,6 +26,10 @@ final class SynopsisView: UIView {
     }
     
     func configureUI() {
+        addSubview(titleLabel)
+        addSubview(moreButton)
+        addSubview(bodyLabel)
+        
         titleLabel.text = "Synopsis"
         titleLabel.font = .boldSystemFont(ofSize: 18)
         titleLabel.textColor = .white
@@ -39,10 +43,6 @@ final class SynopsisView: UIView {
         bodyLabel.textColor = .white
         bodyLabel.numberOfLines = 3
         bodyLabel.lineBreakMode = .byTruncatingTail
-        
-        addSubview(titleLabel)
-        addSubview(moreButton)
-        addSubview(bodyLabel)
         
         titleLabel.snp.makeConstraints { make in
             make.top.leading.equalToSuperview()
@@ -64,6 +64,5 @@ final class SynopsisView: UIView {
         isExpanded.toggle()
         bodyLabel.numberOfLines = isExpanded ? 0 : 3
         moreButton.setTitle(isExpanded ? "Hide" : "More", for: .normal)
-        
     }
 }

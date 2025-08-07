@@ -13,7 +13,7 @@ extension NicknameDetailViewController {
         case containsNumber
         case containsSymbol
         case valid
-
+        
         var result: (message: String, color: UIColor) {
             switch self {
             case .shortOrLong:
@@ -24,9 +24,8 @@ extension NicknameDetailViewController {
                 return ("닉네임에 @, #, $, % 는 포함할 수 없어요", .red)
             case .valid:
                 return ("사용할 수 있는 닉네임이에요", .primary)
-                
             }
         }
     }
-
+    
 }

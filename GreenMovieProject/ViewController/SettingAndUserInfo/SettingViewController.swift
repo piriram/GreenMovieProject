@@ -16,11 +16,8 @@ final class SettingViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         navigationItem.title = "설정"
-        
         configureUI()
-        
         configureLayout()
     }
     func configureUI(){
@@ -51,7 +48,6 @@ final class SettingViewController: BaseViewController {
     }
     
     func configureLayout() {
-        
         profileCardView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(12)
             make.horizontalEdges.equalToSuperview().inset(12)
@@ -77,10 +73,11 @@ final class SettingViewController: BaseViewController {
     @objc func profileCardTouched() {
         goProfileCard()
     }
+    
     @objc func didUpdateProfileCard(){
+        print("didUpdateProfileCard")
         configureProfileCard()
     }
-    
 }
 
 extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
@@ -97,7 +94,6 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -111,9 +107,7 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
             )
             
             alert.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
-            
             alert.addAction(UIAlertAction(title: "확인", style: .destructive, handler: { _ in
-                
                 HeartManager.shared.deleteAllHeart()
                 UserInfoManager.shared.deleteUserInfo()
                 RecentSearchManager.shared.deleteAllKeyword()
@@ -129,7 +123,6 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
             }))
             
             present(alert, animated: true)
-            
         }
     }
     

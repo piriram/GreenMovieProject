@@ -42,7 +42,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     // TODO:UIBarButtonItemAppearance,UINavigationBarAppearance, 등등 머가먼지 종류가 많아서 헷갈린다냥
     func configureNavigationBarAppearance(barAppearance: UIBarButtonItemAppearance) {
         let appearance = UINavigationBarAppearance()
-        
+
         appearance.backgroundColor = .black
         appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
 //        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]

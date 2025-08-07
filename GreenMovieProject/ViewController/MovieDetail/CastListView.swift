@@ -24,17 +24,15 @@ final class CastListView: UIView {
     }
 
     func configureUI() {
+        addSubview(castListStackView)
+        addSubview(titleLabel)
         castListStackView.axis = .vertical
         castListStackView.spacing = 12
         castListStackView.alignment = .leading
-        addSubview(castListStackView)
-        addSubview(titleLabel)
-        
         titleLabel.text = "Cast"
         titleLabel.font = .boldSystemFont(ofSize: 18)
         titleLabel.textColor = .white
         titleLabel.textAlignment = .left
-       
         for member in cast {
             let itemView = CastCell(cast: member)
             castListStackView.addArrangedSubview(itemView)

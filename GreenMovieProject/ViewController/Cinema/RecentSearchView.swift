@@ -20,29 +20,28 @@ final class RecentSearchView: UIView {
     lazy var deleteAllButton = createClearAllButton()
     
     lazy var emptyView = EmptyMessageView(message: "최근 검색어 내역이 없습니다.")
-    
+    let spacerView = UIView()
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
         configureUI()
         configureLayout()
         configureAction()
-        
-        
     }
+    
     func configureUI() {
         addSubview(titleLabel)
         addSubview(scrollView)
         addSubview(deleteAllButton)
         addSubview(emptyView)
+        addSubview(spacerView)
         scrollView.addSubview(keywordStackView)
-        
+        scrollView.showsHorizontalScrollIndicator = false
         titleLabel.text = "최근 검색어"
         titleLabel.font = .systemFont(ofSize: 20, weight: .bold)
         titleLabel.textColor = .white
-        
-        scrollView.showsHorizontalScrollIndicator = false
     }
+    
     func setupStackView()-> UIStackView {
         let stackView = UIStackView()
         stackView.axis = .horizontal
@@ -52,6 +51,7 @@ final class RecentSearchView: UIView {
         stackView.clipsToBounds = true
         return stackView
     }
+    
     func createClearAllButton() -> UIButton {
         let button = UIButton(type: .system)
         button.setTitle("전체 삭제", for: .normal)
@@ -66,11 +66,9 @@ final class RecentSearchView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     func reloadKeywords() {
         keywords = RecentSearchManager.shared.readKeywords()
         keywordStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        
         for keyword in keywords {
             let chipView = createChip(for: keyword)
             keywordStackView.addArrangedSubview(chipView)
@@ -121,8 +119,6 @@ final class RecentSearchView: UIView {
             make.trailing.equalToSuperview()
             make.height.equalToSuperview()
         }
-        let spacerView = UIView()
-        addSubview(spacerView)
 
         spacerView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom)
@@ -133,14 +129,13 @@ final class RecentSearchView: UIView {
             make.centerX.equalToSuperview()
             make.centerY.equalTo(spacerView.snp.centerY)
         }
-
     }
-    
     
     func configureAction(){
         deleteAllButton.addTarget(self, action: #selector(clearAllButtonClicked), for: .touchUpInside)
         reloadKeywords()
     }
+    
     func createChip(for keyword: String) -> UIView {
         let container = UIView()
         container.backgroundColor = .white
@@ -188,6 +183,7 @@ final class RecentSearchView: UIView {
         container.tag = keywords.firstIndex(of: keyword) ?? -1
         return container
     }
+    
     @objc func chipTouched(_ sender: UITapGestureRecognizer) {
         guard let view = sender.view else { return } // 딥다이빙
         let index = view.tag
@@ -201,6 +197,7 @@ final class RecentSearchView: UIView {
         RecentSearchManager.shared.deleteOneKeyword(removed)
         reloadKeywords()
     }
+    
     @objc func clearAllButtonClicked() {
         RecentSearchManager.shared.deleteAllKeyword()
         keywords = []

@@ -93,6 +93,7 @@ final class SearchViewController: BaseViewController {
         searchBar.searchTextField.textColor = .white
          
     }
+    
     func createCollectionView() -> UICollectionView {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: UIScreen.main.bounds.width, height: 140)

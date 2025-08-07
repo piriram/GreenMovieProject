@@ -8,15 +8,14 @@
 import UIKit
 import Alamofire
 import Kingfisher
-//TODO: - 하위 뷰 만들어서 관리하기
+// TODO: - 하위 뷰 만들어서 관리하기
+// TODO: 예외처리 생각해서 공수 산정하기
 class CinemaViewController:BaseViewController {
     
     static let identifier = "CinemaViewController"
     var trendings:[Trending] = []
-    
     let profileCardView = ProfileCardView()
     let recentSearchView = RecentSearchView()
-    
     
     /// 트렌딩 관련 프로퍼티
     let trendingLabel = UILabel()
@@ -30,13 +29,12 @@ class CinemaViewController:BaseViewController {
         configureAction()
     }
     
-    func configureUI(){
+    private func configureUI(){
         view.addSubview(profileCardView)
         view.addSubview(recentSearchView)
         view.addSubview(trendingLabel)
         view.addSubview(trendingCollectionView)
         configureProfileCard()
-        
         trendingLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         trendingLabel.textColor = .white
         trendingLabel.textAlignment = .left
@@ -44,7 +42,7 @@ class CinemaViewController:BaseViewController {
         
     }
     
-    func configureLayout(){
+    private func configureLayout(){
         profileCardView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(12)
             make.horizontalEdges.equalToSuperview().inset(12)
@@ -70,7 +68,7 @@ class CinemaViewController:BaseViewController {
         }
     }
     
-    func configureAction() {
+    private func configureAction() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(profileCardTouched))
         profileCardView.addGestureRecognizer(tap)
         configureNav()
@@ -82,10 +80,9 @@ class CinemaViewController:BaseViewController {
             vc.initialQuery = keyword
             self?.navigationController?.pushViewController(vc, animated: true)
         }
-        
     }
     
-    func createTrendingCollectionView() -> UICollectionView {
+    private func createTrendingCollectionView() -> UICollectionView {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         
@@ -109,7 +106,7 @@ class CinemaViewController:BaseViewController {
         )
     }
     
-    func fetchTrendingData(){
+    private func fetchTrendingData(){
         NetworkManager.shared.fetchTrending{ result in
             switch result{
             case .success(let data):
@@ -124,7 +121,7 @@ class CinemaViewController:BaseViewController {
     }
     
     // MARK: - 검색 버튼을 설정함
-    func configureNav() {
+    private func configureNav() {
         let searchButton = UIBarButtonItem(
             image: UIImage(systemName: "magnifyingglass"),
             style: .plain,
@@ -135,7 +132,7 @@ class CinemaViewController:BaseViewController {
         navigationItem.rightBarButtonItem = searchButton
     }
     
-    @objc func searchButtonClicked() {
+    @objc private func searchButtonClicked() {
         let searchVC = SearchViewController()
         navigationController?.pushViewController(searchVC, animated: true)
     }
@@ -158,7 +155,7 @@ class CinemaViewController:BaseViewController {
     
     @objc func didUpdateHeart(){ configureProfileCard() } // 동일
     
-    @objc func didUpdateRecentKeyword(){ recentSearchView.reloadKeywords() }
+    @objc private func didUpdateRecentKeyword(){ recentSearchView.reloadKeywords() }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)

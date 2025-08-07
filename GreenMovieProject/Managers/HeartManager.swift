@@ -20,6 +20,7 @@ final class HeartManager {
             UserDefaults.standard.set(ids, forKey: key)
         }
     }
+    
     func readHeartCount() -> Int {
         return readHeartAll().count
     }

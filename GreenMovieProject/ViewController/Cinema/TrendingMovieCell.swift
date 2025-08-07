@@ -103,7 +103,6 @@ class TrendingMovieCell: UICollectionViewCell {
                 switch result {
                 case .success(let value):
                     let imageSize = value.image.size
-                    print("이미지 사이즈: \(imageSize.width) x \(imageSize.height)")
                 case .failure(let error):
                     print("이미지 로드 실패: \(error.localizedDescription)")
                 }
@@ -117,6 +116,7 @@ class TrendingMovieCell: UICollectionViewCell {
         let isHearted = HeartManager.shared.hasHearted(id: movie.id)
         heartButton.setImage(UIImage(systemName: isHearted ? "heart.fill" : "heart"), for: .normal)
     }
+    
     @objc private func heartButtonTouched() {
         guard let id = movieID else { return }
         
@@ -128,6 +128,5 @@ class TrendingMovieCell: UICollectionViewCell {
             heartButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
         }
         heartClosure?() //nil이 아님 실행
-        
     }
 }

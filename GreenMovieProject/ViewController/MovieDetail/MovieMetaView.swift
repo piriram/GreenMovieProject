@@ -12,10 +12,8 @@ final class MovieMetaView: UIView {
     
     let releaseDateIcon = UIImageView(image: UIImage(systemName: "calendar"))
     let releaseDateLabel = UILabel()
-    
     let ratingIcon = UIImageView(image: UIImage(systemName: "star.fill"))
     let ratingLabel = UILabel()
-    
     let genreIcon = UIImageView(image: UIImage(systemName: "film"))
     let genreLabel = UILabel()
     

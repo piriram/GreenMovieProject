@@ -25,26 +25,18 @@ final class EmptyMessageView: UIView {
     private func configureUI() {
         backgroundColor = .clear
         addSubview(messageLabel)
-        
         messageLabel.font = .systemFont(ofSize: 14)
         messageLabel.textColor = .lightGray
         messageLabel.textAlignment = .center
         messageLabel.numberOfLines = 0
-        
         messageLabel.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
     }
     
-    func configureData(_ text: String) {
-        messageLabel.text = text
-    }
+    func configureData(_ text: String) { messageLabel.text = text }
     
-    func hide() {
-        isHidden = true
-    }
+    func hide() { isHidden = true}
     
-    func show() {
-        isHidden = false
-    }
+    func show() { isHidden = false }
 }

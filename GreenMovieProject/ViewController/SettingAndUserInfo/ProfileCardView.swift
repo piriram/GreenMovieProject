@@ -40,8 +40,10 @@ final class ProfileCardView: UIView {
         nicknameLabel.font = .boldSystemFont(ofSize: 18)
         
         joinLabel.textColor = .systemGray4
-        chevronImage.tintColor = .systemGray4
+        
         joinLabel.font = .systemFont(ofSize: 12)
+        
+        chevronImage.tintColor = .systemGray4
         
         movieBoxButton.setTitleColor(.white, for: .normal)
         movieBoxButton.titleLabel?.font = .systemFont(ofSize: 14,weight: .bold)

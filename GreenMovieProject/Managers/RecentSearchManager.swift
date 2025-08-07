@@ -24,9 +24,7 @@ final class RecentSearchManager {
         current.removeAll { $0 == keyword }
         current.insert(keyword,at: 0) // 매번 array의 맨앞에 넣는다. 하나씩 다 밀리기 때문에 O(n)의 시간이 걸림
         // 그렇다고 읽기시점에 매번 reverse를 쓰면 쓸때는 append(1)의 비용이지만 읽기 시점에 비용이 발생한다.
-        
         UserDefaults.standard.set(current, forKey: key)
-        
     }
     
     func deleteOneKeyword(_ keyword: String) {

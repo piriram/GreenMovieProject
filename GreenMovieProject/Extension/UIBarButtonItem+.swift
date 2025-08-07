@@ -15,7 +15,6 @@ extension UIBarButtonItem {
             action: action
         )
         backButtonItem.tintColor = .primary
-            
         return backButtonItem
     }
 }

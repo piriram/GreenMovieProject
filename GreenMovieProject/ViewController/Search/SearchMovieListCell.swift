@@ -11,21 +11,20 @@ import Kingfisher
 final class SearchMovieListCell: UICollectionViewCell {
     static let identifier = "MovieCell"
     
+    // MARK: - 컴포넌트
     let posterImageView = UIImageView()
     let titleLabel = UILabel()
     let releaseDateLabel = UILabel()
     let genreStackView = UIStackView()
     let heartButton = UIButton()
     var movieID: Int?
+    
     var isHearted = false
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.layer.cornerRadius = 8
-        contentView.clipsToBounds = true
-        
         configureUI()
         configureLayout()
-        
     }
     
     required init?(coder: NSCoder) {
@@ -37,41 +36,34 @@ final class SearchMovieListCell: UICollectionViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(releaseDateLabel)
         contentView.addSubview(genreStackView)
-        
+        contentView.addSubview(heartButton)
+        contentView.layer.cornerRadius = 8
+        contentView.clipsToBounds = true
         posterImageView.contentMode = .scaleAspectFit
         posterImageView.clipsToBounds = true
         posterImageView.layer.cornerRadius = 12
-        
         
         titleLabel.font = .systemFont(ofSize: 18, weight: .semibold)
         titleLabel.textColor = .white
         titleLabel.numberOfLines = 2
         
-        
         releaseDateLabel.font = .systemFont(ofSize: 13)
         releaseDateLabel.textColor = .gray
-        
         
         genreStackView.axis = .horizontal
         genreStackView.spacing = 4
         genreStackView.alignment = .leading
-        
-        
+
         //TODO: - 크기 변경
         heartButton.setImage(UIImage(systemName: "heart"), for: .normal)
         heartButton.tintColor = .primary
-        contentView.addSubview(heartButton)
-        
         heartButton.addTarget(self, action: #selector(heartButtonClicked), for: .touchUpInside)
-        
-        
     }
     
     func configureLayout() {
         posterImageView.snp.makeConstraints { make in
             make.left.verticalEdges.equalToSuperview().inset(8)
             make.width.equalTo(posterImageView.snp.height).multipliedBy(0.7)
-            
         }
         
         titleLabel.snp.makeConstraints { make in
@@ -121,7 +113,6 @@ final class SearchMovieListCell: UICollectionViewCell {
         }
         
         configureGenres(genreNames)
-        
         updateHeartButton(movie)
         
     }
@@ -138,6 +129,7 @@ final class SearchMovieListCell: UICollectionViewCell {
             genreStackView.removeArrangedSubview(genreView) // input view를 스택뷰의 서브뷰 배열에서 제거
             genreView.removeFromSuperview() // 뷰계층에서 제거하지 않으면 뷰상에 남아서 메모리가 누수될 수 있음
         }
+        
         /// 새로운 태그들을 설정해준다.
         for genre in genres.prefix(3) {
             let label = configureGenreLabel(genre)
@@ -147,7 +139,6 @@ final class SearchMovieListCell: UICollectionViewCell {
     
     func configureGenreLabel(_ genreTitle:String) -> UILabel{
         let label = PaddingLabel()
-        
         label.text = genreTitle
         label.font = .systemFont(ofSize: 11, weight: .medium)
         label.textColor = .white
@@ -155,7 +146,6 @@ final class SearchMovieListCell: UICollectionViewCell {
         label.backgroundColor = .darkGray
         label.layer.cornerRadius = 4
         label.clipsToBounds = true
-        
         /// 텍스트 길이에 따라서 늘어남
         /// required > defaultHigh > defaultLow > fittingSizeLevel
         //        label.setContentHuggingPriority(.required, for: .horizontal) // 크기 우선순위(확장 저항?)

@@ -10,14 +10,13 @@ import SnapKit
 import Toast
 //TODO: 열거형으로 관리하기
 final class NicknameDetailViewController: UIViewController {
-    
     var initialNickname: String? = ""
-    
     let nicknameTextField = UITextField()
     let statusLabel = UILabel()
     var onNicknameClosure: ((String) -> Void)?
     let underline = UIView()
     var status:NicknameStatus = .shortOrLong
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black

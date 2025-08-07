@@ -23,17 +23,15 @@ extension NetworkManager {
                        case let .responseSerializationFailed(reason) = afError ,
                        case let .decodingFailed(decodingError) = reason{
                         print("디코딩 실패:\(decodingError)")
-                    }
-                    
+                    }   
                 }
-                
             }
     }
     
     func fetchBackdropImages(movieID:Int,completion:@escaping ([Medio])->Void){
         parameters["include_image_language"] = "null" // 여기서만 새로 파라미터를 생성해서 씀,이미지는 언어 쿼리가 없음
         let path = "/movie/\(movieID)/images"
-
+        
         AF.request(baseURL + path,parameters: parameters ,headers: headers)
             .validate(statusCode: 200..<300)
             .responseDecodable(of: MedioResponse.self) { response in

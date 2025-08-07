@@ -11,7 +11,7 @@ final class GenreManager {
     
     static let shared = GenreManager()
     private init() {}
-    
+
     var genreMap: [Int: String] = [:]
     private var isLoaded: Bool { !genreMap.isEmpty }
     
@@ -28,6 +28,7 @@ final class GenreManager {
         }
     }
     
+    //TODO: 반환 개수를 파라미터로 받기
     /// 주어진 genreIDs에서 매칭된 이름 최대 3개 반환
     func top3GenreNames(from genreIDs: [Int]) -> [String] {
         return genreIDs
@@ -35,6 +36,7 @@ final class GenreManager {
             .prefix(3)
             .map { $0 }
     }
+    
     /// 주어진 genreIDs에서 매칭된 이름 최대 2개 반환
     func top2GenreNames(from genreIDs: [Int]) -> [String] {
         return genreIDs

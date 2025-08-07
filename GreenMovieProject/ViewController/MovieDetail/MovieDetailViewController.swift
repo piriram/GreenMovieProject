@@ -55,7 +55,6 @@ class MovieDetailViewController: BaseViewController {
         contentView.addSubview(metaHeaderView)
         contentView.addSubview(synopsisView)
         
-        
         GenreManager.shared.loadGenresIfNeeded {
             let genreNames = GenreManager.shared.top2GenreNames(from: self.movie.genreIds)
             self.metaHeaderView.configureData(
@@ -64,7 +63,6 @@ class MovieDetailViewController: BaseViewController {
                 genre: genreNames.joined(separator: ", ")
             )
         }
-        
         configureLayout()
     }
     
@@ -86,7 +84,6 @@ class MovieDetailViewController: BaseViewController {
         pageControl.snp.makeConstraints { make in
             make.centerX.equalTo(imageCollectionView)
             make.bottom.equalTo(imageCollectionView).inset(8)
-            
         }
         
         metaHeaderView.snp.makeConstraints { make in
@@ -99,7 +96,6 @@ class MovieDetailViewController: BaseViewController {
             make.top.equalTo(metaHeaderView.snp.bottom).offset(16)
             make.horizontalEdges.equalToSuperview().inset(16)
         }
-
     }
     
     func fetchCast() {
@@ -108,7 +104,6 @@ class MovieDetailViewController: BaseViewController {
                 DispatchQueue.main.async {
                     self.cast = cast
                     self.crew = crew
-                    
                     let castView = CastListView(cast: cast)
                     self.castView = castView
                     self.contentView.addSubview(castView)

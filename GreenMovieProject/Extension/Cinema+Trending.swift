@@ -20,7 +20,6 @@ extension CinemaViewController: UICollectionViewDelegate {
 
 extension CinemaViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
         return trendings.count
     }
     
@@ -31,7 +30,6 @@ extension CinemaViewController: UICollectionViewDataSource {
         cell.configureCell(movie)
         cell.heartClosure = { [weak self] in
             self?.configureProfileCard()
-            
         }
         return cell
     }
@@ -45,9 +43,7 @@ extension CinemaViewController: UICollectionViewDelegateFlowLayout {
          let textHeight: CGFloat = 90
          let posterHeight = collectionViewHeight - textHeight
          let posterWidth = posterHeight * (2/3)
-
          return CGSize(width: posterWidth, height: collectionViewHeight)
-
     }
 }
 

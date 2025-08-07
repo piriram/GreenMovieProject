@@ -22,6 +22,7 @@ final class OnboardingViewController: UIViewController {
         configureLayout()
     }
     
+    // 폰트사이즈를 비례해서 키우기도하고 거리도 하기
     func configureUI() {
         view.addSubview(splashImageView)
         view.addSubview(titleLabel)

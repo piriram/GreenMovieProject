@@ -8,7 +8,6 @@
 import Foundation
 /// 사용자 정보를 관리하는 매니저입니다.
 /// 현재는 닉네임과 가입일자만 사용하고 있습니다.
-///
 //TODO: 포메터 객체 만들어서 사용해보기 -> 한번만 사용하므로 다음번에,,,
 final class UserInfoManager {
     static let shared = UserInfoManager()

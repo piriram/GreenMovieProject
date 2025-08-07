@@ -26,18 +26,12 @@ final class NicknameCreateViewController: BaseViewController {
         view.addSubview(nicknameTextField)
         view.addSubview(editButton)
         view.addSubview(completeButton)
-        
         nicknameTextField.addSubview(underline)
         nicknameTextField.textColor = .white
         nicknameTextField.font = .systemFont(ofSize: 16)
         nicknameTextField.borderStyle = .none
         nicknameTextField.isUserInteractionEnabled = false // 편집 불가
-        
-        
         underline.backgroundColor = .lightGray
-        
-       
-        
         editButton.setTitle("편집", for: .normal)
         editButton.setTitleColor(.white, for: .normal)
         editButton.layer.borderColor = UIColor.white.cgColor
@@ -45,7 +39,6 @@ final class NicknameCreateViewController: BaseViewController {
         editButton.layer.cornerRadius = 15
         editButton.titleLabel?.font = .systemFont(ofSize: 13, weight: .medium)
         editButton.addTarget(self, action: #selector(goEditClicked), for: .touchUpInside)
-        
         completeButton.setTitle("완료", for: .normal)
         completeButton.setTitleColor(.primary, for: .normal)
         completeButton.layer.borderColor = UIColor.primary.cgColor
@@ -53,7 +46,6 @@ final class NicknameCreateViewController: BaseViewController {
         completeButton.layer.cornerRadius = 24
         completeButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .bold)
         completeButton.addTarget(self, action: #selector(completButtonClicked), for: .touchUpInside)
-        
     }
     
     func configureLayout() {

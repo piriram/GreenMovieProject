@@ -16,6 +16,7 @@ enum NotificationHelper {
     static func post(_ name: Notification.Name) {
         NotificationCenter.default.post(name: name, object: nil)
     }
+    
     ///알림 받기
     static func addObserver(_ observer: Any,
                             selector: Selector,
