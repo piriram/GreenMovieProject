@@ -16,7 +16,6 @@ final class NicknameCreateViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "닉네임 설정"
-        
         configureUI()
         configureLayout()
         nicknameTextField.text = UserInfoManager.shared.readNickname() ?? ""
@@ -91,9 +90,7 @@ final class NicknameCreateViewController: BaseViewController {
     @objc func completButtonClicked() {
         //        UserInfoManager.shared.createJoinDate(Date())
         guard let nicknameTextFieldText = nicknameTextField.text else { return }
-        if nicknameTextFieldText.isEmpty {
-            return
-        }
+        if nicknameTextFieldText.isEmpty { return }
         UserInfoManager.shared.createUserInfo(nicknameTextFieldText, Date())
         
         let tabBarController = MainViewController()

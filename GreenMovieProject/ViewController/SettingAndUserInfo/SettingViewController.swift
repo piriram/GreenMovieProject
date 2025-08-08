@@ -24,6 +24,8 @@ final class SettingViewController: BaseViewController {
         configureProfileCard()
         configureTableView()
     }
+    
+    // TODO: 시네마뷰와 세팅뷰 공통
     func configureProfileCard() {
         view.addSubview(profileCardView)
         
@@ -70,14 +72,9 @@ final class SettingViewController: BaseViewController {
                                        name: NotificationHelper.updateHeart)
     }
     
-    @objc func profileCardTouched() {
-        goProfileCard()
-    }
+    @objc func profileCardTouched() { goProfileCard() }
     
-    @objc func didUpdateProfileCard(){
-        print("didUpdateProfileCard")
-        configureProfileCard()
-    }
+    @objc func didUpdateProfileCard(){ configureProfileCard() }
 }
 
 extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
@@ -112,9 +109,10 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
                 UserInfoManager.shared.deleteUserInfo()
                 RecentSearchManager.shared.deleteAllKeyword()
                 
-                let onboardingVC = OnboardingViewController()
-                let nav = UINavigationController(rootViewController: onboardingVC)
+                let vc = OnboardingViewController()
+                let nav = UINavigationController(rootViewController: vc)
                 
+                // 온보딩으로 돌아가기
                 if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                    let delegate = windowScene.delegate as? SceneDelegate {
                     delegate.window?.rootViewController = nav

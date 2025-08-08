@@ -81,9 +81,7 @@ final class NicknameDetailViewController: UIViewController {
             return char.isNumber
         }
 
-        if hasNumber{
-            return .containsNumber
-        }
+        if hasNumber{ return .containsNumber }
         
         /// 이상한 문자가 있는지 확인
         let unvalidChars:Set<Character> = ["@","#","$","%"]
@@ -91,9 +89,7 @@ final class NicknameDetailViewController: UIViewController {
             return unvalidChars.contains(char)
         }
         
-        if hasUnvalidChar{
-            return .containsSymbol
-        }
+        if hasUnvalidChar{ return .containsSymbol }
         return .valid
     }
     
@@ -118,8 +114,6 @@ final class NicknameDetailViewController: UIViewController {
         }
     }
     
-    @objc func textFieldDidChange() {
-        configureStatusLabel()
-    }
+    @objc func textFieldDidChange() { configureStatusLabel() }
 }
 
