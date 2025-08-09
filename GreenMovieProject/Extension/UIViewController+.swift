@@ -15,5 +15,14 @@ extension UIViewController{
         
         present(nav, animated: true)
     }
+    
+    /// 프로필카드를 설정함
+    func configureProfileCard(view: ProfileCardView) {
+        view.configureData(
+            nickname: UserInfoManager.shared.readNickname() ?? "",
+            joinDate: "\(UserInfoManager.shared.readFormattedJoinDate()) 가입",
+            boxNum: HeartManager.shared.readHeartCount()
+        )
+    }
 }
 

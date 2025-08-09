@@ -56,7 +56,7 @@ class MovieDetailViewController: BaseViewController {
         contentView.addSubview(synopsisView)
         
         GenreManager.shared.loadGenresIfNeeded {
-            let genreNames = GenreManager.shared.top2GenreNames(from: self.movie.genreIds)
+            let genreNames = GenreManager.shared.topGenreNames(from: self.movie.genreIds, limit: 2)
             self.metaHeaderView.configureData(
                 releaseDate: self.movie.releaseDate,
                 rating: self.movie.voteAverage,

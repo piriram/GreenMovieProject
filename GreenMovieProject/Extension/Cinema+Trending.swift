@@ -29,7 +29,8 @@ extension CinemaViewController: UICollectionViewDataSource {
         let movie = trendings[indexPath.item]
         cell.configureCell(movie)
         cell.heartClosure = { [weak self] in
-            self?.configureProfileCard()
+            guard let self = self else { return }
+            self.configureProfileCard(view: self.profileCardView)
         }
         return cell
     }

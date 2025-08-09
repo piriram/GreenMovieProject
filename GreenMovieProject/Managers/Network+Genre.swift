@@ -10,7 +10,6 @@ import Alamofire
 extension NetworkManager {
     func fetchGenres(completion: @escaping ([Int: String]) -> Void) {
         let url = "\(baseURL)/genre/movie/list"
-        let parameters: Parameters = ["language": "ko-KR"]
         
         AF.request(url, parameters: self.parameters, headers: headers)
             .validate()

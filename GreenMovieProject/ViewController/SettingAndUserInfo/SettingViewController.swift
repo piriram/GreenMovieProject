@@ -19,27 +19,16 @@ final class SettingViewController: BaseViewController {
         navigationItem.title = "설정"
         configureUI()
         configureLayout()
+        configureAction()
     }
+    
     func configureUI(){
-        configureProfileCard()
+        configureProfileCard(view: profileCardView)
         configureTableView()
     }
     
-    // TODO: 시네마뷰와 세팅뷰 공통
-    func configureProfileCard() {
-        view.addSubview(profileCardView)
-        
-        profileCardView.configureData(
-            nickname: UserInfoManager.shared.readNickname() ?? "",
-            joinDate: "\(UserInfoManager.shared.readFormattedJoinDate()) 가입",
-            boxNum: HeartManager.shared.readHeartCount()
-        )
-        
-        let tap = UITapGestureRecognizer(target: self, action: #selector(profileCardTouched))
-        profileCardView.addGestureRecognizer(tap)
-    }
-    
     func configureTableView() {
+        view.addSubview(profileCardView)
         view.addSubview(tableView)
         tableView.delegate = self
         tableView.dataSource = self
@@ -62,6 +51,10 @@ final class SettingViewController: BaseViewController {
         }
     }
     
+    func configureAction(){
+        let tap = UITapGestureRecognizer(target: self, action: #selector(profileCardTouched))
+        profileCardView.addGestureRecognizer(tap)
+    }
     override func viewWillAppear(_ animated: Bool) { // 뷰가 화면에 나타나기 진전마다 호출
         super.viewWillAppear(animated)
         NotificationHelper.addObserver(self,
@@ -74,7 +67,7 @@ final class SettingViewController: BaseViewController {
     
     @objc func profileCardTouched() { goProfileCard() }
     
-    @objc func didUpdateProfileCard(){ configureProfileCard() }
+    @objc func didUpdateProfileCard(){ configureProfileCard(view: profileCardView) }
 }
 
 extension SettingViewController: UITableViewDelegate, UITableViewDataSource {

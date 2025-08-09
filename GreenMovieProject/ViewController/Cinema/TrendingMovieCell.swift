@@ -98,17 +98,7 @@ class TrendingMovieCell: UICollectionViewCell {
     func configureCell(_ movie: Trending) {
         let urlString = NetworkManager.shared.composeURLPath(path: movie.posterPath)
         
-        if let url = URL(string: urlString) {
-            posterImageView.kf.setImage(with: url, completionHandler: { result in
-                switch result {
-                case .success(let value):
-                    let imageSize = value.image.size
-                case .failure(let error):
-                    print("이미지 로드 실패: \(error.localizedDescription)")
-                }
-            })
-        }
-        
+        if let url = URL(string: urlString) { posterImageView.kf.setImage(with: url) }
         titleLabel.text = movie.title
         overviewLabel.text = movie.overview
         movieID = movie.id
